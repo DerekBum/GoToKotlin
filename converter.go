@@ -18,9 +18,9 @@ type converter struct {
 	genName int
 }
 
-func createConverter(path string) converter {
+func createConverter(dirPath string) converter {
 	return converter{
-		dirPath: path,
+		dirPath: dirPath,
 		used:    map[string]bool{},
 		genName: 0,
 	}
@@ -161,11 +161,11 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 	return name, nil
 }
 
-func RunConverter(name string, structure interface{}) error {
-	if err := createDir(name); err != nil {
+func RunConverter(dirPath string, structure interface{}) error {
+	if err := createDir(dirPath); err != nil {
 		return err
 	}
-	conv := createConverter(name)
+	conv := createConverter(dirPath)
 
 	_, err := conv.convertStruct(structure)
 	return err
