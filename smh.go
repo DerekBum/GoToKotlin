@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"strings"
 )
 
 func createDir(name string) error {
@@ -46,57 +45,69 @@ func convertBaseType(goName string) string {
 	return ""
 }
 
-func convertType(goName string) string {
-	// Base types
-	base := convertBaseType(goName)
-	if base != "" {
-		return base
+func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
+	switch kind {
+	case reflect.Interface:
+		fieldVal := reflect.Zero(fieldType)
+
+		if !fieldVal.IsNil() {
+			fieldType = fieldType.Elem()
+			kind = fieldType.Kind()
+
+			conv.getInnerStructs(fieldType, kind)
+		}
+
+		return "Object"
+	case reflect.Pointer:
+		fieldType = fieldType.Elem()
+		kind = fieldType.Kind()
+
+		name := conv.getInnerStructs(fieldType, kind)
+
+		return name
+	case reflect.Slice:
+		fieldType = fieldType.Elem()
+		kind = fieldType.Kind()
+
+		name := conv.getInnerStructs(fieldType, kind)
+
+		return name + "[]"
+	case reflect.Map:
+		keyType := fieldType.Key()
+		keyKind := keyType.Kind()
+
+		valType := fieldType.Elem()
+		valKind := valType.Kind()
+
+		keyName := conv.getInnerStructs(keyType, keyKind)
+		valName := conv.getInnerStructs(valType, valKind)
+
+		return fmt.Sprintf("Map<%s, %s>", keyName, valName)
+	case reflect.Struct:
+		sampleStruct := reflect.Zero(fieldType).Interface()
+		name, _ := conv.convertStruct(sampleStruct)
+
+		return name
+	default:
+		return convertBaseType(kind.String())
 	}
-
-	if strings.HasPrefix(goName, "*") {
-		// A pointer
-		goVal := strings.TrimPrefix(goName, "*")
-		javaVal := convertType(goVal)
-		return javaVal //TODO
-	}
-
-	if strings.HasPrefix(goName, "map[") {
-		splited := strings.FieldsFunc(goName, func(r rune) bool {
-			return r == '[' || r == ']'
-		})
-		goValKey := splited[1]
-		goValVal := splited[2]
-
-		javaValKey := convertType(goValKey)
-		javaValVal := convertType(goValVal)
-
-		return fmt.Sprintf("Map<%s, %s>", javaValKey, javaValVal)
-	}
-
-	if strings.HasPrefix(goName, "[]") {
-		// An array
-		goVal := strings.TrimPrefix(goName, "[]")
-		javaVal := convertType(goVal)
-		return javaVal + "[]"
-	}
-
-	return "" // Other struct
 }
 
-func (conv *converter) convertStruct(structure interface{}) error {
+func (conv *converter) convertStruct(structure interface{}) (string, error) {
 	//lol := reflect.ValueOf(&structure).Elem()
+	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
 	name := structType.Name()
 
 	if conv.used[name] {
-		return nil
+		return name, nil
 	}
 	conv.used[name] = true
 
 	filePath := filepath.Join(".", conv.dirPath, name+".java")
 	file, err := os.Create(filePath)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	structDef := fmt.Sprintf(structDefinition, name)
@@ -104,22 +115,15 @@ func (conv *converter) convertStruct(structure interface{}) error {
 	for i := 0; i < structType.NumField(); i++ {
 		fmt.Printf("%+v\n", structType.Field(i))
 		field := structType.Field(i)
+		fieldType := field.Type
 		println(field.Type.String())
-		javaName := convertType(field.Type.String())
 
-		if javaName == "" {
-			/*val := reflect.ValueOf(structure).Field(i).Interface()
+		var javaName string
 
-			f := reflect.TypeOf(val)
-			fmt.Printf("%+v\n", f)*/
-			javaName = field.Type.String()
-			if strings.Contains(javaName, ".") {
-				splited := strings.Split(javaName, ".")
-				javaName = splited[len(splited)-1]
-			}
-			sampleStruct := reflect.Zero(field.Type).Interface()
-			conv.convertStruct(sampleStruct)
-		}
+		fieldVal := structVal.Field(i)
+		kind := fieldVal.Kind()
+
+		javaName = conv.getInnerStructs(fieldType, kind)
 
 		structDef += fmt.Sprintf(structField,
 			javaName, field.Name)
@@ -129,7 +133,7 @@ func (conv *converter) convertStruct(structure interface{}) error {
 
 	file.Write([]byte(structDef))
 
-	return nil
+	return name, nil
 }
 
 func RunConverter(name string, structure interface{}) error {
@@ -138,5 +142,6 @@ func RunConverter(name string, structure interface{}) error {
 	}
 	conv := createConverter(name)
 
-	return conv.convertStruct(structure)
+	_, err := conv.convertStruct(structure)
+	return err
 }

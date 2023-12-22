@@ -5,23 +5,25 @@ import (
 	"fmt"
 )
 
-type smth interface {
+type nonEmptyInterface interface {
 	SomeFunc() bool
 }
 
-type lol struct {
+type someStruct struct {
 	fl1 string
 }
 
-type lel struct {
+type interfaceImpl struct {
 	fl21 []string
 }
 
-func (l lel) SomeFunc() bool {
+func (l interfaceImpl) SomeFunc() bool {
 	return true
 }
 
-type kekes struct {
+type customType int16
+
+type BigStruct struct {
 	Field1      int
 	FieldString string
 	field3      bool
@@ -30,14 +32,25 @@ type kekes struct {
 	f6          []uint
 	f7          *[]uint
 	f8          interface{}
-	F9          lol
-	//f10         smth
-	f11 map[string]bool
+	f85         interface{}
+	f9          someStruct
+	f10         nonEmptyInterface
+	f11         map[string]bool
+	f12         map[interface{}]interface{}
+	f13         *map[someStruct]interfaceImpl
+	f14         *map[*interfaceImpl]*someStruct
+	f15         []someStruct
+	f16         *[]*someStruct
+	f17         *nonEmptyInterface
+	f18         *someStruct
+	f19         customType
+	f20         *customType
+	f21         []*customType
+	f22         map[customType]*customType
 }
 
 func main() {
-	//lele := lel{}
-	//k := kekes{f10: lele}
-	k := kekes{}
+	impl := interfaceImpl{}
+	k := BigStruct{f85: 123, f10: impl}
 	fmt.Printf("%v", GoToJava.RunConverter("example", k))
 }
