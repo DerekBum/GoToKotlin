@@ -15,12 +15,14 @@ func createDir(name string) error {
 type converter struct {
 	dirPath string
 	used    map[string]bool
+	genName int
 }
 
 func createConverter(path string) converter {
 	return converter{
 		dirPath: path,
 		used:    map[string]bool{},
+		genName: 0,
 	}
 }
 
@@ -48,6 +50,9 @@ func convertBaseType(goName string) string {
 
 func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
 	switch kind {
+	case reflect.Func:
+		// skip
+		return ""
 	case reflect.Interface:
 		fieldVal := reflect.Zero(fieldType)
 
@@ -95,10 +100,22 @@ func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 }
 
 func (conv *converter) convertStruct(structure interface{}) (string, error) {
-	//lol := reflect.ValueOf(&structure).Elem()
 	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
+	structKind := structType.Kind()
+
+	if structKind == reflect.Pointer {
+		structType = structType.Elem()
+		structVal = structVal.Elem()
+	}
+
 	name := structType.String()
+
+	if strings.Contains(name, "struct") {
+		name = fmt.Sprintf("generatedInlineStruct_%03d", conv.genName)
+		conv.genName++
+	}
+
 	name = strings.ReplaceAll(name, ".", "_")
 
 	if conv.used[name] {
@@ -112,7 +129,8 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 		return "", err
 	}
 
-	structDef := fmt.Sprintf(structDefinition, name)
+	structDef := imports
+	structDef += fmt.Sprintf(structDefinition, name)
 
 	for i := 0; i < structType.NumField(); i++ {
 		fmt.Printf("%+v\n", structType.Field(i))
@@ -126,6 +144,11 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 		kind := fieldVal.Kind()
 
 		javaName = conv.getInnerStructs(fieldType, kind)
+
+		if javaName == "" {
+			// unsupported, ex functions
+			continue
+		}
 
 		structDef += fmt.Sprintf(structField,
 			javaName, field.Name)

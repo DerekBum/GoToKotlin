@@ -3,6 +3,13 @@ package main
 import (
 	"GoToJava"
 	"fmt"
+	"go/ast"
+	"go/importer"
+	"go/parser"
+	"go/token"
+	"go/types"
+	"golang.org/x/tools/go/ssa"
+	"golang.org/x/tools/go/ssa/ssautil"
 )
 
 type nonEmptyInterface interface {
@@ -50,7 +57,25 @@ type BigStruct struct {
 }
 
 func main() {
-	impl := interfaceImpl{}
-	k := BigStruct{f85: 123, f10: impl}
-	fmt.Printf("%v", GoToJava.RunConverter("example", k))
+	// Replace interface{} with any for this test.
+	// Parse the source files.
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, "./ssa_prompt/main.go", nil, parser.ParseComments)
+	if err != nil {
+		fmt.Print(err) // parse error
+	}
+	files := []*ast.File{f}
+	// Create the type-checker's package.
+	pkg := types.NewPackage("main", "")
+	// Type-check the package, load dependencies.
+	// Create and build the SSA program.
+	pkgBuild, _, err := ssautil.BuildPackage(
+		&types.Config{Importer: importer.Default()}, fset, pkg, files, ssa.PrintFunctions)
+	if err != nil {
+		fmt.Print(err) // type error in some package
+	}
+
+	//impl := interfaceImpl{}
+	//k := BigStruct{f85: 123, f10: impl}
+	fmt.Printf("%v", GoToJava.RunConverter("ssaExample", pkgBuild))
 }
