@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 )
 
 func createDir(name string) error {
@@ -97,7 +98,8 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 	//lol := reflect.ValueOf(&structure).Elem()
 	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
-	name := structType.Name()
+	name := structType.String()
+	name = strings.ReplaceAll(name, ".", "_")
 
 	if conv.used[name] {
 		return name, nil
