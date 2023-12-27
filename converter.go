@@ -29,15 +29,15 @@ func createConverter(dirPath string) converter {
 func convertBaseType(goName string) string {
 	switch goName {
 	case "int", "int32", "uint16", "rune":
-		return "int"
+		return "Integer"
 	case "int16", "uint8", "byte":
-		return "short"
+		return "Short"
 	case "int64", "uint32", "uint":
-		return "long"
+		return "Long"
 	case "float32":
-		return "float"
+		return "Float"
 	case "float64":
-		return "double"
+		return "Double"
 	case "string":
 		return "String"
 	case "bool":
