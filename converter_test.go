@@ -58,6 +58,8 @@ type BigStruct struct {
 	f20         *customType
 	f21         []*customType
 	f22         map[customType]*customType
+	f23         *BigStruct
+	f24         interface{}
 }
 
 var testDir = "./test_struct"
@@ -71,7 +73,10 @@ var genFiles = []string{
 func TestConvert(t *testing.T) {
 	st := BigStruct{}
 
-	err := GoToJava.RunConverter(testDir, st)
+	os.MkdirAll(testDir, os.ModePerm)
+	file, _ := os.Create(testDir + "/filled.txt")
+
+	err := GoToJava.RunConverter(testDir, file, st)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
@@ -81,13 +86,18 @@ func TestConvert(t *testing.T) {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
 
-	if len(dir) != len(genFiles) {
+	if len(dir) != len(genFiles)+1 {
 		t.Errorf("wrong number of files, want %d, got %d", len(genFiles), len(dir))
 	}
-	for i, file := range dir {
-		if file.Name() != genFiles[i] {
-			t.Errorf("unexpected file, want %s, got %s", genFiles[i], file.Name())
+	cnt := 0
+	for _, file := range dir {
+		if file.Name() == "filled.txt" {
+			continue
 		}
+		if file.Name() != genFiles[cnt] {
+			t.Errorf("unexpected file, want %s, got %s", genFiles[cnt], file.Name())
+		}
+		cnt++
 	}
 
 	cmd := exec.Command("kotlinc", testDir, "-d", testDir)

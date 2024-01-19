@@ -1,15 +1,10 @@
 package main
 
 import (
-	"GoToJava"
 	"fmt"
-	"go/ast"
-	"go/importer"
-	"go/parser"
-	"go/token"
-	"go/types"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
+	"os"
+
+	"GoToJava"
 )
 
 type nonEmptyInterface interface {
@@ -54,10 +49,12 @@ type BigStruct struct {
 	f20         *customType
 	f21         []*customType
 	f22         map[customType]*customType
+	f23         *BigStruct
+	f24         interface{}
 }
 
 func main() {
-	// Replace interface{} with any for this test.
+	/*// Replace interface{} with any for this test.
 	// Parse the source files.
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "./ssa_prompt/main.go", nil, parser.ParseComments)
@@ -73,9 +70,25 @@ func main() {
 		&types.Config{Importer: importer.Default()}, fset, pkg, files, ssa.PrintFunctions)
 	if err != nil {
 		fmt.Print(err) // type error in some package
-	}
+	}*/
 
-	//impl := interfaceImpl{}
-	//k := BigStruct{f85: 123, f10: impl}
-	fmt.Printf("%v", GoToJava.RunConverter("ssaExample", pkgBuild))
+	impl := interfaceImpl{}
+	k := BigStruct{f85: 123, f10: impl}
+	k.f9.fl1 = "123"
+	k.f11 = make(map[string]bool)
+	k.f11["lolol"] = false
+
+	mp := make(map[someStruct]interfaceImpl)
+	mp[someStruct{fl1: "key"}] = interfaceImpl{fl21: []string{"some", "value"}}
+	k.f13 = &mp
+
+	f10 := interfaceImpl{fl21: []string{"hello world!", "hola", "привет"}}
+	k.f10 = f10
+	k.f23 = &k
+	k.f24 = &k
+
+	os.Mkdir("example", os.ModePerm)
+	file, _ := os.Create("example/filled.txt")
+
+	fmt.Printf("%v", GoToJava.RunConverter("example", file, &k))
 }
