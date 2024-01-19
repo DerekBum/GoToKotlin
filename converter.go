@@ -327,16 +327,16 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 	default:
 		conv.ptrNow = false
 
-		javaType := convertBaseType(kind.String())
+		ktType := convertBaseType(kind.String())
 		defaultVal := "0"
-		if javaType == "Object" {
+		if ktType == "Any" {
 			defaultVal = "nil"
 		}
 
 		if fieldVal.IsValid() {
-			fillerFile.Write([]byte(fmt.Sprintf("%s %v\n", javaType, fieldVal)))
+			fillerFile.Write([]byte(fmt.Sprintf("%s %v\n", ktType, fieldVal)))
 		} else {
-			fillerFile.Write([]byte(fmt.Sprintf("%s %s\n", javaType, defaultVal)))
+			fillerFile.Write([]byte(fmt.Sprintf("%s %s\n", ktType, defaultVal)))
 		}
 	}
 }
