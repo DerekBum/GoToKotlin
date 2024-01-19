@@ -1,0 +1,2488 @@
+struct ssa_Package 0
+Prog struct ssa_Program 1
+Fset struct token_FileSet 2
+mutex struct sync_RWMutex
+w struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+writerSem Long 0
+readerSem Long 0
+readerCount struct atomic_Int32
+v Integer 0
+end
+readerWait struct atomic_Int32
+v Integer 0
+end
+end
+base Integer 185
+files array
+struct token_File 3
+name String ./ssa_prompt/main.go
+base Integer 1
+size Integer 183
+mutex struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+lines array
+Integer 0
+Integer 13
+Integer 14
+Integer 46
+Integer 57
+Integer 69
+Integer 80
+Integer 100
+Integer 111
+Integer 114
+Integer 124
+Integer 132
+Integer 134
+Integer 135
+Integer 149
+Integer 160
+Integer 181
+end
+infos array
+end
+end
+end
+last struct atomic_Pointer[go/token_File]
+v  0xc000124540
+end
+end
+imported map
+end
+packages map
+struct types_Package 4
+path String main
+name String main
+scope struct types_Scope 5
+parent struct types_Scope 6
+parent struct types_Scope
+end
+children array
+end
+number Integer 0
+elems map
+String uintptr
+struct types_TypeName 7
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uintptr
+typ struct types_Basic 8
+kind Integer 12
+info Integer 6
+name String uintptr
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String complex128
+struct types_TypeName 9
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String complex128
+typ struct types_Basic 10
+kind Integer 16
+info Integer 16
+name String complex128
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String error
+struct types_TypeName 11
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String error
+typ struct types_Named 12
+check struct types_Checker
+end
+obj struct types_TypeName 11
+fromRHS struct types_Interface 13
+check struct types_Checker
+end
+methods array
+struct types_Func 14
+object struct types_object
+parent struct types_Scope
+end
+pos Integer 0
+pkg struct types_Package
+end
+name String Error
+typ struct types_Signature 15
+rparams struct types_TypeParamList
+end
+tparams struct types_TypeParamList
+end
+scope struct types_Scope
+end
+recv struct types_Var 16
+object struct types_object
+parent struct types_Scope
+end
+pos Integer 0
+pkg struct types_Package
+end
+name String 
+typ struct types_Named 12
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+embedded Boolean false
+isField Boolean false
+used Boolean false
+origin struct types_Var
+end
+end
+params struct types_Tuple
+end
+results struct types_Tuple 17
+vars array
+struct types_Var 18
+object struct types_object
+parent struct types_Scope
+end
+pos Integer 0
+pkg struct types_Package
+end
+name String 
+typ struct types_Basic 19
+kind Integer 17
+info Integer 32
+name String string
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+embedded Boolean false
+isField Boolean false
+used Boolean false
+origin struct types_Var
+end
+end
+end
+end
+variadic Boolean false
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+hasPtrRecv_ Boolean false
+origin struct types_Func
+end
+end
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean false
+complete Boolean true
+tset struct types__TypeSet 20
+methods array
+struct types_Func 14
+end
+terms array
+struct types_term 21
+tilde Boolean false
+typ nil
+end
+end
+comparable Boolean false
+end
+end
+inst struct types_instance
+end
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+state_ Long 2
+underlying struct types_Interface 13
+tparams struct types_TypeParamList
+end
+methods array
+end
+loader end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String false
+struct types_Const 22
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String false
+typ struct types_Basic 23
+kind Integer 19
+info Integer 65
+name String untyped bool
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+val Boolean false
+end
+String append
+struct types_Builtin 24
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String append
+typ struct types_Basic 25
+kind Integer 0
+info Integer 0
+name String invalid type
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 0
+end
+String cap
+struct types_Builtin 26
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String cap
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 1
+end
+String println
+struct types_Builtin 27
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String println
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 15
+end
+String bool
+struct types_TypeName 28
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String bool
+typ struct types_Basic 29
+kind Integer 1
+info Integer 1
+name String bool
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String any
+struct types_TypeName 30
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String any
+typ struct types_Interface 31
+check struct types_Checker
+end
+methods array
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean false
+complete Boolean true
+tset struct types__TypeSet 32
+methods array
+end
+terms array
+struct types_term 21
+end
+comparable Boolean false
+end
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String comparable
+struct types_TypeName 33
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String comparable
+typ struct types_Named 34
+check struct types_Checker
+end
+obj struct types_TypeName 33
+fromRHS struct types_Interface 35
+check struct types_Checker
+end
+methods array
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean false
+complete Boolean true
+tset struct types__TypeSet 36
+methods array
+end
+terms array
+struct types_term 21
+end
+comparable Boolean true
+end
+end
+inst struct types_instance
+end
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+state_ Long 2
+underlying struct types_Interface 35
+tparams struct types_TypeParamList
+end
+methods array
+end
+loader end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String copy
+struct types_Builtin 37
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String copy
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 5
+end
+String len
+struct types_Builtin 38
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String len
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 8
+end
+String min
+struct types_Builtin 39
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String min
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 11
+end
+String panic
+struct types_Builtin 40
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String panic
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 13
+end
+String print
+struct types_Builtin 41
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String print
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 14
+end
+String complex64
+struct types_TypeName 42
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String complex64
+typ struct types_Basic 43
+kind Integer 15
+info Integer 16
+name String complex64
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String real
+struct types_Builtin 44
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String real
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 16
+end
+String int32
+struct types_TypeName 45
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String int32
+typ struct types_Basic 46
+kind Integer 5
+info Integer 2
+name String int32
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String uint
+struct types_TypeName 47
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uint
+typ struct types_Basic 48
+kind Integer 7
+info Integer 6
+name String uint
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String uint16
+struct types_TypeName 49
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uint16
+typ struct types_Basic 50
+kind Integer 9
+info Integer 6
+name String uint16
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String float64
+struct types_TypeName 51
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String float64
+typ struct types_Basic 52
+kind Integer 14
+info Integer 8
+name String float64
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String close
+struct types_Builtin 53
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String close
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 3
+end
+String delete
+struct types_Builtin 54
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String delete
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 6
+end
+String new
+struct types_Builtin 55
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String new
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 12
+end
+String int16
+struct types_TypeName 56
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String int16
+typ struct types_Basic 57
+kind Integer 4
+info Integer 2
+name String int16
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String imag
+struct types_Builtin 58
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String imag
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 7
+end
+String true
+struct types_Const 59
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String true
+typ struct types_Basic 23
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+val Boolean true
+end
+String float32
+struct types_TypeName 60
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String float32
+typ struct types_Basic 61
+kind Integer 13
+info Integer 8
+name String float32
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String iota
+struct types_Const 62
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String iota
+typ struct types_Basic 63
+kind Integer 20
+info Integer 66
+name String untyped int
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+val Long 0
+end
+String clear
+struct types_Builtin 64
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String clear
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 2
+end
+String make
+struct types_Builtin 65
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String make
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 9
+end
+String max
+struct types_Builtin 66
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String max
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 10
+end
+String recover
+struct types_Builtin 67
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String recover
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 17
+end
+String int8
+struct types_TypeName 68
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String int8
+typ struct types_Basic 69
+kind Integer 3
+info Integer 2
+name String int8
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String byte
+struct types_TypeName 70
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String byte
+typ struct types_Basic 71
+kind Integer 8
+info Integer 6
+name String byte
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String rune
+struct types_TypeName 72
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String rune
+typ struct types_Basic 73
+kind Integer 5
+info Integer 2
+name String rune
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String int
+struct types_TypeName 74
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String int
+typ struct types_Basic 75
+kind Integer 2
+info Integer 2
+name String int
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String uint8
+struct types_TypeName 76
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uint8
+typ struct types_Basic 77
+kind Integer 8
+info Integer 6
+name String uint8
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String uint32
+struct types_TypeName 78
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uint32
+typ struct types_Basic 79
+kind Integer 10
+info Integer 6
+name String uint32
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String uint64
+struct types_TypeName 80
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String uint64
+typ struct types_Basic 81
+kind Integer 11
+info Integer 6
+name String uint64
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String string
+struct types_TypeName 82
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String string
+typ struct types_Basic 19
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String nil
+struct types_Nil 83
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String nil
+typ struct types_Basic 84
+kind Integer 25
+info Integer 64
+name String untyped nil
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+String complex
+struct types_Builtin 85
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String complex
+typ struct types_Basic 25
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+id Integer 4
+end
+String int64
+struct types_TypeName 86
+object struct types_object
+parent struct types_Scope 6
+pos Integer 0
+pkg struct types_Package
+end
+name String int64
+typ struct types_Basic 87
+kind Integer 6
+info Integer 2
+name String int64
+end
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+end
+end
+pos Integer 0
+end Integer 0
+comment String universe
+isFunc Boolean false
+end
+children array
+struct types_Scope 88
+parent struct types_Scope 5
+children array
+struct types_Scope 89
+parent struct types_Scope 88
+children array
+struct types_Scope 90
+parent struct types_Scope 89
+children array
+struct types_Scope 91
+parent struct types_Scope 90
+children array
+end
+number Integer 1
+elems map
+end
+pos Integer 68
+end Integer 83
+comment String block
+isFunc Boolean false
+end
+struct types_Scope 92
+parent struct types_Scope 90
+children array
+struct types_Scope 93
+parent struct types_Scope 92
+children array
+end
+number Integer 1
+elems map
+end
+pos Integer 99
+end Integer 114
+comment String block
+isFunc Boolean false
+end
+end
+number Integer 2
+elems map
+end
+pos Integer 89
+end Integer 114
+comment String if
+isFunc Boolean false
+end
+end
+number Integer 1
+elems map
+end
+pos Integer 59
+end Integer 114
+comment String if
+isFunc Boolean false
+end
+end
+number Integer 1
+elems map
+String x
+struct types_Var 94
+object struct types_object
+parent struct types_Scope 89
+pos Integer 28
+pkg struct types_Package 4
+name String x
+typ struct types_Basic 75
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+embedded Boolean false
+isField Boolean false
+used Boolean true
+origin struct types_Var
+end
+end
+String res
+struct types_Var 95
+object struct types_object
+parent struct types_Scope 89
+pos Integer 36
+pkg struct types_Package 4
+name String res
+typ struct types_Basic 75
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+embedded Boolean false
+isField Boolean false
+used Boolean true
+origin struct types_Var
+end
+end
+end
+pos Integer 45
+end Integer 134
+comment String function
+isFunc Boolean true
+end
+struct types_Scope 96
+parent struct types_Scope 88
+children array
+end
+number Integer 2
+elems map
+String x
+struct types_Var 97
+object struct types_object
+parent struct types_Scope 96
+pos Integer 155
+pkg struct types_Package 4
+name String x
+typ struct types_Basic 75
+order_ Long 0
+color_ Long 0
+scopePos_ Integer 160
+end
+embedded Boolean false
+isField Boolean false
+used Boolean true
+origin struct types_Var
+end
+end
+end
+pos Integer 148
+end Integer 183
+comment String function
+isFunc Boolean true
+end
+end
+number Integer 1
+elems map
+end
+pos Integer 1
+end Integer 184
+comment String ./ssa_prompt/main.go
+isFunc Boolean false
+end
+end
+number Integer 0
+elems map
+String GetSign
+struct types_Func 98
+object struct types_object
+parent struct types_Scope 5
+pos Integer 20
+pkg struct types_Package 4
+name String GetSign
+typ struct types_Signature 99
+rparams struct types_TypeParamList
+end
+tparams struct types_TypeParamList
+end
+scope struct types_Scope 89
+recv struct types_Var
+end
+params struct types_Tuple 100
+vars array
+struct types_Var 94
+end
+end
+results struct types_Tuple 101
+vars array
+struct types_Var 95
+end
+end
+variadic Boolean false
+end
+order_ Long 1
+color_ Long 1
+scopePos_ Integer 0
+end
+hasPtrRecv_ Boolean false
+origin struct types_Func
+end
+end
+String main
+struct types_Func 102
+object struct types_object
+parent struct types_Scope 5
+pos Integer 141
+pkg struct types_Package 4
+name String main
+typ struct types_Signature 103
+rparams struct types_TypeParamList
+end
+tparams struct types_TypeParamList
+end
+scope struct types_Scope 96
+recv struct types_Var
+end
+params struct types_Tuple
+end
+results struct types_Tuple
+end
+variadic Boolean false
+end
+order_ Long 2
+color_ Long 1
+scopePos_ Integer 0
+end
+hasPtrRecv_ Boolean false
+origin struct types_Func
+end
+end
+end
+pos Integer 0
+end Integer 0
+comment String package "main"
+isFunc Boolean false
+end
+imports array
+end
+complete Boolean true
+fake Boolean false
+cgo Boolean false
+goVersion String 
+end
+struct ssa_Package 0
+end
+mode Long 2
+MethodSets struct typeutil_MethodSetCache
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+named map
+end
+others map
+end
+end
+canon struct ssa_canonizer 104
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+types struct typeutil_Map
+hasher struct typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams struct types_TypeParamList
+end
+end
+table map
+end
+length Integer 0
+end
+lists struct ssa_typeListMap
+hasher struct typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams struct types_TypeParamList
+end
+end
+buckets map
+end
+end
+end
+ctxt struct types_Context 105
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+typeMap map
+end
+nextID Integer 0
+originIDs map
+end
+end
+methodsMu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+methodSets struct typeutil_Map
+hasher struct typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams struct types_TypeParamList
+end
+end
+table map
+end
+length Integer 0
+end
+parameterized struct ssa_tpWalker
+mu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+seen map
+end
+end
+runtimeTypesMu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+runtimeTypes struct typeutil_Map
+hasher struct typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams struct types_TypeParamList
+end
+end
+table map
+end
+length Integer 0
+end
+objectMethodsMu struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+objectMethods map
+end
+end
+Pkg struct types_Package 4
+Members map
+String init
+struct ssa_Function 106
+name String init
+object struct types_Func
+end
+method struct ssa_selection
+end
+Signature struct types_Signature 107
+rparams struct types_TypeParamList
+end
+tparams struct types_TypeParamList
+end
+scope struct types_Scope
+end
+recv struct types_Var
+end
+params struct types_Tuple
+end
+results struct types_Tuple
+end
+variadic Boolean false
+end
+pos Integer 0
+Synthetic String package initializer
+syntax nil
+info struct types_Info
+end
+goversion String 
+build parent struct ssa_Function
+end
+Pkg struct ssa_Package 0
+Prog struct ssa_Program 1
+Params array
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+struct ssa_BasicBlock 108
+Index Integer 0
+Comment String entry
+parent struct ssa_Function 106
+Instrs array
+struct ssa_UnOp 109
+register struct ssa_register
+anInstruction struct generatedInlineStruct_001
+block struct ssa_BasicBlock 108
+end
+num Integer 0
+typ struct types_Basic 29
+pos Integer 0
+referrers array
+struct ssa_If 110
+anInstruction struct generatedInlineStruct_002
+block struct ssa_BasicBlock 108
+end
+Cond struct ssa_UnOp 109
+end
+end
+end
+Op Integer *
+X struct ssa_Global 111
+name String init$guard
+object nil
+typ struct types_Pointer 112
+base struct types_Basic 29
+end
+pos Integer 0
+Pkg struct ssa_Package 0
+end
+CommaOk Boolean false
+end
+struct ssa_If 110
+end
+Preds array
+end
+Succs array
+struct ssa_BasicBlock 113
+Index Integer 2
+Comment String init.done
+parent struct ssa_Function 106
+Instrs array
+struct ssa_Return 114
+anInstruction struct generatedInlineStruct_003
+block struct ssa_BasicBlock 113
+end
+Results array
+end
+pos Integer 0
+end
+end
+Preds array
+struct ssa_BasicBlock 108
+struct ssa_BasicBlock 115
+Index Integer 1
+Comment String init.start
+parent struct ssa_Function 106
+Instrs array
+struct ssa_Store 116
+anInstruction struct generatedInlineStruct_004
+block struct ssa_BasicBlock 115
+end
+Addr struct ssa_Global 111
+Val struct ssa_Const 117
+typ struct types_Basic 29
+Value Boolean true
+end
+pos Integer 0
+end
+struct ssa_Jump 118
+anInstruction struct generatedInlineStruct_005
+block struct ssa_BasicBlock 115
+end
+end
+end
+Preds array
+struct ssa_BasicBlock 108
+end
+Succs array
+struct ssa_BasicBlock 113
+end
+succs2  [0xc000136420 <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 108
+children array
+end
+pre Integer 2
+post Integer 1
+end
+gaps Integer 0
+rundefers Integer 0
+end
+end
+Succs array
+end
+succs2  [<nil> <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 108
+children array
+end
+pre Integer 1
+post Integer 0
+end
+gaps Integer 0
+rundefers Integer 0
+end
+struct ssa_BasicBlock 115
+end
+succs2  [0xc000136420 0xc000136370]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock
+end
+children array
+struct ssa_BasicBlock 113
+struct ssa_BasicBlock 115
+end
+pre Integer 0
+post Integer 2
+end
+gaps Integer 0
+rundefers Integer 0
+end
+struct ssa_BasicBlock 115
+struct ssa_BasicBlock 113
+end
+Recover struct ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Integer 0
+typeparams struct types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin struct ssa_Function
+end
+generic struct ssa_generic
+end
+currentBlock struct ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets struct ssa_targets
+end
+lblocks map
+end
+subst struct ssa_subster
+end
+end
+String GetSign
+struct ssa_Function 119
+name String GetSign
+object struct types_Func 98
+method struct ssa_selection
+end
+Signature struct types_Signature 99
+pos Integer 20
+Synthetic String 
+syntax struct ast_FuncDecl 120
+Doc struct ast_CommentGroup
+end
+Recv struct ast_FieldList
+end
+Name struct ast_Ident 121
+NamePos Integer 20
+Name String GetSign
+Obj struct ast_Object 122
+Kind Integer 5
+Name String GetSign
+Decl struct ast_FuncDecl 120
+Data nil
+Type nil
+end
+end
+Type struct ast_FuncType 123
+Func Integer 15
+TypeParams struct ast_FieldList
+end
+Params struct ast_FieldList 124
+Opening Integer 27
+List array
+struct ast_Field 125
+Doc struct ast_CommentGroup
+end
+Names array
+struct ast_Ident 126
+NamePos Integer 28
+Name String x
+Obj struct ast_Object 127
+Kind Integer 4
+Name String x
+Decl struct ast_Field 125
+Data nil
+Type nil
+end
+end
+end
+Type struct ast_Ident 128
+NamePos Integer 30
+Name String int
+Obj struct ast_Object
+end
+end
+Tag struct ast_BasicLit
+end
+Comment struct ast_CommentGroup
+end
+end
+end
+Closing Integer 33
+end
+Results struct ast_FieldList 129
+Opening Integer 35
+List array
+struct ast_Field 130
+Doc struct ast_CommentGroup
+end
+Names array
+struct ast_Ident 131
+NamePos Integer 36
+Name String res
+Obj struct ast_Object 132
+Kind Integer 4
+Name String res
+Decl struct ast_Field 130
+Data nil
+Type nil
+end
+end
+end
+Type struct ast_Ident 133
+NamePos Integer 40
+Name String int
+Obj struct ast_Object
+end
+end
+Tag struct ast_BasicLit
+end
+Comment struct ast_CommentGroup
+end
+end
+end
+Closing Integer 43
+end
+end
+Body struct ast_BlockStmt 134
+Lbrace Integer 45
+List array
+struct ast_AssignStmt 135
+Lhs array
+struct ast_Ident 136
+NamePos Integer 48
+Name String res
+Obj struct ast_Object 132
+end
+end
+TokPos Integer 52
+Tok Integer 42
+Rhs array
+struct ast_BasicLit 137
+ValuePos Integer 54
+Kind Integer 5
+Value String 123
+end
+end
+end
+struct ast_IfStmt 138
+If Integer 59
+Init nil
+Cond struct ast_BinaryExpr 139
+X struct ast_Ident 140
+NamePos Integer 62
+Name String x
+Obj struct ast_Object 127
+end
+OpPos Integer 64
+Op Integer 41
+Y struct ast_BasicLit 141
+ValuePos Integer 66
+Kind Integer 5
+Value String 0
+end
+end
+Body struct ast_BlockStmt 142
+Lbrace Integer 68
+List array
+struct ast_ReturnStmt 143
+Return Integer 72
+Results array
+struct ast_BasicLit 144
+ValuePos Integer 79
+Kind Integer 5
+Value String 1
+end
+end
+end
+end
+Rbrace Integer 82
+end
+Else struct ast_IfStmt 145
+If Integer 89
+Init nil
+Cond struct ast_BinaryExpr 146
+X struct ast_Ident 147
+NamePos Integer 92
+Name String x
+Obj struct ast_Object 127
+end
+OpPos Integer 94
+Op Integer 39
+Y struct ast_BasicLit 148
+ValuePos Integer 97
+Kind Integer 5
+Value String 0
+end
+end
+Body struct ast_BlockStmt 149
+Lbrace Integer 99
+List array
+struct ast_ReturnStmt 150
+Return Integer 103
+Results array
+struct ast_BasicLit 151
+ValuePos Integer 110
+Kind Integer 5
+Value String 0
+end
+end
+end
+end
+Rbrace Integer 113
+end
+Else nil
+end
+end
+struct ast_AssignStmt 152
+Lhs array
+struct ast_Ident 153
+NamePos Integer 116
+Name String res
+Obj struct ast_Object 132
+end
+end
+TokPos Integer 120
+Tok Integer 42
+Rhs array
+struct ast_UnaryExpr 154
+OpPos Integer 122
+Op Integer 13
+X struct ast_BasicLit 155
+ValuePos Integer 123
+Kind Integer 5
+Value String 1
+end
+end
+end
+end
+struct ast_ReturnStmt 156
+Return Integer 126
+Results array
+end
+end
+end
+Rbrace Integer 133
+end
+end
+info struct types_Info 157
+Types map
+struct ast_Ident 133
+struct types_TypeAndValue
+mode Short 3
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 140
+struct types_TypeAndValue
+mode Short 5
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 158
+NamePos Integer 178
+Name String x
+Obj struct ast_Object 159
+Kind Integer 4
+Name String x
+Decl struct ast_ValueSpec 160
+Doc struct ast_CommentGroup
+end
+Names array
+struct ast_Ident 161
+NamePos Integer 155
+Name String x
+Obj struct ast_Object 159
+end
+end
+Type struct ast_Ident 162
+NamePos Integer 157
+Name String int
+Obj struct ast_Object
+end
+end
+Values array
+end
+Comment struct ast_CommentGroup
+end
+end
+Data Integer 0
+Type nil
+end
+end
+struct types_TypeAndValue
+mode Short 5
+Type struct types_Basic 75
+Value nil
+end
+struct ast_BinaryExpr 146
+struct types_TypeAndValue
+mode Short 7
+Type struct types_Basic 23
+Value nil
+end
+struct ast_BasicLit 155
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 63
+Value Long 1
+end
+struct ast_CallExpr 163
+Fun struct ast_Ident 164
+NamePos Integer 162
+Name String println
+Obj struct ast_Object
+end
+end
+Lparen Integer 169
+Args array
+struct ast_CallExpr 165
+Fun struct ast_Ident 166
+NamePos Integer 170
+Name String GetSign
+Obj struct ast_Object 122
+end
+Lparen Integer 177
+Args array
+struct ast_Ident 158
+end
+Ellipsis Integer 0
+Rparen Integer 179
+end
+end
+Ellipsis Integer 0
+Rparen Integer 180
+end
+struct types_TypeAndValue
+mode Short 1
+Type struct types_Tuple
+end
+Value nil
+end
+struct ast_BasicLit 137
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long 123
+end
+struct ast_BasicLit 144
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long 1
+end
+struct ast_BasicLit 148
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long 0
+end
+struct ast_UnaryExpr 154
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long -1
+end
+struct ast_Ident 166
+struct types_TypeAndValue
+mode Short 7
+Type struct types_Signature 99
+Value nil
+end
+struct ast_BinaryExpr 139
+struct types_TypeAndValue
+mode Short 7
+Type struct types_Basic 23
+Value nil
+end
+struct ast_Ident 136
+struct types_TypeAndValue
+mode Short 5
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 147
+struct types_TypeAndValue
+mode Short 5
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 162
+struct types_TypeAndValue
+mode Short 3
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 164
+struct types_TypeAndValue
+mode Short 2
+Type struct types_Signature 167
+rparams struct types_TypeParamList
+end
+tparams struct types_TypeParamList
+end
+scope struct types_Scope
+end
+recv struct types_Var
+end
+params struct types_Tuple 168
+vars array
+struct types_Var 169
+object struct types_object
+parent struct types_Scope
+end
+pos Integer 0
+pkg struct types_Package
+end
+name String 
+typ struct types_Basic 75
+order_ Long 0
+color_ Long 1
+scopePos_ Integer 0
+end
+embedded Boolean false
+isField Boolean false
+used Boolean false
+origin struct types_Var
+end
+end
+end
+end
+results struct types_Tuple
+end
+variadic Boolean false
+end
+Value nil
+end
+struct ast_CallExpr 165
+struct types_TypeAndValue
+mode Short 7
+Type struct types_Basic 75
+Value nil
+end
+struct ast_Ident 128
+struct types_TypeAndValue
+mode Short 3
+Type struct types_Basic 75
+Value nil
+end
+struct ast_BasicLit 141
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long 0
+end
+struct ast_BasicLit 151
+struct types_TypeAndValue
+mode Short 4
+Type struct types_Basic 75
+Value Long 0
+end
+struct ast_Ident 153
+struct types_TypeAndValue
+mode Short 5
+Type struct types_Basic 75
+Value nil
+end
+end
+Instances map
+end
+Defs map
+struct ast_Ident 131
+struct types_Var 95
+struct ast_Ident 161
+struct types_Var 97
+struct ast_Ident 170
+NamePos Integer 9
+Name String main
+Obj struct ast_Object
+end
+end
+nil
+struct ast_Ident 121
+struct types_Func 98
+struct ast_Ident 171
+NamePos Integer 141
+Name String main
+Obj struct ast_Object 172
+Kind Integer 5
+Name String main
+Decl struct ast_FuncDecl 173
+Doc struct ast_CommentGroup
+end
+Recv struct ast_FieldList
+end
+Name struct ast_Ident 171
+Type struct ast_FuncType 174
+Func Integer 136
+TypeParams struct ast_FieldList
+end
+Params struct ast_FieldList 175
+Opening Integer 145
+List array
+end
+Closing Integer 146
+end
+Results struct ast_FieldList
+end
+end
+Body struct ast_BlockStmt 176
+Lbrace Integer 148
+List array
+struct ast_DeclStmt 177
+Decl struct ast_GenDecl 178
+Doc struct ast_CommentGroup
+end
+TokPos Integer 151
+Tok Integer 85
+Lparen Integer 0
+Specs array
+struct ast_ValueSpec 160
+end
+Rparen Integer 0
+end
+end
+struct ast_ExprStmt 179
+X struct ast_CallExpr 163
+end
+end
+Rbrace Integer 182
+end
+end
+Data nil
+Type nil
+end
+end
+struct types_Func 102
+struct ast_Ident 126
+struct types_Var 94
+end
+Uses map
+struct ast_Ident 166
+struct types_Func 98
+struct ast_Ident 158
+struct types_Var 97
+struct ast_Ident 128
+struct types_TypeName 74
+struct ast_Ident 153
+struct types_Var 95
+struct ast_Ident 162
+struct types_TypeName 74
+struct ast_Ident 164
+struct types_Builtin 27
+struct ast_Ident 133
+struct types_TypeName 74
+struct ast_Ident 136
+struct types_Var 95
+struct ast_Ident 140
+struct types_Var 94
+struct ast_Ident 147
+struct types_Var 94
+end
+Implicits map
+end
+Selections map
+end
+Scopes map
+struct ast_IfStmt 145
+struct types_Scope 92
+struct ast_BlockStmt 149
+struct types_Scope 93
+struct ast_File 180
+Doc struct ast_CommentGroup
+end
+Package Integer 1
+Name struct ast_Ident 170
+Decls array
+struct ast_FuncDecl 120
+struct ast_FuncDecl 173
+end
+FileStart Integer 1
+FileEnd Integer 184
+Scope struct ast_Scope 181
+Outer struct ast_Scope
+end
+Objects map
+String GetSign
+struct ast_Object 122
+String main
+struct ast_Object 172
+end
+end
+Imports array
+end
+Unresolved array
+struct ast_Ident 128
+struct ast_Ident 133
+struct ast_Ident 162
+struct ast_Ident 164
+end
+Comments array
+end
+GoVersion String 
+end
+struct types_Scope 88
+struct ast_FuncType 123
+struct types_Scope 89
+struct ast_FuncType 174
+struct types_Scope 96
+struct ast_IfStmt 138
+struct types_Scope 90
+struct ast_BlockStmt 142
+struct types_Scope 91
+end
+InitOrder array
+end
+end
+goversion String 
+build parent struct ssa_Function
+end
+Pkg struct ssa_Package 0
+Prog struct ssa_Program 1
+Params array
+struct ssa_Parameter 182
+name String x
+object struct types_Var 94
+typ struct types_Basic 75
+parent struct ssa_Function 119
+referrers array
+struct ssa_BinOp 183
+register struct ssa_register
+anInstruction struct generatedInlineStruct_006
+block struct ssa_BasicBlock 184
+Index Integer 0
+Comment String entry
+parent struct ssa_Function 119
+Instrs array
+struct ssa_BinOp 183
+struct ssa_If 185
+anInstruction struct generatedInlineStruct_007
+block struct ssa_BasicBlock 184
+end
+Cond struct ssa_BinOp 183
+end
+end
+Preds array
+end
+Succs array
+struct ssa_BasicBlock 186
+Index Integer 1
+Comment String if.then
+parent struct ssa_Function 119
+Instrs array
+struct ssa_Return 187
+anInstruction struct generatedInlineStruct_008
+block struct ssa_BasicBlock 186
+end
+Results array
+struct ssa_Const 188
+typ struct types_Basic 75
+Value Long 1
+end
+end
+pos Integer 72
+end
+end
+Preds array
+struct ssa_BasicBlock 184
+end
+Succs array
+end
+succs2  [<nil> <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 184
+children array
+end
+pre Integer 1
+post Integer 0
+end
+gaps Integer 2
+rundefers Integer 1
+end
+struct ssa_BasicBlock 189
+Index Integer 2
+Comment String if.else
+parent struct ssa_Function 119
+Instrs array
+struct ssa_BinOp 190
+register struct ssa_register
+anInstruction struct generatedInlineStruct_009
+block struct ssa_BasicBlock 189
+end
+num Integer 1
+typ struct types_Basic 29
+pos Integer 94
+referrers array
+struct ssa_If 191
+anInstruction struct generatedInlineStruct_010
+block struct ssa_BasicBlock 189
+end
+Cond struct ssa_BinOp 190
+end
+end
+end
+Op Integer 39
+X struct ssa_Parameter 182
+Y struct ssa_Const 192
+typ struct types_Basic 75
+Value Long 0
+end
+end
+struct ssa_If 191
+end
+Preds array
+struct ssa_BasicBlock 184
+end
+Succs array
+struct ssa_BasicBlock 193
+Index Integer 3
+Comment String if.then
+parent struct ssa_Function 119
+Instrs array
+struct ssa_Return 194
+anInstruction struct generatedInlineStruct_011
+block struct ssa_BasicBlock 193
+end
+Results array
+struct ssa_Const 195
+typ struct types_Basic 75
+Value Long 0
+end
+end
+pos Integer 103
+end
+end
+Preds array
+struct ssa_BasicBlock 189
+end
+Succs array
+end
+succs2  [<nil> <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 189
+children array
+end
+pre Integer 3
+post Integer 1
+end
+gaps Integer 2
+rundefers Integer 1
+end
+struct ssa_BasicBlock 196
+Index Integer 4
+Comment String if.done
+parent struct ssa_Function 119
+Instrs array
+struct ssa_Return 197
+anInstruction struct generatedInlineStruct_012
+block struct ssa_BasicBlock 196
+end
+Results array
+struct ssa_Const 198
+typ struct types_Basic 75
+Value Long -1
+end
+end
+pos Integer 126
+end
+end
+Preds array
+struct ssa_BasicBlock 189
+end
+Succs array
+end
+succs2  [0xc000136630 <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 189
+children array
+end
+pre Integer 4
+post Integer 2
+end
+gaps Integer 2
+rundefers Integer 1
+end
+end
+succs2  [0xc000136840 0xc0001368f0]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock 184
+children array
+struct ssa_BasicBlock 193
+struct ssa_BasicBlock 196
+end
+pre Integer 2
+post Integer 3
+end
+gaps Integer 1
+rundefers Integer 0
+end
+end
+succs2  [0xc000136580 0xc0001366e0]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock
+end
+children array
+struct ssa_BasicBlock 186
+struct ssa_BasicBlock 189
+end
+pre Integer 0
+post Integer 4
+end
+gaps Integer 5
+rundefers Integer 0
+end
+end
+num Integer 0
+typ struct types_Basic 29
+pos Integer 64
+referrers array
+struct ssa_If 185
+end
+end
+Op Integer 41
+X struct ssa_Parameter 182
+Y struct ssa_Const 199
+typ struct types_Basic 75
+Value Long 0
+end
+end
+struct ssa_BinOp 190
+end
+end
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+struct ssa_BasicBlock 184
+struct ssa_BasicBlock 186
+struct ssa_BasicBlock 189
+struct ssa_BasicBlock 193
+struct ssa_BasicBlock 196
+end
+Recover struct ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Integer 0
+typeparams struct types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin struct ssa_Function
+end
+generic struct ssa_generic
+end
+currentBlock struct ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets struct ssa_targets
+end
+lblocks map
+end
+subst struct ssa_subster
+end
+end
+String main
+struct ssa_Function 200
+name String main
+object struct types_Func 102
+method struct ssa_selection
+end
+Signature struct types_Signature 103
+pos Integer 141
+Synthetic String 
+syntax struct ast_FuncDecl 173
+info struct types_Info 157
+goversion String 
+build parent struct ssa_Function
+end
+Pkg struct ssa_Package 0
+Prog struct ssa_Program 1
+Params array
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+struct ssa_BasicBlock 201
+Index Integer 0
+Comment String entry
+parent struct ssa_Function 200
+Instrs array
+struct ssa_Call 202
+register struct ssa_register
+anInstruction struct generatedInlineStruct_013
+block struct ssa_BasicBlock 201
+end
+num Integer 0
+typ struct types_Basic 75
+pos Integer 0
+referrers array
+struct ssa_Call 203
+register struct ssa_register
+anInstruction struct generatedInlineStruct_014
+block struct ssa_BasicBlock 201
+end
+num Integer 1
+typ struct types_Tuple
+end
+pos Integer 0
+referrers array
+end
+end
+Call struct ssa_CallCommon
+Value struct ssa_Builtin 204
+name String println
+sig struct types_Signature 167
+end
+Method struct types_Func
+end
+Args array
+struct ssa_Call 202
+end
+pos Integer 169
+end
+end
+end
+end
+Call struct ssa_CallCommon
+Value struct ssa_Function 119
+Method struct types_Func
+end
+Args array
+struct ssa_Const 205
+typ struct types_Basic 75
+Value Long 0
+end
+end
+pos Integer 177
+end
+end
+struct ssa_Call 203
+struct ssa_Return 206
+anInstruction struct generatedInlineStruct_015
+block struct ssa_BasicBlock 201
+end
+Results array
+end
+pos Integer 0
+end
+end
+Preds array
+end
+Succs array
+end
+succs2  [<nil> <nil>]
+dom struct ssa_domInfo
+idom struct ssa_BasicBlock
+end
+children array
+end
+pre Integer 0
+post Integer 0
+end
+gaps Integer 2
+rundefers Integer 1
+end
+end
+Recover struct ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Integer 0
+typeparams struct types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin struct ssa_Function
+end
+generic struct ssa_generic
+end
+currentBlock struct ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets struct ssa_targets
+end
+lblocks map
+end
+subst struct ssa_subster
+end
+end
+String init$guard
+struct ssa_Global 111
+end
+objects map
+struct types_Func 98
+struct ssa_Function 119
+struct types_Func 102
+struct ssa_Function 200
+end
+init struct ssa_Function 106
+debug Boolean false
+syntax Boolean true
+buildOnce struct sync_Once
+done Long 1
+m struct sync_Mutex
+state Integer 0
+sema Long 0
+end
+end
+ninit Integer 0
+info struct types_Info
+end
+files array
+end
+created array
+end
+initVersion map
+end
+end
