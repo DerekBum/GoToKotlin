@@ -309,6 +309,11 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 				innerFieldType := field.Type
 				println(field.Type.String())
 
+				if field.Name == "_" {
+					// This is a blank identifier, no need to send.
+					continue
+				}
+
 				innerFieldVal := fieldVal.Field(i)
 				innerKind := innerFieldVal.Kind()
 

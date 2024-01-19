@@ -26,6 +26,8 @@ func (l interfaceImpl) SomeFunc() bool {
 type customType int16
 
 type BigStruct struct {
+	_ interfaceImpl
+
 	Field1      int
 	FieldString string
 	field3      bool
