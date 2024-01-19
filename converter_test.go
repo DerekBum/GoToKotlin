@@ -3,7 +3,6 @@ package GoToJava_test
 import (
 	"os"
 	"os/exec"
-	"path/filepath"
 	"testing"
 
 	"GoToJava"
@@ -63,10 +62,10 @@ type BigStruct struct {
 
 var testDir = "./test_struct"
 var genFiles = []string{
-	"GoToJava_test_BigStruct.java",
-	"GoToJava_test_innerStruct.java",
-	"GoToJava_test_interfaceImpl.java",
-	"GoToJava_test_someStruct.java",
+	"GoToJava_test_BigStruct.kt",
+	"GoToJava_test_innerStruct.kt",
+	"GoToJava_test_interfaceImpl.kt",
+	"GoToJava_test_someStruct.kt",
 }
 
 func TestConvert(t *testing.T) {
@@ -91,16 +90,11 @@ func TestConvert(t *testing.T) {
 		}
 	}
 
-	paths := genFiles
-	for i := range paths {
-		paths[i] = filepath.Join(testDir, paths[i])
-	}
-
-	cmd := exec.Command("javac", paths...)
+	cmd := exec.Command("kotlinc", testDir, "-d", testDir)
 	_, err = cmd.Output()
 
 	if err != nil {
-		t.Errorf("Java files did not compile")
+		t.Errorf("Kotlin files did not compile")
 	}
 }
 

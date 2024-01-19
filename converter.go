@@ -29,7 +29,7 @@ func createConverter(dirPath string) converter {
 func convertBaseType(goName string) string {
 	switch goName {
 	case "int", "int32", "uint16", "rune":
-		return "Integer"
+		return "Int"
 	case "int16", "uint8", "byte":
 		return "Short"
 	case "int64", "uint32", "uint":
@@ -43,7 +43,7 @@ func convertBaseType(goName string) string {
 	case "bool":
 		return "Boolean"
 	case "interface {}":
-		return "Object"
+		return "Any"
 	}
 	return ""
 }
@@ -63,7 +63,7 @@ func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 			conv.getInnerStructs(fieldType, kind)
 		}
 
-		return "Object"
+		return "Any"
 	case reflect.Pointer:
 		fieldType = fieldType.Elem()
 		kind = fieldType.Kind()
@@ -77,7 +77,7 @@ func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 
 		name := conv.getInnerStructs(fieldType, kind)
 
-		return name + "[]"
+		return "Array<" + name + ">"
 	case reflect.Map:
 		keyType := fieldType.Key()
 		keyKind := keyType.Kind()
@@ -123,14 +123,13 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 	}
 	conv.used[name] = true
 
-	filePath := filepath.Join(".", conv.dirPath, name+".java")
+	filePath := filepath.Join(".", conv.dirPath, name+".kt")
 	file, err := os.Create(filePath)
 	if err != nil {
 		return "", err
 	}
 
-	structDef := imports
-	structDef += fmt.Sprintf(structDefinition, name)
+	structDef := fmt.Sprintf(structDefinition, name)
 
 	for i := 0; i < structType.NumField(); i++ {
 		fmt.Printf("%+v\n", structType.Field(i))
@@ -142,21 +141,29 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 			// This is a blank identifier, no need to send.
 			continue
 		}
+		if field.Name == "object" {
+			// Invalid kotlin name.
+			field.Name = "Object"
+		}
+		if field.Name == "val" {
+			// Invalid kotlin name.
+			field.Name = "Val"
+		}
 
-		var javaName string
+		var ktName string
 
 		fieldVal := structVal.Field(i)
 		kind := fieldVal.Kind()
 
-		javaName = conv.getInnerStructs(fieldType, kind)
+		ktName = conv.getInnerStructs(fieldType, kind)
 
-		if javaName == "" {
+		if ktName == "" {
 			// unsupported, ex functions
 			continue
 		}
 
 		structDef += fmt.Sprintf(structField,
-			javaName, field.Name)
+			field.Name, ktName)
 	}
 
 	structDef += "}\n"
