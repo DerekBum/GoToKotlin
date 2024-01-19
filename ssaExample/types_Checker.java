@@ -28,5 +28,5 @@ public class types_Checker {
 	public Object[] objPath;
 	public Object[] cleaners;
 	public types_environment environment;
-	public int indent;
+	public Integer indent;
 }

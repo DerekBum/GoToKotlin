@@ -5,7 +5,7 @@ public class ssa_Program {
 	public token_FileSet Fset;
 	public Map<String, ssa_Package> imported;
 	public Map<types_Package, ssa_Package> packages;
-	public long mode;
+	public Long mode;
 	public typeutil_MethodSetCache MethodSets;
 	public ssa_canonizer canon;
 	public types_Context ctxt;

@@ -34,6 +34,7 @@ type innerStruct struct {
 
 type BigStruct struct {
 	innerStruct
+	_ interfaceImpl
 
 	Field1      int
 	FieldString string

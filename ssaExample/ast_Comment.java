@@ -2,6 +2,6 @@ import java.util.Map;
 
 public class ast_Comment {
 
-	public int Slash;
+	public Integer Slash;
 	public String Text;
 }

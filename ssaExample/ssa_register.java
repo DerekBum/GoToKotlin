@@ -3,8 +3,8 @@ import java.util.Map;
 public class ssa_register {
 
 	public generatedInlineStruct_001 anInstruction;
-	public int num;
+	public Integer num;
 	public Object typ;
-	public int pos;
+	public Integer pos;
 	public Object[] referrers;
 }

@@ -2,10 +2,10 @@ import java.util.Map;
 
 public class ssa_selection {
 
-	public int kind;
+	public Integer kind;
 	public Object recv;
 	public Object typ;
 	public Object obj;
-	public int[] index;
+	public Integer[] index;
 	public Boolean indirect;
 }

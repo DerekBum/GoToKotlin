@@ -3,8 +3,8 @@ import java.util.Map;
 public class ast_CallExpr {
 
 	public Object Fun;
-	public int Lparen;
+	public Integer Lparen;
 	public Object[] Args;
-	public int Ellipsis;
-	public int Rparen;
+	public Integer Ellipsis;
+	public Integer Rparen;
 }

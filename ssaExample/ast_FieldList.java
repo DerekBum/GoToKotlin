@@ -2,7 +2,7 @@ import java.util.Map;
 
 public class ast_FieldList {
 
-	public int Opening;
+	public Integer Opening;
 	public ast_Field[] List;
-	public int Closing;
+	public Integer Closing;
 }

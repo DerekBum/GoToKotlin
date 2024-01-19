@@ -2,7 +2,7 @@ import java.util.Map;
 
 public class ast_BasicLit {
 
-	public int ValuePos;
-	public int Kind;
+	public Integer ValuePos;
+	public Integer Kind;
 	public String Value;
 }

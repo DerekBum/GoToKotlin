@@ -2,7 +2,7 @@ import java.util.Map;
 
 public class types_Basic {
 
-	public int kind;
-	public int info;
+	public Integer kind;
+	public Integer info;
 	public String name;
 }

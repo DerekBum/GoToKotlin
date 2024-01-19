@@ -2,9 +2,9 @@ import java.util.Map;
 
 public class types_Selection {
 
-	public int kind;
+	public Integer kind;
 	public Object recv;
 	public Object obj;
-	public int[] index;
+	public Integer[] index;
 	public Boolean indirect;
 }

@@ -138,6 +138,11 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 		fieldType := field.Type
 		println(field.Type.String())
 
+		if field.Name == "_" {
+			// This is a blank identifier, no need to send.
+			continue
+		}
+
 		var javaName string
 
 		fieldVal := structVal.Field(i)

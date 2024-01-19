@@ -2,8 +2,8 @@ import java.util.Map;
 
 public class token_lineInfo {
 
-	public int Offset;
+	public Integer Offset;
 	public String Filename;
-	public int Line;
-	public int Column;
+	public Integer Line;
+	public Integer Column;
 }

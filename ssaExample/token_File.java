@@ -3,9 +3,9 @@ import java.util.Map;
 public class token_File {
 
 	public String name;
-	public int base;
-	public int size;
+	public Integer base;
+	public Integer size;
 	public sync_Mutex mutex;
-	public int[] lines;
+	public Integer[] lines;
 	public token_lineInfo[] infos;
 }

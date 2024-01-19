@@ -6,7 +6,7 @@ public class ssa_Function {
 	public types_Func object;
 	public ssa_selection method;
 	public types_Signature Signature;
-	public int pos;
+	public Integer pos;
 	public String Synthetic;
 	public Object syntax;
 	public types_Info info;
@@ -21,7 +21,7 @@ public class ssa_Function {
 	public ssa_BasicBlock Recover;
 	public ssa_Function[] AnonFuncs;
 	public Object[] referrers;
-	public int anonIdx;
+	public Integer anonIdx;
 	public types_TypeParamList typeparams;
 	public Object[] typeargs;
 	public ssa_Function topLevelOrigin;

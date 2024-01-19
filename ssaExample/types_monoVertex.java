@@ -2,8 +2,8 @@ import java.util.Map;
 
 public class types_monoVertex {
 
-	public int weight;
-	public int pre;
-	public int len;
+	public Integer weight;
+	public Integer pre;
+	public Integer len;
 	public types_TypeName obj;
 }

@@ -4,7 +4,7 @@ public class types_environment {
 
 	public types_declInfo decl;
 	public types_Scope scope;
-	public int pos;
+	public Integer pos;
 	public Object iota;
 	public Object errpos;
 	public Boolean inTParamList;

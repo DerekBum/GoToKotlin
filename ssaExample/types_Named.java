@@ -7,7 +7,7 @@ public class types_Named {
 	public Object fromRHS;
 	public types_instance inst;
 	public sync_Mutex mu;
-	public long state_;
+	public Long state_;
 	public Object underlying;
 	public types_TypeParamList tparams;
 	public types_Func[] methods;

@@ -10,7 +10,7 @@ public class ssa_Package {
 	public Boolean debug;
 	public Boolean syntax;
 	public sync_Once buildOnce;
-	public int ninit;
+	public Integer ninit;
 	public types_Info info;
 	public ast_File[] files;
 	public ssa_Function[] created;

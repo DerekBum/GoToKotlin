@@ -6,5 +6,5 @@ public class ast_ImportSpec {
 	public ast_Ident Name;
 	public ast_BasicLit Path;
 	public ast_CommentGroup Comment;
-	public int EndPos;
+	public Integer EndPos;
 }
