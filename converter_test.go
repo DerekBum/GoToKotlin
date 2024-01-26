@@ -76,7 +76,13 @@ func TestConvert(t *testing.T) {
 	os.MkdirAll(testDir, os.ModePerm)
 	file, _ := os.Create(testDir + "/filled.txt")
 
-	err := GoToJava.RunConverter(testDir, file, st)
+	conv := GoToJava.CreateConverter(testDir)
+
+	err := conv.GenerateStructures(st)
+	if err != nil {
+		t.Errorf("unexpected error: %s", err.Error())
+	}
+	err = conv.FillStructures(file, st)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
@@ -86,18 +92,33 @@ func TestConvert(t *testing.T) {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
 
-	if len(dir) != len(genFiles)+1 {
+	if len(dir) != len(genFiles)+3 {
 		t.Errorf("wrong number of files, want %d, got %d", len(genFiles), len(dir))
 	}
 	cnt := 0
+	fillerCnt := 0
+	baseCnt := 0
+	entryCnt := 0
 	for _, file := range dir {
 		if file.Name() == "filled.txt" {
+			fillerCnt++
+			continue
+		}
+		if file.Name() == "baseDeserializers.kt" {
+			baseCnt++
+			continue
+		}
+		if file.Name() == "Entrypoint.kt" {
+			entryCnt++
 			continue
 		}
 		if file.Name() != genFiles[cnt] {
 			t.Errorf("unexpected file, want %s, got %s", genFiles[cnt], file.Name())
 		}
 		cnt++
+	}
+	if fillerCnt != 1 || baseCnt != 1 || entryCnt != 1 {
+		t.Errorf("Wrong number of files")
 	}
 
 	cmd := exec.Command("kotlinc", testDir, "-d", testDir)

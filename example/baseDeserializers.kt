@@ -1,51 +1,7 @@
 package GoToJava
 
-const packageLine = `package GoToJava
+import java.io.BufferedReader
 
-`
-
-const structDefinition = `class %s {
-
-`
-
-const structField = `	var %s: %s? = null
-`
-
-const deserializeFunStart = `fun read_%s(buffReader: BufferedReader, id: Int): %s {
-	val res = %s()
-    if (id != -1) {
-        if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as %s
-        }
-        ptrMap[id] = res
-    }
-    var line: String
-    var split: List<String>
-    var id: Int
-    var readType: String
-`
-
-const deserializeField = `
-	line = buffReader.readLine()
-	if (line == "end") {
-        return res
-    }
-    split = line.split(" ")
-    readType = split[1]
-    id = -1
-    if (split.size > 2) {
-        id = split[2].toInt()
-    }
-    res.%s = mapDec[readType]?.invoke(buffReader, id) as %s?
-`
-
-const deserializeEnd = `
-	buffReader.readLine()
-	return res
-}
-`
-
-const readBaseTypes = `
 fun readInteger(buffReader: BufferedReader, id: Int): Any {
     return buffReader.readLine().toLong()
 }
@@ -119,37 +75,3 @@ fun readMap(buffReader: BufferedReader, id: Int): Any? {
     }
     return res
 }
-`
-
-const readerImports = `import java.io.BufferedReader
-`
-
-const entrypoint = `
-fun StartDeserializer(buffReader: BufferedReader): Any? {
-    val line = buffReader.readLine()
-    val split = line.split(" ")
-    val readType = split[0]
-    var id = -1
-    if (split.size > 1) {
-        id = split[1].toInt()
-    }
-    return mapDec[readType]?.invoke(buffReader, id)
-}
-`
-
-const kotlinConstants = `
-val ptrMap: MutableMap<Int, Any> = mutableMapOf()
-val mapDec: Map<String, (BufferedReader, Int)->Any?> = mapOf(
-    "Int" to ::readInteger,
-    "Short" to ::readInteger,
-    "Long" to ::readInteger,
-    "Float" to ::readReal,
-    "Double" to ::readReal,
-    "String" to ::readString,
-    "Boolean" to ::readBoolean,
-    "nil" to ::readNil,
-
-    "array" to ::readArray,
-    "map" to ::readMap`
-
-const funcMapLine = `	"%s" to ::read_%s`

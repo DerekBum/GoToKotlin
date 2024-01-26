@@ -10,36 +10,34 @@ import (
 	"strings"
 )
 
-func createDir(name string) error {
-	return os.MkdirAll(name, os.ModePerm)
-}
-
-type converter struct {
+type Converter struct {
 	dirPath string
 	genName int
 	ptrCnt  int
 	ptrNow  bool
 	currPtr uintptr
 
-	used    map[string]bool
-	usedPtr map[uintptr]int
+	used     map[string]bool
+	usedPtr  map[uintptr]int
+	inlineId map[string]int
 }
 
-func createConverter(dirPath string) converter {
-	return converter{
-		dirPath: dirPath,
-		genName: 0,
-		used:    map[string]bool{},
-		usedPtr: map[uintptr]int{},
+func CreateConverter(dirPath string) Converter {
+	return Converter{
+		dirPath:  dirPath,
+		genName:  0,
+		used:     map[string]bool{},
+		usedPtr:  map[uintptr]int{},
+		inlineId: map[string]int{},
 	}
 }
 
 func convertBaseType(goName string) string {
 	switch goName {
 	case "int", "int32", "uint16", "rune":
-		return "Int"
+		return "Long"
 	case "int16", "uint8", "byte":
-		return "Short"
+		return "Long"
 	case "int64", "uint32", "uint":
 		return "Long"
 	case "float32":
@@ -56,7 +54,7 @@ func convertBaseType(goName string) string {
 	return ""
 }
 
-func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
+func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
 	switch kind {
 	case reflect.Func:
 		// skip
@@ -79,13 +77,13 @@ func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 		name := conv.getInnerStructs(fieldType, kind)
 
 		return name
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		fieldType = fieldType.Elem()
 		kind = fieldType.Kind()
 
 		name := conv.getInnerStructs(fieldType, kind)
 
-		return "Array<" + name + ">"
+		return "List<" + name + ">"
 	case reflect.Map:
 		keyType := fieldType.Key()
 		keyKind := keyType.Kind()
@@ -107,7 +105,7 @@ func (conv *converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 	}
 }
 
-func (conv *converter) convertStruct(structure interface{}) (string, error) {
+func (conv *Converter) convertStruct(structure interface{}) (string, error) {
 	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
 	structKind := structType.Kind()
@@ -120,12 +118,20 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 	name := structType.String()
 
 	if strings.Contains(name, "struct") {
-		name = fmt.Sprintf("generatedInlineStruct_%03d", conv.genName)
-		conv.genName++
+		id, ok := conv.inlineId[name]
+		if !ok {
+			id = conv.genName
+			conv.genName++
+			conv.inlineId[name] = id
+		}
+		name = fmt.Sprintf("generatedInlineStruct_%03d", id)
 	}
 
 	name = strings.ReplaceAll(name, ".", "_")
 
+	if strings.Contains(name, "/") {
+		return "", fmt.Errorf("123")
+	}
 	if conv.used[name] {
 		return name, nil
 	}
@@ -137,7 +143,15 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 		return "", err
 	}
 
-	structDef := fmt.Sprintf(structDefinition, name)
+	structDef := packageLine + readerImports
+	structDef += fmt.Sprintf(structDefinition, name)
+
+	deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
+
+	if name == "types_Named" {
+		l := 1
+		l++
+	}
 
 	for i := 0; i < structType.NumField(); i++ {
 		//fmt.Printf("%+v\n", structType.Field(i))
@@ -158,8 +172,8 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 			field.Name = "Val"
 		}
 
-		fieldVal := structVal.Field(i)
-		kind := fieldVal.Kind()
+		fieldType = structVal.Field(i).Type()
+		kind := fieldType.Kind()
 
 		ktName := conv.getInnerStructs(fieldType, kind)
 
@@ -170,16 +184,19 @@ func (conv *converter) convertStruct(structure interface{}) (string, error) {
 
 		structDef += fmt.Sprintf(structField,
 			field.Name, ktName)
+		deserializer += fmt.Sprintf(deserializeField, field.Name, ktName)
 	}
 
-	structDef += "}\n"
-
+	structDef += "}\n\n"
 	file.Write([]byte(structDef))
+
+	deserializer += deserializeEnd
+	file.Write([]byte(deserializer))
 
 	return name, nil
 }
 
-func getFieldString(conv *converter, startString string) (string, bool) {
+func getFieldString(conv *Converter, startString string) (string, bool) {
 	skip := false
 
 	if conv.ptrNow && conv.currPtr != 0 {
@@ -204,7 +221,7 @@ func getFieldString(conv *converter, startString string) (string, bool) {
 	return startString, skip
 }
 
-func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect.Value, kind reflect.Kind, fillerFile io.Writer) {
+func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect.Value, kind reflect.Kind, fillerFile io.Writer) {
 	switch kind {
 	case reflect.Func:
 		// skip
@@ -238,7 +255,7 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 
 		conv.fillInnerStructs(fieldType, fieldVal, kind, fillerFile)
 
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		arrayString, skip := getFieldString(conv, "array")
 
 		fillerFile.Write([]byte(arrayString))
@@ -280,21 +297,28 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			}
 		}
 
-		conv.getInnerStructs(keyType, keyKind)
-		conv.getInnerStructs(valType, valKind)
-
 		fillerFile.Write([]byte("end\n"))
 	case reflect.Struct:
 		name := fieldType.String()
 
 		if strings.Contains(name, "struct") {
-			name = fmt.Sprintf("generatedInlineStruct_%03d", conv.genName)
-			conv.genName++
+			id, ok := conv.inlineId[name]
+			if !ok {
+				id = conv.genName
+				conv.genName++
+				conv.inlineId[name] = id
+			}
+			name = fmt.Sprintf("generatedInlineStruct_%03d", id)
 		}
 
 		name = strings.ReplaceAll(name, ".", "_")
 
-		structString, skip := getFieldString(conv, "struct "+name)
+		if _, ok := conv.used[name]; !ok {
+			conv.used[name] = true
+			conv.convertStruct(reflect.Zero(fieldType).Interface())
+		}
+
+		structString, skip := getFieldString(conv, name)
 
 		fillerFile.Write([]byte(structString))
 
@@ -313,9 +337,24 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 					// This is a blank identifier, no need to send.
 					continue
 				}
+				if field.Name == "object" {
+					// Invalid kotlin name.
+					field.Name = "Object"
+				}
+				if field.Name == "val" {
+					// Invalid kotlin name.
+					field.Name = "Val"
+				}
+				if strings.Contains(innerFieldType.String(), "/") {
+					continue
+				}
 
 				innerFieldVal := fieldVal.Field(i)
 				innerKind := innerFieldVal.Kind()
+
+				if innerKind == reflect.Func {
+					continue
+				}
 
 				fillerFile.Write([]byte(field.Name + " "))
 
@@ -334,14 +373,23 @@ func (conv *converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 		}
 
 		if fieldVal.IsValid() {
-			fillerFile.Write([]byte(fmt.Sprintf("%s %v\n", ktType, fieldVal)))
+			switch kind {
+			case reflect.String:
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal.String())))
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(fieldVal.Int(), 10))))
+			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(fieldVal.Uint(), 10))))
+			default:
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal)))
+			}
 		} else {
-			fillerFile.Write([]byte(fmt.Sprintf("%s %s\n", ktType, defaultVal)))
+			fillerFile.Write([]byte(fmt.Sprintf("%s\n%s\n", ktType, defaultVal)))
 		}
 	}
 }
 
-func (conv *converter) fillValues(structure interface{}, fillerFile io.Writer) error {
+func (conv *Converter) fillValues(structure interface{}, fillerFile io.Writer) error {
 	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
 	structKind := structType.Kind()
@@ -354,21 +402,61 @@ func (conv *converter) fillValues(structure interface{}, fillerFile io.Writer) e
 // GENERATE PUBLIC CLASS IN ANOTHER FILE
 // FILL IT WITH PUBLIC VARIABLES (GENERATED FROM GO)
 
-func RunConverter(dirPath string, fillerFile io.Writer, structure interface{}) error {
-	var err error
-
-	if err = createDir(dirPath); err != nil {
+func (conv *Converter) generateBaseDeserializers() error {
+	filePath := filepath.Join(".", conv.dirPath, "baseDeserializers.kt")
+	file, err := os.Create(filePath)
+	if err != nil {
 		return err
 	}
-	conv := createConverter(dirPath)
+	des := packageLine + readerImports + readBaseTypes
+	_, err = file.Write([]byte(des))
+	return err
+}
 
-	_, err = conv.convertStruct(structure)
+func (conv *Converter) generateEntrypoint() error {
+	filePath := filepath.Join(".", conv.dirPath, "Entrypoint.kt")
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	start := packageLine + readerImports + kotlinConstants
+
+	for name := range conv.used {
+		start += ",\n"
+		start += fmt.Sprintf(funcMapLine, name, name)
+	}
+
+	start += "\n)\n" + entrypoint
+
+	_, err = file.Write([]byte(start))
+	return err
+}
+
+func (conv *Converter) GenerateStructures(structure interface{}) error {
+	_, err := conv.convertStruct(structure)
 	if err != nil {
 		return err
 	}
 
-	conv.genName = 0
-	err = conv.fillValues(structure, fillerFile)
+	err = conv.generateBaseDeserializers()
+	if err != nil {
+		return err
+	}
+
+	err = conv.generateEntrypoint()
+
+	return err
+}
+
+func (conv *Converter) FillStructures(fillerFile io.Writer, structure interface{}) error {
+	err := conv.fillValues(structure, fillerFile)
+
+	err = conv.generateBaseDeserializers()
+	if err != nil {
+		return err
+	}
+
+	err = conv.generateEntrypoint()
 
 	return err
 }

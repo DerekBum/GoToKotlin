@@ -1,0 +1,3474 @@
+ssa_Package 0
+Prog ssa_Program 1
+Fset token_FileSet 2
+mutex sync_RWMutex
+w sync_Mutex
+state Long
+0
+sema Long
+0
+end
+writerSem Long
+0
+readerSem Long
+0
+readerCount atomic_Int32
+v Long
+0
+end
+readerWait atomic_Int32
+v Long
+0
+end
+end
+base Long
+185
+files array
+token_File 3
+name String
+"./ssa_prompt/main.go"
+base Long
+1
+size Long
+183
+mutex sync_Mutex
+state Long
+0
+sema Long
+0
+end
+lines array
+Long
+0
+Long
+13
+Long
+14
+Long
+46
+Long
+57
+Long
+69
+Long
+80
+Long
+100
+Long
+111
+Long
+114
+Long
+124
+Long
+132
+Long
+134
+Long
+135
+Long
+149
+Long
+160
+Long
+181
+end
+infos array
+end
+end
+end
+end
+imported map
+end
+packages map
+types_Package 4
+path String
+"main"
+name String
+"main"
+scope types_Scope 5
+parent types_Scope 6
+parent types_Scope
+end
+children array
+end
+number Long
+0
+elems map
+String
+"error"
+types_TypeName 7
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"error"
+typ types_Named 8
+check types_Checker
+end
+obj types_TypeName 7
+fromRHS types_Interface 9
+check types_Checker
+end
+methods array
+types_Func 10
+Object types_object
+parent types_Scope
+end
+pos Long
+0
+pkg types_Package
+end
+name String
+"Error"
+typ types_Signature 11
+rparams types_TypeParamList
+end
+tparams types_TypeParamList
+end
+scope types_Scope
+end
+recv types_Var 12
+Object types_object
+parent types_Scope
+end
+pos Long
+0
+pkg types_Package
+end
+name String
+""
+typ types_Named 8
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=false)
+origin types_Var
+end
+end
+params types_Tuple
+end
+results types_Tuple 13
+vars array
+types_Var 14
+Object types_object
+parent types_Scope
+end
+pos Long
+0
+pkg types_Package
+end
+name String
+""
+typ types_Basic 15
+kind Long
+17
+info Long
+32
+name String
+"string"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=false)
+origin types_Var
+end
+end
+end
+end
+variadic Boolean
+%!q(bool=false)
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+hasPtrRecv_ Boolean
+%!q(bool=false)
+origin types_Func
+end
+end
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean
+%!q(bool=false)
+complete Boolean
+%!q(bool=true)
+tset types__TypeSet 16
+methods array
+types_Func 10
+end
+terms array
+types_term 17
+tilde Boolean
+%!q(bool=false)
+typ nil
+end
+end
+comparable Boolean
+%!q(bool=false)
+end
+end
+inst types_instance
+end
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+state_ Long
+2
+underlying types_Interface 9
+tparams types_TypeParamList
+end
+methods array
+end
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"comparable"
+types_TypeName 18
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"comparable"
+typ types_Named 19
+check types_Checker
+end
+obj types_TypeName 18
+fromRHS types_Interface 20
+check types_Checker
+end
+methods array
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean
+%!q(bool=false)
+complete Boolean
+%!q(bool=true)
+tset types__TypeSet 21
+methods array
+end
+terms array
+types_term 17
+end
+comparable Boolean
+%!q(bool=true)
+end
+end
+inst types_instance
+end
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+state_ Long
+2
+underlying types_Interface 20
+tparams types_TypeParamList
+end
+methods array
+end
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"cap"
+types_Builtin 22
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"cap"
+typ types_Basic 23
+kind Long
+0
+info Long
+0
+name String
+"invalid type"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+1
+end
+String
+"close"
+types_Builtin 24
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"close"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+3
+end
+String
+"new"
+types_Builtin 25
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"new"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+12
+end
+String
+"uint16"
+types_TypeName 26
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uint16"
+typ types_Basic 27
+kind Long
+9
+info Long
+6
+name String
+"uint16"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"byte"
+types_TypeName 28
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"byte"
+typ types_Basic 29
+kind Long
+8
+info Long
+6
+name String
+"byte"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"imag"
+types_Builtin 30
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"imag"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+7
+end
+String
+"print"
+types_Builtin 31
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"print"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+14
+end
+String
+"real"
+types_Builtin 32
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"real"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+16
+end
+String
+"int"
+types_TypeName 33
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"int"
+typ types_Basic 34
+kind Long
+2
+info Long
+2
+name String
+"int"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"int8"
+types_TypeName 35
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"int8"
+typ types_Basic 36
+kind Long
+3
+info Long
+2
+name String
+"int8"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"uint8"
+types_TypeName 37
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uint8"
+typ types_Basic 38
+kind Long
+8
+info Long
+6
+name String
+"uint8"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"complex64"
+types_TypeName 39
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"complex64"
+typ types_Basic 40
+kind Long
+15
+info Long
+16
+name String
+"complex64"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"min"
+types_Builtin 41
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"min"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+11
+end
+String
+"println"
+types_Builtin 42
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"println"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+15
+end
+String
+"int64"
+types_TypeName 43
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"int64"
+typ types_Basic 44
+kind Long
+6
+info Long
+2
+name String
+"int64"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"float32"
+types_TypeName 45
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"float32"
+typ types_Basic 46
+kind Long
+13
+info Long
+8
+name String
+"float32"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"float64"
+types_TypeName 47
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"float64"
+typ types_Basic 48
+kind Long
+14
+info Long
+8
+name String
+"float64"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"any"
+types_TypeName 49
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"any"
+typ types_Interface 50
+check types_Checker
+end
+methods array
+end
+embeddeds array
+end
+embedPos array
+end
+implicit Boolean
+%!q(bool=false)
+complete Boolean
+%!q(bool=true)
+tset types__TypeSet 51
+methods array
+end
+terms array
+types_term 17
+end
+comparable Boolean
+%!q(bool=false)
+end
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"nil"
+types_Nil 52
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"nil"
+typ types_Basic 53
+kind Long
+25
+info Long
+64
+name String
+"untyped nil"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"clear"
+types_Builtin 54
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"clear"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+2
+end
+String
+"iota"
+types_Const 55
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"iota"
+typ types_Basic 56
+kind Long
+20
+info Long
+66
+name String
+"untyped int"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+Val Long
+0
+end
+String
+"make"
+types_Builtin 57
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"make"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+9
+end
+String
+"panic"
+types_Builtin 58
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"panic"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+13
+end
+String
+"uintptr"
+types_TypeName 59
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uintptr"
+typ types_Basic 60
+kind Long
+12
+info Long
+6
+name String
+"uintptr"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"true"
+types_Const 61
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"true"
+typ types_Basic 62
+kind Long
+19
+info Long
+65
+name String
+"untyped bool"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+Val Boolean
+%!q(constant.boolVal=true)
+end
+String
+"false"
+types_Const 63
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"false"
+typ types_Basic 62
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+Val Boolean
+%!q(constant.boolVal=false)
+end
+String
+"complex"
+types_Builtin 64
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"complex"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+4
+end
+String
+"copy"
+types_Builtin 65
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"copy"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+5
+end
+String
+"delete"
+types_Builtin 66
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"delete"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+6
+end
+String
+"int16"
+types_TypeName 67
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"int16"
+typ types_Basic 68
+kind Long
+4
+info Long
+2
+name String
+"int16"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"uint"
+types_TypeName 69
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uint"
+typ types_Basic 70
+kind Long
+7
+info Long
+6
+name String
+"uint"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"string"
+types_TypeName 71
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"string"
+typ types_Basic 15
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"append"
+types_Builtin 72
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"append"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+0
+end
+String
+"len"
+types_Builtin 73
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"len"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+8
+end
+String
+"recover"
+types_Builtin 74
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"recover"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+17
+end
+String
+"bool"
+types_TypeName 75
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"bool"
+typ types_Basic 76
+kind Long
+1
+info Long
+1
+name String
+"bool"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"int32"
+types_TypeName 77
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"int32"
+typ types_Basic 78
+kind Long
+5
+info Long
+2
+name String
+"int32"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"uint32"
+types_TypeName 79
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uint32"
+typ types_Basic 80
+kind Long
+10
+info Long
+6
+name String
+"uint32"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"uint64"
+types_TypeName 81
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"uint64"
+typ types_Basic 82
+kind Long
+11
+info Long
+6
+name String
+"uint64"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"complex128"
+types_TypeName 83
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"complex128"
+typ types_Basic 84
+kind Long
+16
+info Long
+16
+name String
+"complex128"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"rune"
+types_TypeName 85
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"rune"
+typ types_Basic 86
+kind Long
+5
+info Long
+2
+name String
+"rune"
+end
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+end
+String
+"max"
+types_Builtin 87
+Object types_object
+parent types_Scope 6
+pos Long
+0
+pkg types_Package
+end
+name String
+"max"
+typ types_Basic 23
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+id Long
+10
+end
+end
+pos Long
+0
+end Long
+0
+comment String
+"universe"
+isFunc Boolean
+%!q(bool=false)
+end
+children array
+types_Scope 88
+parent types_Scope 5
+children array
+types_Scope 89
+parent types_Scope 88
+children array
+types_Scope 90
+parent types_Scope 89
+children array
+types_Scope 91
+parent types_Scope 90
+children array
+end
+number Long
+1
+elems map
+end
+pos Long
+68
+end Long
+83
+comment String
+"block"
+isFunc Boolean
+%!q(bool=false)
+end
+types_Scope 92
+parent types_Scope 90
+children array
+types_Scope 93
+parent types_Scope 92
+children array
+end
+number Long
+1
+elems map
+end
+pos Long
+99
+end Long
+114
+comment String
+"block"
+isFunc Boolean
+%!q(bool=false)
+end
+end
+number Long
+2
+elems map
+end
+pos Long
+89
+end Long
+114
+comment String
+"if"
+isFunc Boolean
+%!q(bool=false)
+end
+end
+number Long
+1
+elems map
+end
+pos Long
+59
+end Long
+114
+comment String
+"if"
+isFunc Boolean
+%!q(bool=false)
+end
+end
+number Long
+1
+elems map
+String
+"x"
+types_Var 94
+Object types_object
+parent types_Scope 89
+pos Long
+28
+pkg types_Package 4
+name String
+"x"
+typ types_Basic 34
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=true)
+origin types_Var
+end
+end
+String
+"res"
+types_Var 95
+Object types_object
+parent types_Scope 89
+pos Long
+36
+pkg types_Package 4
+name String
+"res"
+typ types_Basic 34
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=true)
+origin types_Var
+end
+end
+end
+pos Long
+45
+end Long
+134
+comment String
+"function"
+isFunc Boolean
+%!q(bool=true)
+end
+types_Scope 96
+parent types_Scope 88
+children array
+end
+number Long
+2
+elems map
+String
+"x"
+types_Var 97
+Object types_object
+parent types_Scope 96
+pos Long
+155
+pkg types_Package 4
+name String
+"x"
+typ types_Basic 34
+order_ Long
+0
+color_ Long
+0
+scopePos_ Long
+160
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=true)
+origin types_Var
+end
+end
+end
+pos Long
+148
+end Long
+183
+comment String
+"function"
+isFunc Boolean
+%!q(bool=true)
+end
+end
+number Long
+1
+elems map
+end
+pos Long
+1
+end Long
+184
+comment String
+"./ssa_prompt/main.go"
+isFunc Boolean
+%!q(bool=false)
+end
+end
+number Long
+0
+elems map
+String
+"GetSign"
+types_Func 98
+Object types_object
+parent types_Scope 5
+pos Long
+20
+pkg types_Package 4
+name String
+"GetSign"
+typ types_Signature 99
+rparams types_TypeParamList
+end
+tparams types_TypeParamList
+end
+scope types_Scope 89
+recv types_Var
+end
+params types_Tuple 100
+vars array
+types_Var 94
+end
+end
+results types_Tuple 101
+vars array
+types_Var 95
+end
+end
+variadic Boolean
+%!q(bool=false)
+end
+order_ Long
+1
+color_ Long
+1
+scopePos_ Long
+0
+end
+hasPtrRecv_ Boolean
+%!q(bool=false)
+origin types_Func
+end
+end
+String
+"main"
+types_Func 102
+Object types_object
+parent types_Scope 5
+pos Long
+141
+pkg types_Package 4
+name String
+"main"
+typ types_Signature 103
+rparams types_TypeParamList
+end
+tparams types_TypeParamList
+end
+scope types_Scope 96
+recv types_Var
+end
+params types_Tuple
+end
+results types_Tuple
+end
+variadic Boolean
+%!q(bool=false)
+end
+order_ Long
+2
+color_ Long
+1
+scopePos_ Long
+0
+end
+hasPtrRecv_ Boolean
+%!q(bool=false)
+origin types_Func
+end
+end
+end
+pos Long
+0
+end Long
+0
+comment String
+"package \"main\""
+isFunc Boolean
+%!q(bool=false)
+end
+imports array
+end
+complete Boolean
+%!q(bool=true)
+fake Boolean
+%!q(bool=false)
+cgo Boolean
+%!q(bool=false)
+goVersion String
+""
+end
+ssa_Package 0
+end
+mode Long
+2
+MethodSets typeutil_MethodSetCache
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+named map
+end
+others map
+end
+end
+canon ssa_canonizer 104
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+types typeutil_Map
+hasher typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams types_TypeParamList
+end
+end
+table map
+end
+length Long
+0
+end
+lists ssa_typeListMap
+hasher typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams types_TypeParamList
+end
+end
+buckets map
+end
+end
+end
+ctxt types_Context 105
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+typeMap map
+end
+nextID Long
+0
+originIDs map
+end
+end
+methodsMu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+methodSets typeutil_Map
+hasher typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams types_TypeParamList
+end
+end
+table map
+end
+length Long
+0
+end
+parameterized ssa_tpWalker
+mu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+seen map
+end
+end
+runtimeTypesMu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+runtimeTypes typeutil_Map
+hasher typeutil_Hasher
+memo map
+end
+ptrMap map
+end
+sigTParams types_TypeParamList
+end
+end
+table map
+end
+length Long
+0
+end
+objectMethodsMu sync_Mutex
+state Long
+0
+sema Long
+0
+end
+objectMethods map
+end
+end
+Pkg types_Package 4
+Members map
+String
+"init"
+ssa_Function 106
+name String
+"init"
+Object types_Func
+end
+method ssa_selection
+end
+Signature types_Signature 107
+rparams types_TypeParamList
+end
+tparams types_TypeParamList
+end
+scope types_Scope
+end
+recv types_Var
+end
+params types_Tuple
+end
+results types_Tuple
+end
+variadic Boolean
+%!q(bool=false)
+end
+pos Long
+0
+Synthetic String
+"package initializer"
+syntax nil
+info types_Info
+end
+goversion String
+""
+parent ssa_Function
+end
+Pkg ssa_Package 0
+Prog ssa_Program 1
+Params array
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+ssa_BasicBlock 108
+Index Long
+0
+Comment String
+"entry"
+parent ssa_Function 106
+Instrs array
+ssa_UnOp 109
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 108
+end
+num Long
+0
+typ types_Basic 76
+pos Long
+0
+referrers array
+ssa_If 110
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 108
+end
+Cond ssa_UnOp 109
+end
+end
+end
+Op Long
+14
+X ssa_Global 111
+name String
+"init$guard"
+Object nil
+typ types_Pointer 112
+base types_Basic 76
+end
+pos Long
+0
+Pkg ssa_Package 0
+end
+CommaOk Boolean
+%!q(bool=false)
+end
+ssa_If 110
+end
+Preds array
+end
+Succs array
+ssa_BasicBlock 113
+Index Long
+2
+Comment String
+"init.done"
+parent ssa_Function 106
+Instrs array
+ssa_Return 114
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 113
+end
+Results array
+end
+pos Long
+0
+end
+end
+Preds array
+ssa_BasicBlock 108
+ssa_BasicBlock 115
+Index Long
+1
+Comment String
+"init.start"
+parent ssa_Function 106
+Instrs array
+ssa_Store 116
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 115
+end
+Addr ssa_Global 111
+Val ssa_Const 117
+typ types_Basic 76
+Value Boolean
+"true"
+end
+pos Long
+0
+end
+ssa_Jump 118
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 115
+end
+end
+end
+Preds array
+ssa_BasicBlock 108
+end
+Succs array
+ssa_BasicBlock 113
+end
+succs2 array
+ssa_BasicBlock 113
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 108
+children array
+end
+pre Long
+2
+post Long
+1
+end
+gaps Long
+0
+rundefers Long
+0
+end
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 108
+children array
+end
+pre Long
+1
+post Long
+0
+end
+gaps Long
+0
+rundefers Long
+0
+end
+ssa_BasicBlock 115
+end
+succs2 array
+ssa_BasicBlock 113
+ssa_BasicBlock 115
+end
+dom ssa_domInfo
+idom ssa_BasicBlock
+end
+children array
+ssa_BasicBlock 113
+ssa_BasicBlock 115
+end
+pre Long
+0
+post Long
+2
+end
+gaps Long
+0
+rundefers Long
+0
+end
+ssa_BasicBlock 115
+ssa_BasicBlock 113
+end
+Recover ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Long
+0
+typeparams types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin ssa_Function
+end
+generic ssa_generic
+end
+currentBlock ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets ssa_targets
+end
+lblocks map
+end
+subst ssa_subster
+end
+end
+String
+"GetSign"
+ssa_Function 119
+name String
+"GetSign"
+Object types_Func 98
+method ssa_selection
+end
+Signature types_Signature 99
+pos Long
+20
+Synthetic String
+""
+syntax ast_FuncDecl 120
+Doc ast_CommentGroup
+end
+Recv ast_FieldList
+end
+Name ast_Ident 121
+NamePos Long
+20
+Name String
+"GetSign"
+Obj ast_Object 122
+Kind Long
+5
+Name String
+"GetSign"
+Decl ast_FuncDecl 120
+Data nil
+Type nil
+end
+end
+Type ast_FuncType 123
+Func Long
+15
+TypeParams ast_FieldList
+end
+Params ast_FieldList 124
+Opening Long
+27
+List array
+ast_Field 125
+Doc ast_CommentGroup
+end
+Names array
+ast_Ident 126
+NamePos Long
+28
+Name String
+"x"
+Obj ast_Object 127
+Kind Long
+4
+Name String
+"x"
+Decl ast_Field 125
+Data nil
+Type nil
+end
+end
+end
+Type ast_Ident 128
+NamePos Long
+30
+Name String
+"int"
+Obj ast_Object
+end
+end
+Tag ast_BasicLit
+end
+Comment ast_CommentGroup
+end
+end
+end
+Closing Long
+33
+end
+Results ast_FieldList 129
+Opening Long
+35
+List array
+ast_Field 130
+Doc ast_CommentGroup
+end
+Names array
+ast_Ident 131
+NamePos Long
+36
+Name String
+"res"
+Obj ast_Object 132
+Kind Long
+4
+Name String
+"res"
+Decl ast_Field 130
+Data nil
+Type nil
+end
+end
+end
+Type ast_Ident 133
+NamePos Long
+40
+Name String
+"int"
+Obj ast_Object
+end
+end
+Tag ast_BasicLit
+end
+Comment ast_CommentGroup
+end
+end
+end
+Closing Long
+43
+end
+end
+Body ast_BlockStmt 134
+Lbrace Long
+45
+List array
+ast_AssignStmt 135
+Lhs array
+ast_Ident 136
+NamePos Long
+48
+Name String
+"res"
+Obj ast_Object 132
+end
+end
+TokPos Long
+52
+Tok Long
+42
+Rhs array
+ast_BasicLit 137
+ValuePos Long
+54
+Kind Long
+5
+Value String
+"123"
+end
+end
+end
+ast_IfStmt 138
+If Long
+59
+Init nil
+Cond ast_BinaryExpr 139
+X ast_Ident 140
+NamePos Long
+62
+Name String
+"x"
+Obj ast_Object 127
+end
+OpPos Long
+64
+Op Long
+41
+Y ast_BasicLit 141
+ValuePos Long
+66
+Kind Long
+5
+Value String
+"0"
+end
+end
+Body ast_BlockStmt 142
+Lbrace Long
+68
+List array
+ast_ReturnStmt 143
+Return Long
+72
+Results array
+ast_BasicLit 144
+ValuePos Long
+79
+Kind Long
+5
+Value String
+"1"
+end
+end
+end
+end
+Rbrace Long
+82
+end
+Else ast_IfStmt 145
+If Long
+89
+Init nil
+Cond ast_BinaryExpr 146
+X ast_Ident 147
+NamePos Long
+92
+Name String
+"x"
+Obj ast_Object 127
+end
+OpPos Long
+94
+Op Long
+39
+Y ast_BasicLit 148
+ValuePos Long
+97
+Kind Long
+5
+Value String
+"0"
+end
+end
+Body ast_BlockStmt 149
+Lbrace Long
+99
+List array
+ast_ReturnStmt 150
+Return Long
+103
+Results array
+ast_BasicLit 151
+ValuePos Long
+110
+Kind Long
+5
+Value String
+"0"
+end
+end
+end
+end
+Rbrace Long
+113
+end
+Else nil
+end
+end
+ast_AssignStmt 152
+Lhs array
+ast_Ident 153
+NamePos Long
+116
+Name String
+"res"
+Obj ast_Object 132
+end
+end
+TokPos Long
+120
+Tok Long
+42
+Rhs array
+ast_UnaryExpr 154
+OpPos Long
+122
+Op Long
+13
+X ast_BasicLit 155
+ValuePos Long
+123
+Kind Long
+5
+Value String
+"1"
+end
+end
+end
+end
+ast_ReturnStmt 156
+Return Long
+126
+Results array
+end
+end
+end
+Rbrace Long
+133
+end
+end
+info types_Info 157
+Types map
+ast_BasicLit 155
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 56
+Value Long
+1
+end
+ast_Ident 133
+types_TypeAndValue
+mode Long
+3
+Type types_Basic 34
+Value nil
+end
+ast_BasicLit 137
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+123
+end
+ast_Ident 158
+NamePos Long
+170
+Name String
+"GetSign"
+Obj ast_Object 122
+end
+types_TypeAndValue
+mode Long
+7
+Type types_Signature 99
+Value nil
+end
+ast_Ident 159
+NamePos Long
+157
+Name String
+"int"
+Obj ast_Object
+end
+end
+types_TypeAndValue
+mode Long
+3
+Type types_Basic 34
+Value nil
+end
+ast_CallExpr 160
+Fun ast_Ident 161
+NamePos Long
+162
+Name String
+"println"
+Obj ast_Object
+end
+end
+Lparen Long
+169
+Args array
+ast_CallExpr 162
+Fun ast_Ident 158
+Lparen Long
+177
+Args array
+ast_Ident 163
+NamePos Long
+178
+Name String
+"x"
+Obj ast_Object 164
+Kind Long
+4
+Name String
+"x"
+Decl ast_ValueSpec 165
+Doc ast_CommentGroup
+end
+Names array
+ast_Ident 166
+NamePos Long
+155
+Name String
+"x"
+Obj ast_Object 164
+end
+end
+Type ast_Ident 159
+Values array
+end
+Comment ast_CommentGroup
+end
+end
+Data Long
+0
+Type nil
+end
+end
+end
+Ellipsis Long
+0
+Rparen Long
+179
+end
+end
+Ellipsis Long
+0
+Rparen Long
+180
+end
+types_TypeAndValue
+mode Long
+1
+Type types_Tuple
+end
+Value nil
+end
+ast_BinaryExpr 139
+types_TypeAndValue
+mode Long
+7
+Type types_Basic 62
+Value nil
+end
+ast_BinaryExpr 146
+types_TypeAndValue
+mode Long
+7
+Type types_Basic 62
+Value nil
+end
+ast_Ident 140
+types_TypeAndValue
+mode Long
+5
+Type types_Basic 34
+Value nil
+end
+ast_BasicLit 148
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+0
+end
+ast_UnaryExpr 154
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+-1
+end
+ast_Ident 147
+types_TypeAndValue
+mode Long
+5
+Type types_Basic 34
+Value nil
+end
+ast_Ident 153
+types_TypeAndValue
+mode Long
+5
+Type types_Basic 34
+Value nil
+end
+ast_Ident 161
+types_TypeAndValue
+mode Long
+2
+Type types_Signature 167
+rparams types_TypeParamList
+end
+tparams types_TypeParamList
+end
+scope types_Scope
+end
+recv types_Var
+end
+params types_Tuple 168
+vars array
+types_Var 169
+Object types_object
+parent types_Scope
+end
+pos Long
+0
+pkg types_Package
+end
+name String
+""
+typ types_Basic 34
+order_ Long
+0
+color_ Long
+1
+scopePos_ Long
+0
+end
+embedded Boolean
+%!q(bool=false)
+isField Boolean
+%!q(bool=false)
+used Boolean
+%!q(bool=false)
+origin types_Var
+end
+end
+end
+end
+results types_Tuple
+end
+variadic Boolean
+%!q(bool=false)
+end
+Value nil
+end
+ast_Ident 163
+types_TypeAndValue
+mode Long
+5
+Type types_Basic 34
+Value nil
+end
+ast_Ident 128
+types_TypeAndValue
+mode Long
+3
+Type types_Basic 34
+Value nil
+end
+ast_BasicLit 141
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+0
+end
+ast_BasicLit 144
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+1
+end
+ast_Ident 136
+types_TypeAndValue
+mode Long
+5
+Type types_Basic 34
+Value nil
+end
+ast_BasicLit 151
+types_TypeAndValue
+mode Long
+4
+Type types_Basic 34
+Value Long
+0
+end
+ast_CallExpr 162
+types_TypeAndValue
+mode Long
+7
+Type types_Basic 34
+Value nil
+end
+end
+Instances map
+end
+Defs map
+ast_Ident 166
+types_Var 97
+ast_Ident 170
+NamePos Long
+9
+Name String
+"main"
+Obj ast_Object
+end
+end
+nil
+ast_Ident 121
+types_Func 98
+ast_Ident 171
+NamePos Long
+141
+Name String
+"main"
+Obj ast_Object 172
+Kind Long
+5
+Name String
+"main"
+Decl ast_FuncDecl 173
+Doc ast_CommentGroup
+end
+Recv ast_FieldList
+end
+Name ast_Ident 171
+Type ast_FuncType 174
+Func Long
+136
+TypeParams ast_FieldList
+end
+Params ast_FieldList 175
+Opening Long
+145
+List array
+end
+Closing Long
+146
+end
+Results ast_FieldList
+end
+end
+Body ast_BlockStmt 176
+Lbrace Long
+148
+List array
+ast_DeclStmt 177
+Decl ast_GenDecl 178
+Doc ast_CommentGroup
+end
+TokPos Long
+151
+Tok Long
+85
+Lparen Long
+0
+Specs array
+ast_ValueSpec 165
+end
+Rparen Long
+0
+end
+end
+ast_ExprStmt 179
+X ast_CallExpr 160
+end
+end
+Rbrace Long
+182
+end
+end
+Data nil
+Type nil
+end
+end
+types_Func 102
+ast_Ident 126
+types_Var 94
+ast_Ident 131
+types_Var 95
+end
+Uses map
+ast_Ident 159
+types_TypeName 33
+ast_Ident 158
+types_Func 98
+ast_Ident 133
+types_TypeName 33
+ast_Ident 136
+types_Var 95
+ast_Ident 140
+types_Var 94
+ast_Ident 147
+types_Var 94
+ast_Ident 128
+types_TypeName 33
+ast_Ident 153
+types_Var 95
+ast_Ident 161
+types_Builtin 42
+ast_Ident 163
+types_Var 97
+end
+Implicits map
+end
+Selections map
+end
+Scopes map
+ast_File 180
+Doc ast_CommentGroup
+end
+Package Long
+1
+Name ast_Ident 170
+Decls array
+ast_FuncDecl 120
+ast_FuncDecl 173
+end
+FileStart Long
+1
+FileEnd Long
+184
+Scope ast_Scope 181
+Outer ast_Scope
+end
+Objects map
+String
+"GetSign"
+ast_Object 122
+String
+"main"
+ast_Object 172
+end
+end
+Imports array
+end
+Unresolved array
+ast_Ident 128
+ast_Ident 133
+ast_Ident 159
+ast_Ident 161
+end
+Comments array
+end
+GoVersion String
+""
+end
+types_Scope 88
+ast_FuncType 123
+types_Scope 89
+ast_FuncType 174
+types_Scope 96
+ast_IfStmt 138
+types_Scope 90
+ast_BlockStmt 142
+types_Scope 91
+ast_IfStmt 145
+types_Scope 92
+ast_BlockStmt 149
+types_Scope 93
+end
+InitOrder array
+end
+end
+goversion String
+""
+parent ssa_Function
+end
+Pkg ssa_Package 0
+Prog ssa_Program 1
+Params array
+ssa_Parameter 182
+name String
+"x"
+Object types_Var 94
+typ types_Basic 34
+parent ssa_Function 119
+referrers array
+ssa_BinOp 183
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 184
+Index Long
+0
+Comment String
+"entry"
+parent ssa_Function 119
+Instrs array
+ssa_BinOp 183
+ssa_If 185
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 184
+end
+Cond ssa_BinOp 183
+end
+end
+Preds array
+end
+Succs array
+ssa_BasicBlock 186
+Index Long
+1
+Comment String
+"if.then"
+parent ssa_Function 119
+Instrs array
+ssa_Return 187
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 186
+end
+Results array
+ssa_Const 188
+typ types_Basic 34
+Value Long
+1
+end
+end
+pos Long
+72
+end
+end
+Preds array
+ssa_BasicBlock 184
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 184
+children array
+end
+pre Long
+1
+post Long
+0
+end
+gaps Long
+2
+rundefers Long
+1
+end
+ssa_BasicBlock 189
+Index Long
+2
+Comment String
+"if.else"
+parent ssa_Function 119
+Instrs array
+ssa_BinOp 190
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 189
+end
+num Long
+1
+typ types_Basic 76
+pos Long
+94
+referrers array
+ssa_If 191
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 189
+end
+Cond ssa_BinOp 190
+end
+end
+end
+Op Long
+39
+X ssa_Parameter 182
+Y ssa_Const 192
+typ types_Basic 34
+Value Long
+0
+end
+end
+ssa_If 191
+end
+Preds array
+ssa_BasicBlock 184
+end
+Succs array
+ssa_BasicBlock 193
+Index Long
+3
+Comment String
+"if.then"
+parent ssa_Function 119
+Instrs array
+ssa_Return 194
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 193
+end
+Results array
+ssa_Const 195
+typ types_Basic 34
+Value Long
+0
+end
+end
+pos Long
+103
+end
+end
+Preds array
+ssa_BasicBlock 189
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 189
+children array
+end
+pre Long
+3
+post Long
+1
+end
+gaps Long
+2
+rundefers Long
+1
+end
+ssa_BasicBlock 196
+Index Long
+4
+Comment String
+"if.done"
+parent ssa_Function 119
+Instrs array
+ssa_Return 197
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 196
+end
+Results array
+ssa_Const 198
+typ types_Basic 34
+Value Long
+-1
+end
+end
+pos Long
+126
+end
+end
+Preds array
+ssa_BasicBlock 189
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock 199
+Index Long
+2
+Comment String
+"if.done"
+parent ssa_Function 119
+Instrs array
+ssa_Store 200
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 196
+end
+Addr ssa_Alloc 201
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 184
+end
+num Long
+0
+typ types_Pointer 202
+base types_Basic 34
+end
+pos Long
+36
+referrers array
+ssa_Store 203
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 184
+end
+Addr ssa_Alloc 201
+Val ssa_Const 204
+typ types_Basic 34
+Value Long
+123
+end
+pos Long
+48
+end
+ssa_Store 205
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 186
+end
+Addr ssa_Alloc 201
+Val ssa_Const 188
+pos Long
+72
+end
+ssa_UnOp 206
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 186
+end
+num Long
+0
+typ types_Basic 34
+pos Long
+0
+referrers array
+end
+end
+Op Long
+14
+X ssa_Alloc 201
+CommaOk Boolean
+%!q(bool=false)
+end
+ssa_Store 207
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 193
+end
+Addr ssa_Alloc 201
+Val ssa_Const 195
+pos Long
+103
+end
+ssa_UnOp 208
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 193
+end
+num Long
+0
+typ types_Basic 34
+pos Long
+0
+referrers array
+end
+end
+Op Long
+14
+X ssa_Alloc 201
+CommaOk Boolean
+%!q(bool=false)
+end
+ssa_Store 200
+ssa_UnOp 209
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 196
+end
+num Long
+0
+typ types_Basic 34
+pos Long
+0
+referrers array
+end
+end
+Op Long
+14
+X ssa_Alloc 201
+CommaOk Boolean
+%!q(bool=false)
+end
+end
+end
+Comment String
+"res"
+Heap Boolean
+%!q(bool=false)
+index Long
+1
+end
+Val ssa_Const 198
+pos Long
+116
+end
+ssa_RunDefers 210
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 196
+end
+end
+ssa_UnOp 209
+ssa_Return 197
+end
+Preds array
+ssa_BasicBlock 196
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock
+end
+children array
+end
+pre Long
+0
+post Long
+0
+end
+gaps Long
+0
+rundefers Long
+0
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 189
+children array
+end
+pre Long
+4
+post Long
+2
+end
+gaps Long
+2
+rundefers Long
+1
+end
+end
+succs2 array
+ssa_BasicBlock 193
+ssa_BasicBlock 196
+end
+dom ssa_domInfo
+idom ssa_BasicBlock 184
+children array
+ssa_BasicBlock 193
+ssa_BasicBlock 196
+end
+pre Long
+2
+post Long
+3
+end
+gaps Long
+1
+rundefers Long
+0
+end
+end
+succs2 array
+ssa_BasicBlock 186
+ssa_BasicBlock 189
+end
+dom ssa_domInfo
+idom ssa_BasicBlock
+end
+children array
+ssa_BasicBlock 186
+ssa_BasicBlock 189
+end
+pre Long
+0
+post Long
+4
+end
+gaps Long
+5
+rundefers Long
+0
+end
+end
+num Long
+0
+typ types_Basic 76
+pos Long
+64
+referrers array
+ssa_If 185
+end
+end
+Op Long
+41
+X ssa_Parameter 182
+Y ssa_Const 211
+typ types_Basic 34
+Value Long
+0
+end
+end
+ssa_BinOp 190
+end
+end
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+ssa_BasicBlock 184
+ssa_BasicBlock 186
+ssa_BasicBlock 189
+ssa_BasicBlock 193
+ssa_BasicBlock 196
+end
+Recover ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Long
+0
+typeparams types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin ssa_Function
+end
+generic ssa_generic
+end
+currentBlock ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets ssa_targets
+end
+lblocks map
+end
+subst ssa_subster
+end
+end
+String
+"main"
+ssa_Function 212
+name String
+"main"
+Object types_Func 102
+method ssa_selection
+end
+Signature types_Signature 103
+pos Long
+141
+Synthetic String
+""
+syntax ast_FuncDecl 173
+info types_Info 157
+goversion String
+""
+parent ssa_Function
+end
+Pkg ssa_Package 0
+Prog ssa_Program 1
+Params array
+end
+FreeVars array
+end
+Locals array
+end
+Blocks array
+ssa_BasicBlock 213
+Index Long
+0
+Comment String
+"entry"
+parent ssa_Function 212
+Instrs array
+ssa_Call 214
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 213
+end
+num Long
+0
+typ types_Basic 34
+pos Long
+0
+referrers array
+ssa_Call 215
+register ssa_register
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 213
+end
+num Long
+1
+typ types_Tuple
+end
+pos Long
+0
+referrers array
+end
+end
+Call ssa_CallCommon
+Value ssa_Builtin 216
+name String
+"println"
+sig types_Signature 167
+end
+Method types_Func
+end
+Args array
+ssa_Call 214
+end
+pos Long
+169
+end
+end
+end
+end
+Call ssa_CallCommon
+Value ssa_Function 119
+Method types_Func
+end
+Args array
+ssa_Const 217
+typ types_Basic 34
+Value Long
+0
+end
+end
+pos Long
+177
+end
+end
+ssa_Call 215
+ssa_Return 218
+anInstruction generatedInlineStruct_001
+block ssa_BasicBlock 213
+end
+Results array
+end
+pos Long
+0
+end
+end
+Preds array
+end
+Succs array
+end
+succs2 array
+ssa_BasicBlock
+end
+ssa_BasicBlock
+end
+end
+dom ssa_domInfo
+idom ssa_BasicBlock
+end
+children array
+end
+pre Long
+0
+post Long
+0
+end
+gaps Long
+2
+rundefers Long
+1
+end
+end
+Recover ssa_BasicBlock
+end
+AnonFuncs array
+end
+referrers array
+end
+anonIdx Long
+0
+typeparams types_TypeParamList
+end
+typeargs array
+end
+topLevelOrigin ssa_Function
+end
+generic ssa_generic
+end
+currentBlock ssa_BasicBlock
+end
+vars map
+end
+namedResults array
+end
+targets ssa_targets
+end
+lblocks map
+end
+subst ssa_subster
+end
+end
+String
+"init$guard"
+ssa_Global 111
+end
+objects map
+types_Func 98
+ssa_Function 119
+types_Func 102
+ssa_Function 212
+end
+init ssa_Function 106
+debug Boolean
+%!q(bool=false)
+syntax Boolean
+%!q(bool=true)
+buildOnce sync_Once
+done Long
+1
+m sync_Mutex
+state Long
+0
+sema Long
+0
+end
+end
+ninit Long
+0
+info types_Info
+end
+files array
+end
+created array
+end
+initVersion map
+end
+end

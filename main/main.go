@@ -84,7 +84,7 @@ func main() {
 	mp[someStruct{fl1: "key"}] = interfaceImpl{fl21: []string{"some", "value"}}
 	k.f13 = &mp
 
-	f10 := interfaceImpl{fl21: []string{"hello world!", "hola", "привет"}}
+	f10 := interfaceImpl{fl21: []string{"hello\nworld!", "hola", "привет"}}
 	k.f10 = f10
 	k.f23 = &k
 	k.f24 = &k
@@ -92,5 +92,8 @@ func main() {
 	os.Mkdir("example", os.ModePerm)
 	file, _ := os.Create("example/filled.txt")
 
-	fmt.Printf("%v", GoToJava.RunConverter("example", file, &k))
+	conv := GoToJava.CreateConverter("example")
+
+	fmt.Printf("%v", conv.GenerateStructures(&k))
+	fmt.Printf("%v", conv.FillStructures(file, &k))
 }

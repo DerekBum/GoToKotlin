@@ -1,39 +1,54 @@
-struct main_BigStruct 0
-Field1 Integer 0
-FieldString String 
-field3 Boolean false
-F4 Short 0
-f5 Short 0
+main_BigStruct 0
+Field1 Long
+0
+FieldString String
+""
+field3 Boolean
+%!q(bool=false)
+F4 Long
+0
+f5 Long
+0
 f6 array
 end
 f7 array
 end
 f8 nil
-f85 Integer 123
-f9 struct main_someStruct
-fl1 String 123
+f85 Long
+123
+f9 main_someStruct
+fl1 String
+"123"
 end
-f10 struct main_interfaceImpl
+f10 main_interfaceImpl
 fl21 array
-String hello world!
-String hola
-String привет
+String
+"hello\nworld!"
+String
+"hola"
+String
+"привет"
 end
 end
 f11 map
-String lolol
-Boolean false
+String
+"lolol"
+Boolean
+%!q(bool=false)
 end
 f12 map
 end
 f13 map 1
-struct main_someStruct
-fl1 String key
+main_someStruct
+fl1 String
+"key"
 end
-struct main_interfaceImpl
+main_interfaceImpl
 fl21 array
-String some
-String value
+String
+"some"
+String
+"value"
 end
 end
 end
@@ -44,14 +59,16 @@ end
 f16 array
 end
 f17 nil
-f18 struct main_someStruct
+f18 main_someStruct
 end
-f19 Short 0
-f20 Short 0
+f19 Long
+0
+f20 Long
+0
 f21 array
 end
 f22 map
 end
-f23 struct main_BigStruct 0
-f24 struct main_BigStruct 0
+f23 main_BigStruct 0
+f24 main_BigStruct 0
 end
