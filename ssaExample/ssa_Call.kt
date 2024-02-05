@@ -1,17 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_001 {
+class ssa_Call {
 
-	var value: types_MethodSet? = null
-	var pointer: types_MethodSet? = null
+	var register: ssa_register? = null
+	var Call: ssa_CallCommon? = null
 }
 
-fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generatedInlineStruct_001 {
-	val res = generatedInlineStruct_001()
+fun read_ssa_Call(buffReader: BufferedReader, id: Int): ssa_Call {
+	val res = ssa_Call()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_001
+            return ptrMap[id] as ssa_Call
         }
         ptrMap[id] = res
     }
@@ -30,7 +30,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.value = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.register = mapDec[readType]?.invoke(buffReader, id) as ssa_register?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -42,7 +42,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pointer = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Call = mapDec[readType]?.invoke(buffReader, id) as ssa_CallCommon?
 
 	buffReader.readLine()
 	return res

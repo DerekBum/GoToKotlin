@@ -1,17 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_001 {
+class types_Const {
 
-	var value: types_MethodSet? = null
-	var pointer: types_MethodSet? = null
+	var Object: types_object? = null
+	var Val: Any? = null
 }
 
-fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generatedInlineStruct_001 {
-	val res = generatedInlineStruct_001()
+fun read_types_Const(buffReader: BufferedReader, id: Int): types_Const {
+	val res = types_Const()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_001
+            return ptrMap[id] as types_Const
         }
         ptrMap[id] = res
     }
@@ -30,7 +30,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.value = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Object = mapDec[readType]?.invoke(buffReader, id) as types_object?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -42,7 +42,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pointer = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Val = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res

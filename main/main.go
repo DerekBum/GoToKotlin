@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/ssa"
+	"golang.org/x/tools/go/ssa/ssautil"
 	"os"
 
 	"GoToJava"
@@ -56,25 +59,51 @@ type BigStruct struct {
 }
 
 func main() {
-	/*// Replace interface{} with any for this test.
-	// Parse the source files.
-	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "./ssa_prompt/main.go", nil, parser.ParseComments)
-	if err != nil {
-		fmt.Print(err) // parse error
-	}
-	files := []*ast.File{f}
-	// Create the type-checker's package.
-	pkg := types.NewPackage("main", "")
-	// Type-check the package, load dependencies.
-	// Create and build the SSA program.
-	pkgBuild, _, err := ssautil.BuildPackage(
-		&types.Config{Importer: importer.Default()}, fset, pkg, files, ssa.PrintFunctions)
-	if err != nil {
-		fmt.Print(err) // type error in some package
-	}*/
+	fileName := "./ssa_prompt/main.go"
 
-	impl := interfaceImpl{}
+	// Replace interface{} with any for this test.
+	// Parse the source files.
+	f, err := os.Open(fileName)
+	if err != nil {
+		fmt.Printf("open file: %s", err)
+	}
+	if err = f.Close(); err != nil {
+		fmt.Printf("close file: %s", err)
+	}
+
+	mode := packages.NeedName |
+		packages.NeedFiles |
+		packages.NeedCompiledGoFiles |
+		packages.NeedImports |
+		packages.NeedDeps |
+		packages.NeedExportFile |
+		packages.NeedTypes |
+		packages.NeedTypesSizes |
+		packages.NeedTypesInfo |
+		packages.NeedSyntax |
+		packages.NeedModule |
+		packages.NeedEmbedFiles |
+		packages.NeedEmbedPatterns
+	cfg := &packages.Config{Mode: mode}
+
+	initialPackages, err := packages.Load(cfg, fileName)
+	if err != nil {
+		fmt.Print(err)
+	}
+	if len(initialPackages) == 0 {
+		fmt.Printf("no packages were loaded")
+	}
+
+	if packages.PrintErrors(initialPackages) > 0 {
+		fmt.Printf("packages contain errors")
+	}
+
+	program, _ := ssautil.AllPackages(initialPackages, ssa.InstantiateGenerics|ssa.SanityCheckFunctions)
+	program.Build()
+
+	//mainPackage := ssautil.MainPackages(program.AllPackages())[0]
+
+	/*impl := interfaceImpl{}
 	k := BigStruct{f85: 123, f10: impl}
 	k.f9.fl1 = "123"
 	k.f11 = make(map[string]bool)
@@ -87,13 +116,13 @@ func main() {
 	f10 := interfaceImpl{fl21: []string{"hello\nworld!", "hola", "привет"}}
 	k.f10 = f10
 	k.f23 = &k
-	k.f24 = &k
+	k.f24 = &k*/
 
-	os.Mkdir("example", os.ModePerm)
-	file, _ := os.Create("example/filled.txt")
+	os.Mkdir("ssaExample", os.ModePerm)
+	file, _ := os.Create("ssaExample/filled.txt")
 
-	conv := GoToJava.CreateConverter("example")
+	conv := GoToJava.CreateConverter("ssaExample")
 
-	fmt.Printf("%v", conv.GenerateStructures(&k))
-	fmt.Printf("%v", conv.FillStructures(file, &k))
+	fmt.Printf("%v", conv.GenerateStructures(program))
+	fmt.Printf("%v", conv.FillStructures(file, program))
 }

@@ -1,16 +1,16 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_000 {
+class types_Pointer {
 
-	var block: ssa_BasicBlock? = null
+	var base: Any? = null
 }
 
-fun read_generatedInlineStruct_000(buffReader: BufferedReader, id: Int): generatedInlineStruct_000 {
-	val res = generatedInlineStruct_000()
+fun read_types_Pointer(buffReader: BufferedReader, id: Int): types_Pointer {
+	val res = types_Pointer()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_000
+            return ptrMap[id] as types_Pointer
         }
         ptrMap[id] = res
     }
@@ -29,7 +29,7 @@ fun read_generatedInlineStruct_000(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.block = mapDec[readType]?.invoke(buffReader, id) as ssa_BasicBlock?
+    res.base = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res

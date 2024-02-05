@@ -1,17 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_001 {
+class ast_ReturnStmt {
 
-	var value: types_MethodSet? = null
-	var pointer: types_MethodSet? = null
+	var Return: Long? = null
+	var Results: List<Any>? = null
 }
 
-fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generatedInlineStruct_001 {
-	val res = generatedInlineStruct_001()
+fun read_ast_ReturnStmt(buffReader: BufferedReader, id: Int): ast_ReturnStmt {
+	val res = ast_ReturnStmt()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_001
+            return ptrMap[id] as ast_ReturnStmt
         }
         ptrMap[id] = res
     }
@@ -30,7 +30,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.value = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Return = mapDec[readType]?.invoke(buffReader, id) as Long?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -42,7 +42,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pointer = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Results = mapDec[readType]?.invoke(buffReader, id) as List<Any>?
 
 	buffReader.readLine()
 	return res

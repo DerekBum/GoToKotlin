@@ -1,18 +1,18 @@
 package GoToJava
 
 import java.io.BufferedReader
-class typeutil_MethodSetCache {
+class ast_UnaryExpr {
 
-	var mu: sync_Mutex? = null
-	var named: Map<types_Named, generatedInlineStruct_001>? = null
-	var others: Map<Any, types_MethodSet>? = null
+	var OpPos: Long? = null
+	var Op: Long? = null
+	var X: Any? = null
 }
 
-fun read_typeutil_MethodSetCache(buffReader: BufferedReader, id: Int): typeutil_MethodSetCache {
-	val res = typeutil_MethodSetCache()
+fun read_ast_UnaryExpr(buffReader: BufferedReader, id: Int): ast_UnaryExpr {
+	val res = ast_UnaryExpr()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as typeutil_MethodSetCache
+            return ptrMap[id] as ast_UnaryExpr
         }
         ptrMap[id] = res
     }
@@ -31,7 +31,7 @@ fun read_typeutil_MethodSetCache(buffReader: BufferedReader, id: Int): typeutil_
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.mu = mapDec[readType]?.invoke(buffReader, id) as sync_Mutex?
+    res.OpPos = mapDec[readType]?.invoke(buffReader, id) as Long?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -43,7 +43,7 @@ fun read_typeutil_MethodSetCache(buffReader: BufferedReader, id: Int): typeutil_
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.named = mapDec[readType]?.invoke(buffReader, id) as Map<types_Named, generatedInlineStruct_001>?
+    res.Op = mapDec[readType]?.invoke(buffReader, id) as Long?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -55,7 +55,7 @@ fun read_typeutil_MethodSetCache(buffReader: BufferedReader, id: Int): typeutil_
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.others = mapDec[readType]?.invoke(buffReader, id) as Map<Any, types_MethodSet>?
+    res.X = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res

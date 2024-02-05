@@ -1,17 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_001 {
+class ssa_Builtin {
 
-	var value: types_MethodSet? = null
-	var pointer: types_MethodSet? = null
+	var name: String? = null
+	var sig: types_Signature? = null
 }
 
-fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generatedInlineStruct_001 {
-	val res = generatedInlineStruct_001()
+fun read_ssa_Builtin(buffReader: BufferedReader, id: Int): ssa_Builtin {
+	val res = ssa_Builtin()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_001
+            return ptrMap[id] as ssa_Builtin
         }
         ptrMap[id] = res
     }
@@ -30,7 +30,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.value = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.name = mapDec[readType]?.invoke(buffReader, id) as String?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -42,7 +42,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pointer = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.sig = mapDec[readType]?.invoke(buffReader, id) as types_Signature?
 
 	buffReader.readLine()
 	return res

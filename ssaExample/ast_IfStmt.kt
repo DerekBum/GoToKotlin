@@ -1,20 +1,20 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_register {
+class ast_IfStmt {
 
-	var anInstruction: generatedInlineStruct_000? = null
-	var num: Long? = null
-	var typ: Any? = null
-	var pos: Long? = null
-	var referrers: List<Any>? = null
+	var If: Long? = null
+	var Init: Any? = null
+	var Cond: Any? = null
+	var Body: ast_BlockStmt? = null
+	var Else: Any? = null
 }
 
-fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
-	val res = ssa_register()
+fun read_ast_IfStmt(buffReader: BufferedReader, id: Int): ast_IfStmt {
+	val res = ast_IfStmt()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as ssa_register
+            return ptrMap[id] as ast_IfStmt
         }
         ptrMap[id] = res
     }
@@ -33,7 +33,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.anInstruction = mapDec[readType]?.invoke(buffReader, id) as generatedInlineStruct_000?
+    res.If = mapDec[readType]?.invoke(buffReader, id) as Long?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -45,7 +45,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.num = mapDec[readType]?.invoke(buffReader, id) as Long?
+    res.Init = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -57,7 +57,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.typ = mapDec[readType]?.invoke(buffReader, id) as Any?
+    res.Cond = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -69,7 +69,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pos = mapDec[readType]?.invoke(buffReader, id) as Long?
+    res.Body = mapDec[readType]?.invoke(buffReader, id) as ast_BlockStmt?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -81,7 +81,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.referrers = mapDec[readType]?.invoke(buffReader, id) as List<Any>?
+    res.Else = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res

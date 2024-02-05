@@ -314,7 +314,13 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 		name = strings.ReplaceAll(name, ".", "_")
 
 		if _, ok := conv.used[name]; !ok {
-			conv.used[name] = true
+			if strings.HasPrefix(name, "ssa_") {
+				println("###### " + name)
+			}
+			if name == "ssa_Call" {
+				l := 1
+				l++
+			}
 			conv.convertStruct(reflect.Zero(fieldType).Interface())
 		}
 
@@ -398,9 +404,6 @@ func (conv *Converter) fillValues(structure interface{}, fillerFile io.Writer) e
 
 	return nil
 }
-
-// GENERATE PUBLIC CLASS IN ANOTHER FILE
-// FILL IT WITH PUBLIC VARIABLES (GENERATED FROM GO)
 
 func (conv *Converter) generateBaseDeserializers() error {
 	filePath := filepath.Join(".", conv.dirPath, "baseDeserializers.kt")

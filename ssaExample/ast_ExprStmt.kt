@@ -1,16 +1,16 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_000 {
+class ast_ExprStmt {
 
-	var block: ssa_BasicBlock? = null
+	var X: Any? = null
 }
 
-fun read_generatedInlineStruct_000(buffReader: BufferedReader, id: Int): generatedInlineStruct_000 {
-	val res = generatedInlineStruct_000()
+fun read_ast_ExprStmt(buffReader: BufferedReader, id: Int): ast_ExprStmt {
+	val res = ast_ExprStmt()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_000
+            return ptrMap[id] as ast_ExprStmt
         }
         ptrMap[id] = res
     }
@@ -29,7 +29,7 @@ fun read_generatedInlineStruct_000(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.block = mapDec[readType]?.invoke(buffReader, id) as ssa_BasicBlock?
+    res.X = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res

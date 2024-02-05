@@ -1,20 +1,19 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_register {
+class ssa_CallCommon {
 
-	var anInstruction: generatedInlineStruct_000? = null
-	var num: Long? = null
-	var typ: Any? = null
+	var Value: Any? = null
+	var Method: types_Func? = null
+	var Args: List<Any>? = null
 	var pos: Long? = null
-	var referrers: List<Any>? = null
 }
 
-fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
-	val res = ssa_register()
+fun read_ssa_CallCommon(buffReader: BufferedReader, id: Int): ssa_CallCommon {
+	val res = ssa_CallCommon()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as ssa_register
+            return ptrMap[id] as ssa_CallCommon
         }
         ptrMap[id] = res
     }
@@ -33,7 +32,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.anInstruction = mapDec[readType]?.invoke(buffReader, id) as generatedInlineStruct_000?
+    res.Value = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -45,7 +44,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.num = mapDec[readType]?.invoke(buffReader, id) as Long?
+    res.Method = mapDec[readType]?.invoke(buffReader, id) as types_Func?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -57,7 +56,7 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.typ = mapDec[readType]?.invoke(buffReader, id) as Any?
+    res.Args = mapDec[readType]?.invoke(buffReader, id) as List<Any>?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -70,18 +69,6 @@ fun read_ssa_register(buffReader: BufferedReader, id: Int): ssa_register {
         id = split[2].toInt()
     }
     res.pos = mapDec[readType]?.invoke(buffReader, id) as Long?
-
-	line = buffReader.readLine()
-	if (line == "end") {
-        return res
-    }
-    split = line.split(" ")
-    readType = split[1]
-    id = -1
-    if (split.size > 2) {
-        id = split[2].toInt()
-    }
-    res.referrers = mapDec[readType]?.invoke(buffReader, id) as List<Any>?
 
 	buffReader.readLine()
 	return res

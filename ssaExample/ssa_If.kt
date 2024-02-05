@@ -1,17 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class generatedInlineStruct_001 {
+class ssa_If {
 
-	var value: types_MethodSet? = null
-	var pointer: types_MethodSet? = null
+	var anInstruction: generatedInlineStruct_000? = null
+	var Cond: Any? = null
 }
 
-fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generatedInlineStruct_001 {
-	val res = generatedInlineStruct_001()
+fun read_ssa_If(buffReader: BufferedReader, id: Int): ssa_If {
+	val res = ssa_If()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
-            return ptrMap[id] as generatedInlineStruct_001
+            return ptrMap[id] as ssa_If
         }
         ptrMap[id] = res
     }
@@ -30,7 +30,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.value = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.anInstruction = mapDec[readType]?.invoke(buffReader, id) as generatedInlineStruct_000?
 
 	line = buffReader.readLine()
 	if (line == "end") {
@@ -42,7 +42,7 @@ fun read_generatedInlineStruct_001(buffReader: BufferedReader, id: Int): generat
     if (split.size > 2) {
         id = split[2].toInt()
     }
-    res.pointer = mapDec[readType]?.invoke(buffReader, id) as types_MethodSet?
+    res.Cond = mapDec[readType]?.invoke(buffReader, id) as Any?
 
 	buffReader.readLine()
 	return res
