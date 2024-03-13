@@ -314,13 +314,6 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 		name = strings.ReplaceAll(name, ".", "_")
 
 		if _, ok := conv.used[name]; !ok {
-			if strings.HasPrefix(name, "ssa_") {
-				println("###### " + name)
-			}
-			if name == "ssa_Call" {
-				l := 1
-				l++
-			}
 			conv.convertStruct(reflect.Zero(fieldType).Interface())
 		}
 
@@ -386,6 +379,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(fieldVal.Int(), 10))))
 			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(fieldVal.Uint(), 10))))
+			case reflect.Bool:
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatBool(fieldVal.Bool()))))
 			default:
 				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal)))
 			}

@@ -310,11 +310,11 @@ scopePos_ Long
 0
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=false)
+false
 origin types_Var
 end
 end
@@ -348,18 +348,18 @@ scopePos_ Long
 0
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=false)
+false
 origin types_Var
 end
 end
 end
 end
 variadic Boolean
-%!q(bool=false)
+false
 end
 order_ Long
 0
@@ -369,7 +369,7 @@ scopePos_ Long
 0
 end
 hasPtrRecv_ Boolean
-%!q(bool=false)
+false
 origin types_Func
 end
 end
@@ -379,9 +379,9 @@ end
 embedPos array
 end
 implicit Boolean
-%!q(bool=false)
+false
 complete Boolean
-%!q(bool=true)
+true
 tset types__TypeSet 27
 methods array
 types_Func 21
@@ -389,12 +389,12 @@ end
 terms array
 types_term 28
 tilde Boolean
-%!q(bool=false)
+false
 typ nil
 end
 end
 comparable Boolean
-%!q(bool=false)
+false
 end
 end
 inst types_instance
@@ -771,9 +771,9 @@ end
 embedPos array
 end
 implicit Boolean
-%!q(bool=false)
+false
 complete Boolean
-%!q(bool=true)
+true
 tset types__TypeSet 52
 methods array
 end
@@ -781,7 +781,7 @@ terms array
 types_term 28
 end
 comparable Boolean
-%!q(bool=true)
+true
 end
 end
 inst types_instance
@@ -1121,9 +1121,9 @@ end
 embedPos array
 end
 implicit Boolean
-%!q(bool=false)
+false
 complete Boolean
-%!q(bool=true)
+true
 tset types__TypeSet 73
 methods array
 end
@@ -1131,7 +1131,7 @@ terms array
 types_term 28
 end
 comparable Boolean
-%!q(bool=false)
+false
 end
 end
 order_ Long
@@ -1390,7 +1390,7 @@ end Long
 comment String
 "universe"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 children array
 types_Scope 88
@@ -1417,7 +1417,7 @@ end Long
 comment String
 "block"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 types_Scope 92
 parent types_Scope 90
@@ -1437,7 +1437,7 @@ end Long
 comment String
 "block"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 end
 number Long
@@ -1451,7 +1451,7 @@ end Long
 comment String
 "if"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 end
 number Long
@@ -1465,7 +1465,7 @@ end Long
 comment String
 "if"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 end
 number Long
@@ -1490,11 +1490,11 @@ scopePos_ Long
 0
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=true)
+true
 origin types_Var
 end
 end
@@ -1517,11 +1517,11 @@ scopePos_ Long
 0
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=true)
+true
 origin types_Var
 end
 end
@@ -1533,7 +1533,7 @@ end Long
 comment String
 "function"
 isFunc Boolean
-%!q(bool=true)
+true
 end
 types_Scope 96
 parent types_Scope 88
@@ -1561,11 +1561,11 @@ scopePos_ Long
 160
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=true)
+true
 origin types_Var
 end
 end
@@ -1577,7 +1577,7 @@ end Long
 comment String
 "function"
 isFunc Boolean
-%!q(bool=true)
+true
 end
 end
 number Long
@@ -1591,7 +1591,7 @@ end Long
 comment String
 "/home/tulchin/huawei/GoToJava/ssa_prompt/main.go"
 isFunc Boolean
-%!q(bool=false)
+false
 end
 end
 number Long
@@ -1626,7 +1626,7 @@ types_Var 95
 end
 end
 variadic Boolean
-%!q(bool=false)
+false
 end
 order_ Long
 1
@@ -1636,7 +1636,7 @@ scopePos_ Long
 0
 end
 hasPtrRecv_ Boolean
-%!q(bool=false)
+false
 origin types_Func
 end
 end
@@ -1663,7 +1663,7 @@ end
 results types_Tuple
 end
 variadic Boolean
-%!q(bool=false)
+false
 end
 order_ Long
 2
@@ -1673,7 +1673,7 @@ scopePos_ Long
 0
 end
 hasPtrRecv_ Boolean
-%!q(bool=false)
+false
 origin types_Func
 end
 end
@@ -1685,16 +1685,16 @@ end Long
 comment String
 "package \"command-line-arguments\""
 isFunc Boolean
-%!q(bool=false)
+false
 end
 imports array
 end
 complete Boolean
-%!q(bool=true)
+true
 fake Boolean
-%!q(bool=false)
+false
 cgo Boolean
-%!q(bool=false)
+false
 goVersion String
 ""
 end
@@ -1722,7 +1722,7 @@ end
 results types_Tuple
 end
 variadic Boolean
-%!q(bool=false)
+false
 end
 pos Long
 0
@@ -1784,7 +1784,7 @@ pos Long
 Pkg ssa_Package 3
 end
 CommaOk Boolean
-%!q(bool=false)
+false
 end
 ssa_If 108
 end
@@ -2316,11 +2316,11 @@ scopePos_ Long
 0
 end
 embedded Boolean
-%!q(bool=false)
+false
 isField Boolean
-%!q(bool=false)
+false
 used Boolean
-%!q(bool=false)
+false
 origin types_Var
 end
 end
@@ -2329,7 +2329,7 @@ end
 results types_Tuple
 end
 variadic Boolean
-%!q(bool=false)
+false
 end
 Value nil
 end
@@ -2935,7 +2935,7 @@ Op Long
 14
 X ssa_Alloc 199
 CommaOk Boolean
-%!q(bool=false)
+false
 end
 ssa_Store 205
 anInstruction generatedInlineStruct_000
@@ -2963,7 +2963,7 @@ Op Long
 14
 X ssa_Alloc 199
 CommaOk Boolean
-%!q(bool=false)
+false
 end
 ssa_Store 198
 ssa_UnOp 207
@@ -2983,14 +2983,14 @@ Op Long
 14
 X ssa_Alloc 199
 CommaOk Boolean
-%!q(bool=false)
+false
 end
 end
 end
 Comment String
 "res"
 Heap Boolean
-%!q(bool=false)
+false
 index Long
 1
 end
@@ -3325,9 +3325,9 @@ ssa_Function 210
 end
 init ssa_Function 104
 debug Boolean
-%!q(bool=false)
+false
 syntax Boolean
-%!q(bool=true)
+true
 buildOnce sync_Once
 done Long
 1
