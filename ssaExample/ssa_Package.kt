@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ssa_Package {
 
 	var Prog: ssa_Program? = null

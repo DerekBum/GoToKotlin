@@ -1,9 +1,20 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Union {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Union : GoType {
 
 	var terms: List<types_Term>? = null
+
+	override val typeName: String
+        get(): String {
+            var res = "enum {\n"
+            for (t in terms!!) {
+                res += (t.typ!! as GoType).typeName + ",\n"
+            }
+            return "$res}"
+        }
 }
 
 fun read_types_Union(buffReader: BufferedReader, id: Int): types_Union {

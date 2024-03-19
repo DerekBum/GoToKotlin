@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_Builtin {
 
 	var Object: types_object? = null

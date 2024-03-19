@@ -1,9 +1,14 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Pointer {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Pointer : GoType {
 
 	var base: Any? = null
+
+	override val typeName: String
+        get() = "*${(base!! as GoType).typeName}"
 }
 
 fun read_types_Pointer(buffReader: BufferedReader, id: Int): types_Pointer {

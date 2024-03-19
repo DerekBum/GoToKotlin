@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class sync_RWMutex {
 
 	var w: sync_Mutex? = null

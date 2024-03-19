@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class generatedInlineStruct_001 {
 
 	var value: types_MethodSet? = null

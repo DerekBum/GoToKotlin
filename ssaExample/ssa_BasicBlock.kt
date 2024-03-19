@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ssa_BasicBlock {
 
 	var Index: Long? = null
@@ -13,6 +14,23 @@ class ssa_BasicBlock {
 	var dom: ssa_domInfo? = null
 	var gaps: Long? = null
 	var rundefers: Long? = null
+
+	fun createJacoDBBasicBlock(method: GoMethod): GoBasicBlock {
+        val inst = mutableListOf<GoInst>()
+
+        for (value in Instrs!!) {
+            if (value is ssaToJacoInst) {
+                inst.add(value.createJacoDBInst(method))
+            }
+        }
+
+        return GoBasicBlock(
+            Index!!.toInt(),
+            Preds!!.map { it.Index!!.toInt() },
+            Succs!!.map { it.Index!!.toInt() },
+            inst
+        )
+    }
 }
 
 fun read_ssa_BasicBlock(buffReader: BufferedReader, id: Int): ssa_BasicBlock {

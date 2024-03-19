@@ -1,9 +1,20 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Tuple {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Tuple : GoType {
 
 	var vars: List<types_Var>? = null
+
+	override val typeName: String
+        get(): String {
+            var res = "["
+            for (i in vars!!) {
+                res += i.Object!!.name + ", "
+            }
+            return res.removeSuffix(", ") + "]"
+        }
 }
 
 fun read_types_Tuple(buffReader: BufferedReader, id: Int): types_Tuple {

@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_Initializer {
 
 	var Lhs: List<types_Var>? = null

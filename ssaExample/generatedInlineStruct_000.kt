@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class generatedInlineStruct_000 {
 
 	var block: ssa_BasicBlock? = null

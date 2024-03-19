@@ -1,9 +1,25 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Jump {
+import jacodbInst.*
+import jacodbInst.impl.location.GoInstLocationImpl
+class ssa_Jump : ssaToJacoInst {
 
 	var anInstruction: generatedInlineStruct_000? = null
+
+	override fun createJacoDBInst(parent: GoMethod): GoJumpInst {
+        return GoJumpInst(
+            GoInstLocationImpl(
+                anInstruction!!.block!!.Index!!.toInt(),
+                0,
+                parent,
+            ),
+            parent,
+            GoInstRef(
+                anInstruction!!.block!!.Index!!.toInt()
+            )
+        )
+    }
 }
 
 fun read_ssa_Jump(buffReader: BufferedReader, id: Int): ssa_Jump {

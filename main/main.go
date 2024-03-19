@@ -121,7 +121,7 @@ func main() {
 	os.Mkdir("ssaExample", os.ModePerm)
 	file, _ := os.Create("ssaExample/filled.txt")
 
-	conv := GoToJava.CreateConverter("ssaExample")
+	conv := GoToJava.CreateConverter("ssaExample", true)
 
 	fmt.Printf("%v", conv.GenerateStructures(program))
 	fmt.Printf("%v", conv.FillStructures(file, program))

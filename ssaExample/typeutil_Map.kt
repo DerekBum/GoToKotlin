@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class typeutil_Map {
 
 	var hasher: typeutil_Hasher? = null

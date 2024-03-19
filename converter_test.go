@@ -76,7 +76,7 @@ func TestConvert(t *testing.T) {
 	os.MkdirAll(testDir, os.ModePerm)
 	file, _ := os.Create(testDir + "/filled.txt")
 
-	conv := GoToJava.CreateConverter(testDir)
+	conv := GoToJava.CreateConverter(testDir, false)
 
 	err := conv.GenerateStructures(st)
 	if err != nil {

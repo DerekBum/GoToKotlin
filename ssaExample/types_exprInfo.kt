@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_exprInfo {
 
 	var isLhs: Boolean? = null

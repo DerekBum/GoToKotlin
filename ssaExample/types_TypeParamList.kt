@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_TypeParamList {
 
 	var tparams: List<types_TypeParam>? = null

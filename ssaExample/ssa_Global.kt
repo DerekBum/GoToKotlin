@@ -1,13 +1,26 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Global {
+import jacodbInst.*
+class ssa_Global : ssaToJacoExpr, ssaToJacoValue {
 
 	var name: String? = null
 	var Object: Any? = null
 	var typ: Any? = null
 	var pos: Long? = null
 	var Pkg: ssa_Package? = null
+
+	override fun createJacoDBExpr(): GoGlobal {
+        return GoGlobal(
+            pos!!.toInt(),
+            name!!,
+            typ!! as GoType
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_Global(buffReader: BufferedReader, id: Int): ssa_Global {

@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_instanceLookup {
 
 	var buf: List<types_Named>? = null

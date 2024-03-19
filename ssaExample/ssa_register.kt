@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ssa_register {
 
 	var anInstruction: generatedInlineStruct_000? = null

@@ -1,11 +1,16 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Basic {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Basic : GoType {
 
 	var kind: Long? = null
 	var info: Long? = null
 	var name: String? = null
+
+	override val typeName: String
+        get() = name!!
 }
 
 fun read_types_Basic(buffReader: BufferedReader, id: Int): types_Basic {

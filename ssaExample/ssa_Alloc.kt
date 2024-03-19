@@ -1,12 +1,19 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Alloc {
+import jacodbInst.*
+class ssa_Alloc : ssaToJacoExpr {
 
 	var register: ssa_register? = null
 	var Comment: String? = null
 	var Heap: Boolean? = null
 	var index: Long? = null
+
+	override fun createJacoDBExpr(): GoAllocExpr {
+        return GoAllocExpr(
+            register!!.typ!! as GoType,
+        )
+    }
 }
 
 fun read_ssa_Alloc(buffReader: BufferedReader, id: Int): ssa_Alloc {

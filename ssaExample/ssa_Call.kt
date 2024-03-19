@@ -1,10 +1,28 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Call {
+import jacodbInst.*
+import jacodbInst.impl.location.GoInstLocationImpl
+class ssa_Call : ssaToJacoInst, ssaToJacoValue {
 
 	var register: ssa_register? = null
 	var Call: ssa_CallCommon? = null
+
+	override fun createJacoDBInst(parent: GoMethod): GoCallInst {
+        return GoCallInst(
+            GoInstLocationImpl(
+                register!!.anInstruction!!.block!!.Index!!.toInt(),
+                Call!!.pos!!.toInt(),
+                parent,
+            ),
+            parent,
+            ssa_CallExpr(this).createJacoDBExpr()
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return ssa_CallExpr(this).createJacoDBValue()
+    }
 }
 
 fun read_ssa_Call(buffReader: BufferedReader, id: Int): ssa_Call {

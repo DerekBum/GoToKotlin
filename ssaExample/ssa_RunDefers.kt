@@ -1,9 +1,22 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_RunDefers {
+import jacodbInst.*
+import jacodbInst.impl.location.GoInstLocationImpl
+class ssa_RunDefers : ssaToJacoInst {
 
 	var anInstruction: generatedInlineStruct_000? = null
+
+	override fun createJacoDBInst(parent: GoMethod): GoRunDefersInst {
+        return GoRunDefersInst(
+            GoInstLocationImpl(
+                anInstruction!!.block!!.Index!!.toInt(),
+                0,
+                parent,
+            ),
+            parent,
+        )
+    }
 }
 
 fun read_ssa_RunDefers(buffReader: BufferedReader, id: Int): ssa_RunDefers {

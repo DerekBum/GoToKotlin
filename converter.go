@@ -8,10 +8,13 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"GoToJava/constants"
+	"GoToJava/ssa_helpers"
 )
 
 type Converter struct {
-	dirPath string
+	DirPath string
 	genName int
 	ptrCnt  int
 	ptrNow  bool
@@ -20,15 +23,18 @@ type Converter struct {
 	used     map[string]bool
 	usedPtr  map[uintptr]int
 	inlineId map[string]int
+
+	isJacoSupported bool
 }
 
-func CreateConverter(dirPath string) Converter {
+func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 	return Converter{
-		dirPath:  dirPath,
-		genName:  0,
-		used:     map[string]bool{},
-		usedPtr:  map[uintptr]int{},
-		inlineId: map[string]int{},
+		DirPath:         dirPath,
+		genName:         0,
+		used:            map[string]bool{},
+		usedPtr:         map[uintptr]int{},
+		inlineId:        map[string]int{},
+		isJacoSupported: isJacoSupported,
 	}
 }
 
@@ -130,21 +136,26 @@ func (conv *Converter) convertStruct(structure interface{}) (string, error) {
 	name = strings.ReplaceAll(name, ".", "_")
 
 	if strings.Contains(name, "/") {
-		return "", fmt.Errorf("123")
+		return "", fmt.Errorf("name of the structure contains the '/' symbol")
 	}
 	if conv.used[name] {
 		return name, nil
 	}
 	conv.used[name] = true
 
-	filePath := filepath.Join(".", conv.dirPath, name+".kt")
+	filePath := filepath.Join(".", conv.DirPath, name+".kt")
 	file, err := os.Create(filePath)
 	if err != nil {
 		return "", err
 	}
 
-	structDef := packageLine + readerImports
-	structDef += fmt.Sprintf(structDefinition, name)
+	structDef := constants.PackageLine + readerImports
+
+	if conv.isJacoSupported {
+		structDef = ssa_helpers.AddImportAndDefinition(structDef, name)
+	} else {
+		structDef += fmt.Sprintf(constants.StructDefinition, name)
+	}
 
 	deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
 
@@ -154,7 +165,6 @@ func (conv *Converter) convertStruct(structure interface{}) (string, error) {
 	}
 
 	for i := 0; i < structType.NumField(); i++ {
-		//fmt.Printf("%+v\n", structType.Field(i))
 		field := structType.Field(i)
 		fieldType := field.Type
 		println(field.Type.String())
@@ -185,6 +195,10 @@ func (conv *Converter) convertStruct(structure interface{}) (string, error) {
 		structDef += fmt.Sprintf(structField,
 			field.Name, ktName)
 		deserializer += fmt.Sprintf(deserializeField, field.Name, ktName)
+	}
+
+	if conv.isJacoSupported {
+		structDef = ssa_helpers.AddInterfaceFunctions(structDef, name)
 	}
 
 	structDef += "}\n\n"
@@ -401,23 +415,23 @@ func (conv *Converter) fillValues(structure interface{}, fillerFile io.Writer) e
 }
 
 func (conv *Converter) generateBaseDeserializers() error {
-	filePath := filepath.Join(".", conv.dirPath, "baseDeserializers.kt")
+	filePath := filepath.Join(".", conv.DirPath, "baseDeserializers.kt")
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
-	des := packageLine + readerImports + readBaseTypes
+	des := constants.PackageLine + readerImports + readBaseTypes
 	_, err = file.Write([]byte(des))
 	return err
 }
 
 func (conv *Converter) generateEntrypoint() error {
-	filePath := filepath.Join(".", conv.dirPath, "Entrypoint.kt")
+	filePath := filepath.Join(".", conv.DirPath, "Entrypoint.kt")
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
-	start := packageLine + readerImports + kotlinConstants
+	start := constants.PackageLine + readerImports + kotlinConstants
 
 	for name := range conv.used {
 		start += ",\n"
@@ -431,6 +445,13 @@ func (conv *Converter) generateEntrypoint() error {
 }
 
 func (conv *Converter) GenerateStructures(structure interface{}) error {
+	if conv.isJacoSupported {
+		err := ssa_helpers.GenerateJacoStructs(conv.DirPath)
+		if err != nil {
+			return err
+		}
+	}
+
 	_, err := conv.convertStruct(structure)
 	if err != nil {
 		return err

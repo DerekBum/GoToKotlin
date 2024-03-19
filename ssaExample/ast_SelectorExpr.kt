@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ast_SelectorExpr {
 
 	var X: Any? = null

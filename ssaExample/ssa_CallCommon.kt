@@ -1,12 +1,21 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_CallCommon {
+import jacodbInst.*
+class ssa_CallCommon : ssaToJacoExpr {
 
 	var Value: Any? = null
 	var Method: types_Func? = null
 	var Args: List<Any>? = null
 	var pos: Long? = null
+
+	override fun createJacoDBExpr(): GoExpr {
+        return GoCallExpr(
+            Method!!.Object!!.typ!! as GoType,
+            (Value!! as ssaToJacoValue).createJacoDBValue(),
+            Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
+        )
+    }
 }
 
 fun read_ssa_CallCommon(buffReader: BufferedReader, id: Int): ssa_CallCommon {

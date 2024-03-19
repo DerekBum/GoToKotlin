@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ssa_Program {
 
 	var Fset: token_FileSet? = null
@@ -17,6 +18,21 @@ class ssa_Program {
 	var runtimeTypes: typeutil_Map? = null
 	var objectMethodsMu: sync_Mutex? = null
 	var objectMethods: Map<types_Func, ssa_Function>? = null
+
+	fun createJacoDBProject(): GoProject {
+        val methods = mutableListOf<GoMethod>()
+        for (pkg in packages!!) {
+            for (member in pkg.value.Members!!) {
+                if (member.value is ssa_Function) {
+                    methods.add((member.value as ssa_Function).createJacoDBMethod())
+                }
+            }
+        }
+
+        return GoProject(
+            methods.toList()
+        )
+    }
 }
 
 fun read_ssa_Program(buffReader: BufferedReader, id: Int): ssa_Program {

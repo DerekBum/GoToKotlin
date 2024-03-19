@@ -1,7 +1,8 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Function {
+import jacodbInst.*
+class ssa_Function : ssaToJacoValue {
 
 	var name: String? = null
 	var Object: types_Func? = null
@@ -33,6 +34,34 @@ class ssa_Function {
 	var targets: ssa_targets? = null
 	var lblocks: Map<types_Label, ssa_lblock>? = null
 	var subst: ssa_subster? = null
+
+	fun createJacoDBMethod(): GoFunction {
+        val returns = mutableListOf<GoType>()
+
+        if (Signature!!.results!!.vars != null) {
+            for (ret in Signature!!.results!!.vars!!) {
+                returns.add(ret.Object!!.typ!! as GoType)
+            }
+        }
+
+        val noBlocksFunction =
+            GoFunction(
+                Signature!!,
+                Params!!.map { it.createJacoDBExpr() }, // TODO
+                name!!,
+                listOf(),
+                returns, //TODO
+                Pkg!!.Pkg!!.name!!
+            )
+
+        noBlocksFunction.blocks = Blocks!!.map { it.createJacoDBBasicBlock(noBlocksFunction) }
+
+        return noBlocksFunction
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBMethod()
+    }
 }
 
 fun read_ssa_Function(buffReader: BufferedReader, id: Int): ssa_Function {

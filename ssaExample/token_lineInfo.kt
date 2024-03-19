@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class token_lineInfo {
 
 	var Offset: Long? = null

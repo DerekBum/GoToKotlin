@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ast_GenDecl {
 
 	var Doc: ast_CommentGroup? = null

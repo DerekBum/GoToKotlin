@@ -1,12 +1,17 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_TypeParam {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_TypeParam : GoType {
 
 	var check: types_Checker? = null
 	var obj: types_TypeName? = null
 	var index: Long? = null
 	var bound: Any? = null
+
+	override val typeName: String
+        get() = obj!!.Object!!.name!!
 }
 
 fun read_types_TypeParam(buffReader: BufferedReader, id: Int): types_TypeParam {

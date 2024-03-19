@@ -1,10 +1,23 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Builtin {
+import jacodbInst.*
+class ssa_Builtin : ssaToJacoExpr, ssaToJacoValue {
 
 	var name: String? = null
 	var sig: types_Signature? = null
+
+	override fun createJacoDBExpr(): GoBuiltin {
+        return GoBuiltin(
+            0,
+            name!!,
+            sig!!
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_Builtin(buffReader: BufferedReader, id: Int): ssa_Builtin {

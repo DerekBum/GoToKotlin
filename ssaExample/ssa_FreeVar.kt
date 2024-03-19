@@ -1,7 +1,8 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_FreeVar {
+import jacodbInst.*
+class ssa_FreeVar : ssaToJacoExpr, ssaToJacoValue {
 
 	var name: String? = null
 	var typ: Any? = null
@@ -9,6 +10,18 @@ class ssa_FreeVar {
 	var parent: ssa_Function? = null
 	var referrers: List<Any>? = null
 	var outer: Any? = null
+
+	override fun createJacoDBExpr(): GoFreeVar {
+        return GoFreeVar(
+            pos!!.toInt(),
+            name!!,
+            typ!! as GoType
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_FreeVar(buffReader: BufferedReader, id: Int): ssa_FreeVar {

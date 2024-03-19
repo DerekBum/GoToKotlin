@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types_monoGraph {
 
 	var vertices: List<types_monoVertex>? = null

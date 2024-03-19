@@ -1,11 +1,25 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Return {
+import jacodbInst.*
+import jacodbInst.impl.location.GoInstLocationImpl
+class ssa_Return : ssaToJacoInst {
 
 	var anInstruction: generatedInlineStruct_000? = null
 	var Results: List<Any>? = null
 	var pos: Long? = null
+
+	override fun createJacoDBInst(parent: GoMethod): GoReturnInst {
+        return GoReturnInst(
+            GoInstLocationImpl(
+                anInstruction!!.block!!.Index!!.toInt(),
+                pos!!.toInt(),
+                parent,
+            ),
+            parent,
+            Results!!.map { (it as ssaToJacoValue).createJacoDBValue() },
+        )
+    }
 }
 
 fun read_ssa_Return(buffReader: BufferedReader, id: Int): ssa_Return {

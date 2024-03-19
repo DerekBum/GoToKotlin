@@ -1,7 +1,9 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Named {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Named : GoType {
 
 	var check: types_Checker? = null
 	var obj: types_TypeName? = null
@@ -12,6 +14,9 @@ class types_Named {
 	var underlying: Any? = null
 	var tparams: types_TypeParamList? = null
 	var methods: List<types_Func>? = null
+
+	override val typeName: String
+        get() = (underlying!! as GoType).typeName
 }
 
 fun read_types_Named(buffReader: BufferedReader, id: Int): types_Named {

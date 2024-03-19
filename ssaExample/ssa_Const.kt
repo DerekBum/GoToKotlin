@@ -1,10 +1,58 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Const {
+import jacodbInst.*
+class ssa_Const : ssaToJacoExpr, ssaToJacoValue {
 
 	var typ: Any? = null
 	var Value: Any? = null
+
+	override fun createJacoDBExpr(): GoConst {
+        val innerVal = Value!!
+        val name: String
+
+        when (innerVal) {
+            is Long -> {
+                name = GoLong(
+                    innerVal,
+                    typ!! as GoType
+                ).toString()
+            }
+            is Boolean -> {
+                name = GoBool(
+                    innerVal,
+                    typ!! as GoType
+                ).toString()
+            }
+            is Double -> {
+                name = GoDouble(
+                    innerVal,
+                    typ!! as GoType
+                ).toString()
+            }
+            is String -> {
+                name = GoStringConstant(
+                    innerVal,
+                    typ!! as GoType
+                ).toString()
+            }
+            else -> {
+                name = GoNullConstant(
+                    typ!! as GoType
+                ).toString()
+            }
+        }
+
+        return GoConst(
+            0,
+            name,
+            typ!! as GoType
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_Const(buffReader: BufferedReader, id: Int): ssa_Const {

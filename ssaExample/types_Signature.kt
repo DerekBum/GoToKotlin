@@ -1,7 +1,9 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Signature {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Signature : GoType {
 
 	var rparams: types_TypeParamList? = null
 	var tparams: types_TypeParamList? = null
@@ -10,6 +12,22 @@ class types_Signature {
 	var params: types_Tuple? = null
 	var results: types_Tuple? = null
 	var variadic: Boolean? = null
+
+	override val typeName: String
+        get(): String {
+            var res = "func ("
+            var paramsString = ""
+            for (p in params!!.vars!!) {
+                paramsString += p.Object!!.name + ", "
+            }
+            res += paramsString.removeSuffix(", ") + ") ("
+            var resultsString = ""
+            for (r in results!!.vars!!) {
+                resultsString += r.Object!!.name + ", "
+            }
+            res += resultsString.removeSuffix(", ") + ")"
+            return res
+        }
 }
 
 fun read_types_Signature(buffReader: BufferedReader, id: Int): types_Signature {

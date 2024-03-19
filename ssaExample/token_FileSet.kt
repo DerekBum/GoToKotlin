@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class token_FileSet {
 
 	var mutex: sync_RWMutex? = null

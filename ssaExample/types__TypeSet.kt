@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class types__TypeSet {
 
 	var methods: List<types_Func>? = null

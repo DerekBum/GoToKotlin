@@ -1,7 +1,9 @@
 package GoToJava
 
 import java.io.BufferedReader
-class types_Interface {
+import jacodbInst.*
+import jacodbInst.GoType
+class types_Interface : GoType {
 
 	var check: types_Checker? = null
 	var methods: List<types_Func>? = null
@@ -10,6 +12,9 @@ class types_Interface {
 	var implicit: Boolean? = null
 	var complete: Boolean? = null
 	var tset: types__TypeSet? = null
+
+	override val typeName: String
+        get() = "Any"
 }
 
 fun read_types_Interface(buffReader: BufferedReader, id: Int): types_Interface {

@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class typeutil_MethodSetCache {
 
 	var mu: sync_Mutex? = null

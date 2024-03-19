@@ -1,13 +1,26 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_Parameter {
+import jacodbInst.*
+class ssa_Parameter : ssaToJacoExpr, ssaToJacoValue {
 
 	var name: String? = null
 	var Object: types_Var? = null
 	var typ: Any? = null
 	var parent: ssa_Function? = null
 	var referrers: List<Any>? = null
+
+	override fun createJacoDBExpr(): GoParameter {
+        return GoParameter(
+            Object!!.Object!!.pos!!.toInt(),
+            name!!,
+            typ!! as GoType
+        )
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_Parameter(buffReader: BufferedReader, id: Int): ssa_Parameter {

@@ -1,6 +1,7 @@
 package GoToJava
 
 import java.io.BufferedReader
+import jacodbInst.*
 class ast_CommentGroup {
 
 	var List: List<ast_Comment>? = null

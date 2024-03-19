@@ -1,12 +1,46 @@
 package GoToJava
 
 import java.io.BufferedReader
-class ssa_UnOp {
+import jacodbInst.*
+class ssa_UnOp : ssaToJacoExpr, ssaToJacoValue {
 
 	var register: ssa_register? = null
 	var Op: Long? = null
 	var X: Any? = null
 	var CommaOk: Boolean? = null
+
+	override fun createJacoDBExpr(): GoUnaryExpr {
+        val type = register!!.typ!! as GoType
+
+        when (Op!!) {
+            43L -> return GoUnNotExpr(
+                value = (X!! as ssaToJacoValue).createJacoDBValue(),
+                type = type
+            )
+            13L -> return GoUnSubExpr(
+                value = (X!! as ssaToJacoValue).createJacoDBValue(),
+                type = type
+            )
+            36L -> return GoUnArrowExpr(
+                value = (X!! as ssaToJacoValue).createJacoDBValue(),
+                type = type,
+                commaOk = CommaOk ?: false
+            )
+            14L -> return GoUnMulExpr(
+                value = (X!! as ssaToJacoValue).createJacoDBValue(),
+                type = type
+            )
+            19L -> return GoUnXorExpr(
+                value = (X!! as ssaToJacoValue).createJacoDBValue(),
+                type = type
+            )
+            else -> error("unexpected UnOp ${Op!!}")
+        }
+    }
+
+    override fun createJacoDBValue(): GoValue {
+        return createJacoDBExpr()
+    }
 }
 
 fun read_ssa_UnOp(buffReader: BufferedReader, id: Int): ssa_UnOp {
