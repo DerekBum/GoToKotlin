@@ -10,6 +10,7 @@ const deserializeFunStart = `fun read_%s(buffReader: BufferedReader, id: Int): %
             return ptrMap[id] as %s
         }
         ptrMap[id] = res
+		structToPtrMap[res] = id
     }
     var line: String
     var split: List<String>
@@ -59,7 +60,6 @@ fun readNil(buffReader: BufferedReader, id: Int): Any? {
 }
 
 fun readArray(buffReader: BufferedReader, id: Int): Any? {
-    var line = buffReader.readLine()
     val res: MutableList<Any?> = mutableListOf()
     if (id != -1) {
         if (ptrMap.containsKey(id)) {
@@ -67,6 +67,7 @@ fun readArray(buffReader: BufferedReader, id: Int): Any? {
         }
         ptrMap[id] = res
     }
+	var line = buffReader.readLine()
     while (line != "end") {
         var split: List<String>
         var id: Int
@@ -131,6 +132,8 @@ fun StartDeserializer(buffReader: BufferedReader): Any? {
 
 const kotlinConstants = `
 val ptrMap: MutableMap<Int, Any> = mutableMapOf()
+val structToPtrMap: MutableMap<Any, Int> = mutableMapOf()
+val ptrToJacoMap: MutableMap<Int, Any> = mutableMapOf()
 val mapDec: Map<String, (BufferedReader, Int)->Any?> = mapOf(
     "Int" to ::readInteger,
     "Short" to ::readInteger,

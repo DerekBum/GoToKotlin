@@ -16,6 +16,7 @@ const (
 	expressionValue_
 	type_
 	instructionValue_
+	call_
 
 	none_ = -1
 )
@@ -65,6 +66,9 @@ func GenerateJacoStructs(dirPath string) error {
 }
 
 func getJacoInterface(name string) int {
+	if name == "ssa_Call" {
+		return call_
+	}
 	if slices.Contains(instructions, name) {
 		if slices.Contains(values, name) {
 			return instructionValue_
@@ -93,7 +97,7 @@ func AddImportAndDefinition(structDef, name string) string {
 
 	iface := getJacoInterface(name)
 
-	if iface == instruction_ || iface == instructionValue_ {
+	if iface == instruction_ || iface == instructionValue_ || iface == call_ {
 		structDef += jacoInstImport
 	}
 	if iface == type_ {

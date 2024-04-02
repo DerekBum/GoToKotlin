@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
-	"os"
 
 	"GoToJava"
 )
@@ -59,7 +60,7 @@ type BigStruct struct {
 }
 
 func main() {
-	fileName := "./ssa_prompt/main.go"
+	fileName := "./ssa_prompt/934E2/main.go" //"./ssa_prompt/tarantool/main.go"
 
 	// Replace interface{} with any for this test.
 	// Parse the source files.
@@ -86,7 +87,7 @@ func main() {
 		packages.NeedEmbedPatterns
 	cfg := &packages.Config{Mode: mode}
 
-	initialPackages, err := packages.Load(cfg, fileName)
+	initialPackages, err := packages.Load(cfg, fileName) //"k8s.io/client-go/kubernetes"
 	if err != nil {
 		fmt.Print(err)
 	}

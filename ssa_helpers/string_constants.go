@@ -1,41 +1,61 @@
 package ssa_helpers
 
-const jacoImport = `import jacodbInst.*
+import "fmt"
+
+const jacoImport = `import jacodb.*
 `
 
-const jacoInstImport = `import jacodbInst.impl.location.GoInstLocationImpl
+const jacoInstImport = `import jacodb.GoInstLocationImpl
 `
 
-const jacoTypeImport = `import jacodbInst.GoType
+const jacoTypeImport = `import jacodb.GoType
 `
 
 const structDefinitionWithInterface = `class %s : %s {
 
 `
 
-const ssaToJacoExpr = `import jacodbInst.GoExpr
+const ssaToJacoExpr = `import jacodb.GoExpr
 
 interface ssaToJacoExpr {
     fun createJacoDBExpr(): GoExpr
 }
 `
 
-const ssaToJacoInst = `import jacodbInst.GoInst
-import jacodbInst.GoMethod
+const ssaToJacoInst = `import jacodb.GoInst
+import jacodb.GoMethod
 
 interface ssaToJacoInst {
     fun createJacoDBInst(parent: GoMethod): GoInst
 }
 `
 
-const ssaToJacoValue = `import jacodbInst.GoValue
+const ssaToJacoValue = `import jacodb.GoValue
 
 interface ssaToJacoValue {
     fun createJacoDBValue(): GoValue
 }
 `
 
-const ssaCallExpr = `import jacodbInst.*
+const createValueFunc = `override fun createJacoDBValue(): GoValue {
+		if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
+            return ptrToJacoMap[structToPtrMap[this]] as %s
+        }
+        return createJacoDBExpr()
+    }
+`
+
+const checkUsed = `if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
+            return ptrToJacoMap[structToPtrMap[this]] as %s
+        }
+`
+
+const markUsed = `if (structToPtrMap.containsKey(this)) {
+            ptrToJacoMap[structToPtrMap[this]!!] = res
+        }
+        return res`
+
+var ssaCallExpr = fmt.Sprintf(`import jacodb.*
 
 class ssa_CallExpr(init: ssa_Call) : ssaToJacoExpr, ssaToJacoValue {
     val type = init.register!!.typ!! as GoType
@@ -43,21 +63,22 @@ class ssa_CallExpr(init: ssa_Call) : ssaToJacoExpr, ssaToJacoValue {
     val operands = init.Call!!.Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
 
     override fun createJacoDBExpr(): GoCallExpr {
-        return GoCallExpr(
+		%s
+        val res = GoCallExpr(
             type,
             value,
             operands
         )
+		%s
     }
-
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
+	%s
 }
-`
+`, fmt.Sprintf(checkUsed, "GoCallExpr"), markUsed, fmt.Sprintf(createValueFunc, "GoCallExpr"))
 
-const functionExtra = `
+var functionExtra = fmt.Sprintf(`
 	fun createJacoDBMethod(): GoFunction {
+		%s
+
         val returns = mutableListOf<GoType>()
 
         if (Signature!!.results!!.vars != null) {
@@ -66,28 +87,41 @@ const functionExtra = `
             }
         }
 
-        val noBlocksFunction =
+        val res =
             GoFunction(
                 Signature!!,
-                Params!!.map { it.createJacoDBExpr() }, // TODO
+                Params!!.map { it.createJacoDBExpr() }, //TODO
                 name!!,
                 listOf(),
                 returns, //TODO
-                Pkg!!.Pkg!!.name!!
+                Pkg?.Pkg?.name ?: "null"
             )
 
-        noBlocksFunction.blocks = Blocks!!.map { it.createJacoDBBasicBlock(noBlocksFunction) }
+		if (structToPtrMap.containsKey(this)) {
+            ptrToJacoMap[structToPtrMap[this]!!] = res
+        }
 
-        return noBlocksFunction
+        res.blocks = Blocks!!.map { it.createJacoDBBasicBlock(res) }
+
+		return res
     }
-
-    override fun createJacoDBValue(): GoValue {
+	
+	override fun createJacoDBValue(): GoValue {
+		if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
+            return ptrToJacoMap[structToPtrMap[this]] as GoFunction
+        }
         return createJacoDBMethod()
     }
-`
 
-const programExtra = `
+	override fun createJacoDBExpr(): GoExpr {
+        return createJacoDBValue()
+    }
+`, fmt.Sprintf(checkUsed, "GoFunction"))
+
+var programExtra = fmt.Sprintf(`
 	fun createJacoDBProject(): GoProject {
+		%s
+
         val methods = mutableListOf<GoMethod>()
         for (pkg in packages!!) {
             for (member in pkg.value.Members!!) {
@@ -97,14 +131,17 @@ const programExtra = `
             }
         }
 
-        return GoProject(
+        val res = GoProject(
             methods.toList()
         )
+		%s
     }
-`
+`, fmt.Sprintf(checkUsed, "GoProject"), markUsed)
 
-const basicBlockExtra = `
+var basicBlockExtra = fmt.Sprintf(`
 	fun createJacoDBBasicBlock(method: GoMethod): GoBasicBlock {
+		%s
+
         val inst = mutableListOf<GoInst>()
 
         for (value in Instrs!!) {
@@ -113,18 +150,21 @@ const basicBlockExtra = `
             }
         }
 
-        return GoBasicBlock(
+        val res = GoBasicBlock(
             Index!!.toInt(),
             Preds!!.map { it.Index!!.toInt() },
             Succs!!.map { it.Index!!.toInt() },
             inst
         )
+		%s
     }
-`
+`, fmt.Sprintf(checkUsed, "GoBasicBlock"), markUsed)
 
-const jumpExtra = `
+var jumpExtra = fmt.Sprintf(`
 	override fun createJacoDBInst(parent: GoMethod): GoJumpInst {
-        return GoJumpInst(
+		%s
+
+        val res = GoJumpInst(
             GoInstLocationImpl(
                 anInstruction!!.block!!.Index!!.toInt(),
                 0,
@@ -135,11 +175,14 @@ const jumpExtra = `
                 anInstruction!!.block!!.Index!!.toInt()
             )
         )
+		%s
     }
-`
+`, fmt.Sprintf(checkUsed, "GoJumpInst"), markUsed)
 
-const ifExtra = `
+var ifExtra = fmt.Sprintf(`
 	override fun createJacoDBInst(parent: GoMethod): GoIfInst {
+		%s
+
         var cond: GoConditionExpr
 
         val trueConst = ssa_Const()
@@ -169,7 +212,7 @@ const ifExtra = `
             )
         }
 
-        return GoIfInst(
+        val res = GoIfInst(
             GoInstLocationImpl(
                 anInstruction!!.block!!.Index!!.toInt(),
                 0,
@@ -184,8 +227,9 @@ const ifExtra = `
                 anInstruction!!.block!!.Succs!![1].Index!!.toInt()
             ),
         )
+		%s
     }
-`
+`, fmt.Sprintf(checkUsed, "GoIfInst"), markUsed)
 
 const returnExtra = `
 	override fun createJacoDBInst(parent: GoMethod): GoReturnInst {
@@ -237,7 +281,8 @@ const goExtra = `
                 parent,
             ),
             parent,
-			(Call!! as ssaToJacoExpr).createJacoDBExpr(),
+			(Call!!.Value!! as ssaToJacoValue).createJacoDBValue(),
+            Call!!.Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
         )
     }
 `
@@ -251,7 +296,8 @@ const deferExtra = `
                 parent,
             ),
             parent,
-			(Call!! as ssaToJacoExpr).createJacoDBExpr(),
+			(Call!!.Value!! as ssaToJacoValue).createJacoDBValue(),
+            Call!!.Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
         )
     }
 `
@@ -315,8 +361,12 @@ const debugRefExtra = `
     }
 `
 
-const callExtra = `
+var callExtra = fmt.Sprintf(`
+	var CallExpr: GoCallExpr? = null
 	override fun createJacoDBInst(parent: GoMethod): GoCallInst {
+        if (CallExpr == null) {
+            CallExpr = ssa_CallExpr(this).createJacoDBExpr()
+        }
         return GoCallInst(
             GoInstLocationImpl(
                 register!!.anInstruction!!.block!!.Index!!.toInt(),
@@ -324,16 +374,23 @@ const callExtra = `
                 parent,
             ),
             parent,
-            ssa_CallExpr(this).createJacoDBExpr()
+            CallExpr!!
         )
     }
-
-    override fun createJacoDBValue(): GoValue {
-        return ssa_CallExpr(this).createJacoDBValue()
+	
+	override fun createJacoDBValue(): GoValue {
+        if (CallExpr == null) {
+            CallExpr = ssa_CallExpr(this).createJacoDBExpr()
+        }
+        return CallExpr!!
     }
-`
 
-const freeVarExtra = `
+	override fun createJacoDBExpr(): GoExpr {
+        return createJacoDBValue()
+    }
+`)
+
+var freeVarExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoFreeVar {
         return GoFreeVar(
             pos!!.toInt(),
@@ -341,13 +398,10 @@ const freeVarExtra = `
             typ!! as GoType
         )
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoFreeVar"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
-`
-
-const parameterExtra = `
+var parameterExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoParameter {
         return GoParameter(
             Object!!.Object!!.pos!!.toInt(),
@@ -355,15 +409,13 @@ const parameterExtra = `
             typ!! as GoType
         )
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoParameter"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
-`
-
-const constExtra = `
+// TODO()
+var constExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoConst {
-        val innerVal = Value!!
+        val innerVal = Value
         val name: String
 
         when (innerVal) {
@@ -391,10 +443,26 @@ const constExtra = `
                     typ!! as GoType
                 ).toString()
             }
-            else -> {
-                name = GoNullConstant(
+            is constant_intVal -> {
+                name = GoStringConstant(
+                    innerVal.Val!!.abs!!.joinToString { it.toString() },
                     typ!! as GoType
                 ).toString()
+            }
+            is constant_stringVal -> {
+                name = GoStringConstant(
+                    innerVal.s!!,
+                    typ!! as GoType
+                ).toString()
+            }
+            is constant_ratVal -> {
+                name = GoStringConstant(
+                    "${innerVal.Val!!.a!!} / ${innerVal.Val!!.a!!}",
+                    typ!! as GoType
+                ).toString()
+            }
+            else -> {
+                name = GoNullConstant().toString()
             }
         }
 
@@ -404,13 +472,10 @@ const constExtra = `
             typ!! as GoType
         )
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoConst"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
-`
-
-const globalExtra = `
+var globalExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoGlobal {
         return GoGlobal(
             pos!!.toInt(),
@@ -418,13 +483,10 @@ const globalExtra = `
             typ!! as GoType
         )
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoGlobal"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
-`
-
-const builtinExtra = `
+var builtinExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoBuiltin {
         return GoBuiltin(
             0,
@@ -432,10 +494,12 @@ const builtinExtra = `
             sig!!
         )
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoBuiltin"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
+const arrayExtra = `
+	override val typeName: String
+        get() = "[${len!!}]${(elem!! as GoType).typeName}"
 `
 
 const basicExtra = `
@@ -443,9 +507,31 @@ const basicExtra = `
         get() = name!!
 `
 
+const chanExtra = `
+	override val typeName: String
+        get(): String {
+            var res = (elem!! as GoType).typeName
+            if (dir!! == 0L) {
+                res = "chan $res"
+            }
+            else if (dir!! == 1L) {
+                res = "<-chan $res"
+            }
+            else if (dir!! == 2L) {
+                res = "chan <-$res"
+            }
+            return res
+        }
+`
+
 const interfaceExtra = `
 	override val typeName: String
         get() = "Any"
+`
+
+const mapExtra = `
+	override val typeName: String
+        get() = "map[${(key!! as GoType).typeName}]${(elem!! as GoType).typeName}"
 `
 
 const namedExtra = `
@@ -472,6 +558,27 @@ const signatureExtra = `
                 resultsString += r.Object!!.name + ", "
             }
             res += resultsString.removeSuffix(", ") + ")"
+            return res
+        }
+`
+
+const sliceTypeExtra = `
+	override val typeName: String
+        get() = "[]${(elem!! as GoType).typeName}"
+`
+
+const structExtra = `
+	override val typeName: String
+        get(): String {
+            var res = "struct {\n"
+            fields!!.forEachIndexed { ind, elem ->
+                res += (elem.Object!!.typ!! as GoType).typeName
+                if (tags != null && tags!!.size > ind) {
+                    res += " " + tags!![ind]
+                }
+                res += "\n"
+            }
+            res += "}"
             return res
         }
 `
@@ -503,22 +610,37 @@ const unionExtra = `
         }
 `
 
-const allocExtra = `
+const opaqueTypeExtra = `
+	override val typeName: String
+        get() = name!!
+`
+
+var allocExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoAllocExpr {
         return GoAllocExpr(
             register!!.typ!! as GoType,
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoAllocExpr"))
 
-const phiExtra = `
+var phiExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoPhiExpr {
-        return GoPhiExpr(
+		%s
+
+        val res = GoPhiExpr(
             register!!.typ!! as GoType,
-			Edges!!.map { (it as ssaToJacoValue).createJacoDBValue() }
+			listOf()
         )
+        if (structToPtrMap.containsKey(this)) {
+            ptrToJacoMap[structToPtrMap[this]!!] = res
+        }
+        
+        res.edges = Edges!!.map { (it as ssaToJacoValue).createJacoDBValue() }
+		return res
     }
-`
+	%s
+`, fmt.Sprintf(checkUsed, "GoPhiExpr"), fmt.Sprintf(createValueFunc, "GoPhiExpr"))
 
 const binOpExtra = `
 	override fun createJacoDBExpr(): GoBinaryExpr {
@@ -613,9 +735,17 @@ const binOpExtra = `
             else -> error("unexpected BinOp ${Op!!}")
         }
     }
+
+	override fun createJacoDBValue(): GoValue {
+        val res = createJacoDBExpr()
+        if (res is GoValue) {
+            return res
+        }
+        error("unexpected cast to Value $res")
+    }
 `
 
-const unOpExtra = `
+var unOpExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoUnaryExpr {
         val type = register!!.typ!! as GoType
 
@@ -644,67 +774,70 @@ const unOpExtra = `
             else -> error("unexpected UnOp ${Op!!}")
         }
     }
+	%s
+`, fmt.Sprintf(createValueFunc, "GoUnaryExpr"))
 
-    override fun createJacoDBValue(): GoValue {
-        return createJacoDBExpr()
-    }
-`
-
-const changeTypeExtra = `
+var changeTypeExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoChangeTypeExpr {
         return GoChangeTypeExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoChangeTypeExpr"))
 
-const convertExtra = `
+var convertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoConvertExpr {
         return GoConvertExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoConvertExpr"))
 
-const multiConvertExtra = `
+var multiConvertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMultiConvertExpr {
         return GoMultiConvertExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMultiConvertExpr"))
 
-const changeInterfaceExtra = `
+var changeInterfaceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoChangeInterfaceExpr {
         return GoChangeInterfaceExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoChangeInterfaceExpr"))
 
-const sliceToArrayPointerExtra = `
+var sliceToArrayPointerExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoSliceToArrayPointerExpr {
         return GoSliceToArrayPointerExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoSliceToArrayPointerExpr"))
 
-const makeInterfaceExtra = `
+var makeInterfaceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeInterfaceExpr {
         return GoMakeInterfaceExpr(
             register!!.typ!! as GoType,
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMakeInterfaceExpr"))
 
-const makeClosureExtra = `
+var makeClosureExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeClosureExpr {
         return GoMakeClosureExpr(
 			register!!.typ!! as GoType,
@@ -712,27 +845,36 @@ const makeClosureExtra = `
 			Bindings!!.map { (it as ssaToJacoValue).createJacoDBValue() },
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMakeClosureExpr"))
 
-const makeMapExtra = `
+var makeMapExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeMapExpr {
+		val reserve = if (Reserve == null) {
+            GoLong(0, LongType())
+        } else {
+            (Reserve!! as ssaToJacoValue).createJacoDBValue()
+        }
+
         return GoMakeMapExpr(
 			register!!.typ!! as GoType,
-            (Reserve!! as ssaToJacoValue).createJacoDBValue(),
+            reserve,
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMakeMapExpr"))
 
-const makeChanExtra = `
+var makeChanExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeChanExpr {
         return GoMakeChanExpr(
 			register!!.typ!! as GoType,
             (Size!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMakeChanExpr"))
 
-const makeSliceExtra = `
+var makeSliceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeSliceExpr {
         return GoMakeSliceExpr(
 			register!!.typ!! as GoType,
@@ -740,21 +882,42 @@ const makeSliceExtra = `
 			(Cap!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoMakeSliceExpr"))
 
-const sliceExtra = `
+var sliceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoSliceExpr {
-        return GoSliceExpr(
+		%s
+
+		val low: GoValue = if (Low == null) {
+            GoNullConstant()
+        } else {
+            (Low!! as ssaToJacoValue).createJacoDBValue()
+        }
+        val high: GoValue = if (High == null) {
+            GoNullConstant()
+        } else {
+            (High!! as ssaToJacoValue).createJacoDBValue()
+        }
+        val max: GoValue = if (Max == null) {
+            GoNullConstant()
+        } else {
+            (Max!! as ssaToJacoValue).createJacoDBValue()
+        }
+
+		val res = GoSliceExpr(
 			register!!.typ!! as GoType,
             (X!! as ssaToJacoValue).createJacoDBValue(),
-			(Low!! as ssaToJacoValue).createJacoDBValue(),
-			(High!! as ssaToJacoValue).createJacoDBValue(),
-			(Max!! as ssaToJacoValue).createJacoDBValue(),
+			low,
+			high,
+			max,
         )
+		%s
     }
-`
+	%s
+`, fmt.Sprintf(checkUsed, "GoSliceExpr"), markUsed, fmt.Sprintf(createValueFunc, "GoSliceExpr"))
 
-const fieldAddrExtra = `
+var fieldAddrExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoFieldAddrExpr {
         return GoFieldAddrExpr(
 			register!!.typ!! as GoType,
@@ -762,9 +925,10 @@ const fieldAddrExtra = `
 			Field!!.toInt(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoFieldAddrExpr"))
 
-const fieldExtra = `
+var fieldExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoFieldExpr {
         return GoFieldExpr(
 			register!!.typ!! as GoType,
@@ -772,9 +936,10 @@ const fieldExtra = `
 			Field!!.toInt(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoFieldExpr"))
 
-const indexAddrExtra = `
+var indexAddrExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoIndexAddrExpr {
         return GoIndexAddrExpr(
 			register!!.typ!! as GoType,
@@ -782,9 +947,10 @@ const indexAddrExtra = `
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoIndexAddrExpr"))
 
-const indexExtra = `
+var indexExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoIndexExpr {
         return GoIndexExpr(
 			register!!.typ!! as GoType,
@@ -792,9 +958,10 @@ const indexExtra = `
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoIndexExpr"))
 
-const lookupExtra = `
+var lookupExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoLookupExpr {
         return GoLookupExpr(
 			register!!.typ!! as GoType,
@@ -802,38 +969,57 @@ const lookupExtra = `
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoLookupExpr"))
 
-const selectExtra = `
+var selectExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoSelectExpr {
+        val chan = mutableListOf<GoValue>()
+        val send = mutableListOf<GoValue>()
+        if (States != null) {
+            States!!.map {
+                chan.add((it.Chan!! as ssaToJacoValue).createJacoDBValue())
+                send.add(
+                    if (it.Send == null) {
+                        GoNullConstant()
+                    } else {
+                        (it.Send!! as ssaToJacoValue).createJacoDBValue()
+                    }
+                )
+            }
+        }
+
         return GoSelectExpr(
 			register!!.typ!! as GoType,
-            States!!.map { (it.Chan!! as ssaToJacoValue).createJacoDBValue() },
-			States!!.map { (it.Send!! as ssaToJacoValue).createJacoDBValue() },
+            chan,
+			send,
 			Blocking!!,
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoSelectExpr"))
 
-const rangeExtra = `
+var rangeExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoRangeExpr {
         return GoRangeExpr(
 			register!!.typ!! as GoType,
             (X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoRangeExpr"))
 
-const nextExtra = `
+var nextExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoNextExpr {
         return GoNextExpr(
 			register!!.typ!! as GoType,
             (Iter!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoNextExpr"))
 
-const typeAssertExtra = `
+var typeAssertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoTypeAssertExpr {
         return GoTypeAssertExpr(
 			register!!.typ!! as GoType,
@@ -841,9 +1027,10 @@ const typeAssertExtra = `
 			AssertedType!! as GoType,
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoTypeAssertExpr"))
 
-const extractExtra = `
+var extractExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoExtractExpr {
         return GoExtractExpr(
 			register!!.typ!! as GoType,
@@ -851,14 +1038,16 @@ const extractExtra = `
 			Index!!.toInt(),
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoExtractExpr"))
 
-const callCommonExtra = `
-	override fun createJacoDBExpr(): GoExpr {
+/*var callCommonExtra = fmt.Sprintf(`
+	override fun createJacoDBExpr(): GoCallExpr {
         return GoCallExpr(
             Method!!.Object!!.typ!! as GoType,
             (Value!! as ssaToJacoValue).createJacoDBValue(),
             Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
         )
     }
-`
+	%s
+`, fmt.Sprintf(createValueFunc, "GoCallExpr"))*/

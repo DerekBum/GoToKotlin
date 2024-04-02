@@ -21,7 +21,7 @@ type Converter struct {
 	currPtr uintptr
 
 	used     map[string]bool
-	usedPtr  map[uintptr]int
+	usedPtr  map[uintptr]map[string]int
 	inlineId map[string]int
 
 	isJacoSupported bool
@@ -32,7 +32,7 @@ func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 		DirPath:         dirPath,
 		genName:         0,
 		used:            map[string]bool{},
-		usedPtr:         map[uintptr]int{},
+		usedPtr:         map[uintptr]map[string]int{},
 		inlineId:        map[string]int{},
 		isJacoSupported: isJacoSupported,
 	}
@@ -57,7 +57,7 @@ func convertBaseType(goName string) string {
 	case "interface {}":
 		return "Any"
 	}
-	return ""
+	return "Long"
 }
 
 func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
@@ -159,15 +159,10 @@ func (conv *Converter) convertStruct(structure interface{}) (string, error) {
 
 	deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
 
-	if name == "types_Named" {
-		l := 1
-		l++
-	}
-
 	for i := 0; i < structType.NumField(); i++ {
 		field := structType.Field(i)
 		fieldType := field.Type
-		println(field.Type.String())
+		//println(field.Type.String())
 
 		if field.Name == "_" {
 			// This is a blank identifier, no need to send.
@@ -214,15 +209,25 @@ func getFieldString(conv *Converter, startString string) (string, bool) {
 	skip := false
 
 	if conv.ptrNow && conv.currPtr != 0 {
-		id, ok := conv.usedPtr[conv.currPtr]
+		var id int
+
+		nameToID, ok := conv.usedPtr[conv.currPtr]
 
 		if !ok {
+			conv.usedPtr[conv.currPtr] = make(map[string]int)
 			id = conv.ptrCnt
 			conv.ptrCnt++
 
-			conv.usedPtr[conv.currPtr] = id
+			conv.usedPtr[conv.currPtr][startString] = id
 		} else {
-			skip = true
+			if id, ok = nameToID[startString]; ok {
+				skip = true
+			} else {
+				id = conv.ptrCnt
+				conv.ptrCnt++
+
+				conv.usedPtr[conv.currPtr][startString] = id
+			}
 		}
 
 		startString += " " + strconv.Itoa(id)
@@ -341,10 +346,10 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 
 		if fieldVal.Kind() != 0 {
 			for i := 0; i < fieldType.NumField(); i++ {
-				fmt.Printf("%+v\n", fieldType.Field(i))
+				//fmt.Printf("%+v\n", fieldType.Field(i))
 				field := fieldType.Field(i)
 				innerFieldType := field.Type
-				println(field.Type.String())
+				//println(field.Type.String())
 
 				if field.Name == "_" {
 					// This is a blank identifier, no need to send.
@@ -390,9 +395,17 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			case reflect.String:
 				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal.String())))
 			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(fieldVal.Int(), 10))))
+				kek := fieldVal.Int()
+				if kek > 1000000000000 {
+					kek = 1000000000000
+				}
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(kek, 10))))
 			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(fieldVal.Uint(), 10))))
+				kek := fieldVal.Uint()
+				if kek > 1000000000000 {
+					kek = 1000000000000
+				}
+				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(kek, 10))))
 			case reflect.Bool:
 				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatBool(fieldVal.Bool()))))
 			default:
@@ -469,6 +482,9 @@ func (conv *Converter) GenerateStructures(structure interface{}) error {
 
 func (conv *Converter) FillStructures(fillerFile io.Writer, structure interface{}) error {
 	err := conv.fillValues(structure, fillerFile)
+	if err != nil {
+		return err
+	}
 
 	err = conv.generateBaseDeserializers()
 	if err != nil {

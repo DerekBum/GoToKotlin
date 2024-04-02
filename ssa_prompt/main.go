@@ -1,5 +1,9 @@
 package main
 
+import (
+	"GoToJava"
+)
+
 func GetSign(x int) (res int) {
 	res = 123
 	if x > 0 {
@@ -14,4 +18,9 @@ func GetSign(x int) (res int) {
 func main() {
 	var x int
 	println(GetSign(x))
+
+	conv := GoToJava.CreateConverter("ssaExample", true)
+
+	conv.GenerateStructures(x)
+	conv.FillStructures(nil, x)
 }

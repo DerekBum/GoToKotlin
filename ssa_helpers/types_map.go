@@ -49,24 +49,27 @@ var expressions = append(variables, []string{
 	"ssa_Next",
 	"ssa_TypeAssert",
 	"ssa_Extract",
-	"ssa_CallCommon",
-}...)
-
-var values = append(variables, []string{
 	"ssa_Call",
 	"ssa_Function",
-	"ssa_UnOp",
 }...)
 
+var values = append(variables, expressions...)
+
 var types = []string{
+	"types_Array",
 	"types_Basic",
+	"types_Chan",
 	"types_Interface",
+	"types_Map",
 	"types_Named",
 	"types_Pointer",
 	"types_Signature",
+	"types_Slice",
+	"types_Struct",
 	"types_Tuple",
 	"types_TypeParam",
 	"types_Union",
+	"ssa_opaqueType",
 }
 
 var ifaceToStringMap = map[int]string{
@@ -76,6 +79,7 @@ var ifaceToStringMap = map[int]string{
 	type_:             "GoType",
 	expressionValue_:  "ssaToJacoExpr, ssaToJacoValue",
 	instructionValue_: "ssaToJacoInst, ssaToJacoValue",
+	call_:             "ssaToJacoInst, ssaToJacoValue, ssaToJacoExpr",
 }
 
 var nameToExtra = map[string]string{
@@ -102,14 +106,20 @@ var nameToExtra = map[string]string{
 	"ssa_Global":    globalExtra,
 	"ssa_Builtin":   builtinExtra,
 
+	"types_Array":     arrayExtra,
 	"types_Basic":     basicExtra,
+	"types_Chan":      chanExtra,
 	"types_Interface": interfaceExtra,
+	"types_Map":       mapExtra,
 	"types_Named":     namedExtra,
 	"types_Pointer":   pointerExtra,
 	"types_Signature": signatureExtra,
+	"types_Slice":     sliceTypeExtra,
+	"types_Struct":    structExtra,
 	"types_Tuple":     tupleExtra,
 	"types_TypeParam": typeParamExtra,
 	"types_Union":     unionExtra,
+	"ssa_opaqueType":  opaqueTypeExtra,
 
 	"ssa_Alloc":               allocExtra,
 	"ssa_Phi":                 phiExtra,
@@ -136,5 +146,5 @@ var nameToExtra = map[string]string{
 	"ssa_Next":                nextExtra,
 	"ssa_TypeAssert":          typeAssertExtra,
 	"ssa_Extract":             extractExtra,
-	"ssa_CallCommon":          callCommonExtra,
+	//"ssa_CallCommon":          callCommonExtra,
 }
