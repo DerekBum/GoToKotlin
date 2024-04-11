@@ -445,19 +445,31 @@ var constExtra = fmt.Sprintf(`
             }
             is constant_intVal -> {
                 name = GoStringConstant(
-                    innerVal.Val!!.abs!!.joinToString { it.toString() },
+                    innerVal.toString(),
                     typ!! as GoType
                 ).toString()
             }
             is constant_stringVal -> {
                 name = GoStringConstant(
-                    innerVal.s!!,
+                    innerVal.toString(),
                     typ!! as GoType
                 ).toString()
             }
             is constant_ratVal -> {
                 name = GoStringConstant(
-                    "${innerVal.Val!!.a!!} / ${innerVal.Val!!.a!!}",
+                    innerVal.toString(),
+                    typ!! as GoType
+                ).toString()
+            }
+			is constant_floatVal -> {
+                name = GoStringConstant(
+                    innerVal.toString(),
+                    typ!! as GoType
+                ).toString()
+            }
+			is constant_complexVal -> {
+                name = GoStringConstant(
+                    innerVal.toString(),
                     typ!! as GoType
                 ).toString()
             }
@@ -474,6 +486,82 @@ var constExtra = fmt.Sprintf(`
     }
 	%s
 `, fmt.Sprintf(createValueFunc, "GoConst"))
+
+const intValStub = `package GoToJava
+
+class constant_intVal {}
+`
+
+const stringValStub = `package GoToJava
+
+class constant_stringVal {}
+`
+
+const ratValStub = `package GoToJava
+
+class constant_ratVal {}
+`
+
+const floatValStub = `package GoToJava
+
+class constant_floatVal {}
+`
+
+const complexValStub = `package GoToJava
+
+class constant_complexVal {}
+`
+
+const intValExtra = `
+	override fun toString(): String {
+        var num = Val!!.abs!!.joinToString { it.toString() }
+        if (Val!!.neg!!) {
+            num = "-$num"
+        }
+        return num
+    }
+`
+
+const stringValExtra = `
+    override fun toString(): String {
+        var str = ""
+        if (s != null) {
+            str += s!!
+        }
+        if (l != null) {
+            str += l!!.toString()
+            str += r!!.toString()
+        }
+        return str
+    }
+`
+
+const ratValExtra = `
+    override fun toString(): String {
+        return "${Val!!.a}/${Val!!.b}"
+    }
+`
+
+const floatValExtra = `
+    override fun toString(): String {
+		var str = "2^${Val!!.exp!!}"
+		val temp = ""
+		for (w in Val!!.mant!!) {
+			temp += w.toString()
+		}
+		str = "$temp * $str"
+		if (Val!!.neg!!) {
+			str = "-$str"
+		}
+        return str
+    }
+`
+
+const complexValExtra = `
+    override fun toString(): String {
+        return "(${re!!} + ${im!!}i)"
+    }
+`
 
 var globalExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoGlobal {

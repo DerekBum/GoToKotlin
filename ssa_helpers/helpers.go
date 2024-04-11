@@ -120,3 +120,21 @@ func AddInterfaceFunctions(structDef, name string) string {
 
 	return structDef
 }
+
+func AddStubs(dirPath string, used map[string]bool) error {
+	for name, stub := range nameToStub {
+		if used[name] {
+			continue
+		}
+
+		filePath := filepath.Join(".", dirPath, name+".kt")
+		file, err := os.Create(filePath)
+		if err != nil {
+			return err
+		}
+
+		file.Write([]byte(stub))
+	}
+
+	return nil
+}

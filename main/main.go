@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -59,8 +60,11 @@ type BigStruct struct {
 	f24         interface{}
 }
 
+var needToGen = flag.Bool("gen", true, "Is initial generation needed")
+
 func main() {
-	fileName := "./ssa_prompt/934E2/main.go" //"./ssa_prompt/tarantool/main.go"
+	flag.Parse()
+	fileName := "./ssa_prompt/g306/main.go" //"./ssa_prompt/tarantool/main.go"
 
 	// Replace interface{} with any for this test.
 	// Parse the source files.
@@ -124,6 +128,8 @@ func main() {
 
 	conv := GoToJava.CreateConverter("ssaExample", true)
 
-	fmt.Printf("%v", conv.GenerateStructures(program))
+	if *needToGen {
+		fmt.Printf("%v", conv.GenerateStructures(program))
+	}
 	fmt.Printf("%v", conv.FillStructures(file, program))
 }

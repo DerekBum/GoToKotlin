@@ -11,7 +11,7 @@ KOTLIN_REMOVE=$(ls $KOTLIN | grep -xv "Main.kt" | sed "s|.*|$KOTLIN&|" | xargs r
 
 $GO_REMOVE
 
-echo "Go generate:"
+echo "Go generate 2 steps:"
 time go run $MAIN
 echo ""
 
@@ -20,6 +20,10 @@ $KOTLIN_REMOVE
 echo "" && echo "Moving:"
 
 time $MOVE
+
+echo "Go fill only:"
+time go run $MAIN -gen=false
+echo ""
 
 #echo "" && echo "All together:"
 

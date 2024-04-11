@@ -146,5 +146,18 @@ var nameToExtra = map[string]string{
 	"ssa_Next":                nextExtra,
 	"ssa_TypeAssert":          typeAssertExtra,
 	"ssa_Extract":             extractExtra,
-	//"ssa_CallCommon":          callCommonExtra,
+
+	"constant_intVal":     intValExtra,
+	"constant_stringVal":  stringValExtra,
+	"constant_ratVal":     ratValExtra,
+	"constant_floatVal":   floatValExtra,
+	"constant_complexVal": complexValExtra,
+}
+
+var nameToStub = map[string]string{
+	"constant_intVal":     intValStub,
+	"constant_stringVal":  stringValStub,
+	"constant_ratVal":     ratValStub,
+	"constant_floatVal":   floatValStub,
+	"constant_complexVal": complexValStub,
 }

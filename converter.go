@@ -60,11 +60,11 @@ func convertBaseType(goName string) string {
 	return "Long"
 }
 
-func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) string {
+func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind) (string, error) {
 	switch kind {
 	case reflect.Func:
 		// skip
-		return ""
+		return "", nil
 	case reflect.Interface:
 		fieldVal := reflect.Zero(fieldType)
 
@@ -75,21 +75,19 @@ func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 			conv.getInnerStructs(fieldType, kind)
 		}
 
-		return "Any"
+		return "Any", nil
 	case reflect.Pointer:
 		fieldType = fieldType.Elem()
 		kind = fieldType.Kind()
 
-		name := conv.getInnerStructs(fieldType, kind)
-
-		return name
+		return conv.getInnerStructs(fieldType, kind)
 	case reflect.Slice, reflect.Array:
 		fieldType = fieldType.Elem()
 		kind = fieldType.Kind()
 
-		name := conv.getInnerStructs(fieldType, kind)
+		name, _ := conv.getInnerStructs(fieldType, kind)
 
-		return "List<" + name + ">"
+		return "List<" + name + ">", nil
 	case reflect.Map:
 		keyType := fieldType.Key()
 		keyKind := keyType.Kind()
@@ -97,112 +95,113 @@ func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 		valType := fieldType.Elem()
 		valKind := valType.Kind()
 
-		keyName := conv.getInnerStructs(keyType, keyKind)
-		valName := conv.getInnerStructs(valType, valKind)
+		keyName, _ := conv.getInnerStructs(keyType, keyKind)
+		valName, _ := conv.getInnerStructs(valType, valKind)
 
-		return fmt.Sprintf("Map<%s, %s>", keyName, valName)
+		return fmt.Sprintf("Map<%s, %s>", keyName, valName), nil
 	case reflect.Struct:
-		sampleStruct := reflect.Zero(fieldType).Interface()
-		name, _ := conv.convertStruct(sampleStruct)
+		name := fieldType.String()
 
-		return name
+		if strings.Contains(name, "struct") {
+			id, ok := conv.inlineId[name]
+			if !ok {
+				id = conv.genName
+				conv.genName++
+				conv.inlineId[name] = id
+			}
+			name = fmt.Sprintf("generatedInlineStruct_%03d", id)
+		}
+
+		name = strings.ReplaceAll(name, ".", "_")
+
+		if strings.Contains(name, "/") {
+			return "", fmt.Errorf("name of the structure contains the '/' symbol")
+		}
+		if conv.used[name] {
+			return name, nil
+		}
+		conv.used[name] = true
+
+		filePath := filepath.Join(".", conv.DirPath, name+".kt")
+		file, err := os.Create(filePath)
+		if err != nil {
+			return "", err
+		}
+		defer file.Close()
+
+		structDef := constants.PackageLine + readerImports
+
+		if conv.isJacoSupported {
+			structDef = ssa_helpers.AddImportAndDefinition(structDef, name)
+		} else {
+			structDef += fmt.Sprintf(constants.StructDefinition, name)
+		}
+
+		deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
+
+		for i := 0; i < fieldType.NumField(); i++ {
+			//fmt.Printf("%+v\n", fieldType.Field(i))
+			field := fieldType.Field(i)
+			innerFieldType := field.Type
+			//println(field.Type.String())
+
+			if field.Name == "_" {
+				// This is a blank identifier, no need to send.
+				continue
+			}
+			if field.Name == "object" {
+				// Invalid kotlin name.
+				field.Name = "Object"
+			}
+			if field.Name == "val" {
+				// Invalid kotlin name.
+				field.Name = "Val"
+			}
+			if strings.Contains(innerFieldType.String(), "/") {
+				continue
+			}
+
+			innerKind := innerFieldType.Kind()
+
+			ktName, _ := conv.getInnerStructs(innerFieldType, innerKind)
+
+			if ktName == "" {
+				// unsupported, ex functions
+				continue
+			}
+
+			structDef += fmt.Sprintf(structField,
+				field.Name, ktName)
+			deserializer += fmt.Sprintf(deserializeField, field.Name, ktName)
+
+			if innerKind == reflect.Func {
+				continue
+			}
+
+			conv.getInnerStructs(innerFieldType, innerKind)
+		}
+
+		if conv.isJacoSupported {
+			structDef = ssa_helpers.AddInterfaceFunctions(structDef, name)
+		}
+
+		structDef += "}\n\n"
+		file.Write([]byte(structDef))
+
+		deserializer += deserializeEnd
+		file.Write([]byte(deserializer))
+
+		return name, nil
 	default:
-		return convertBaseType(kind.String())
+		return convertBaseType(kind.String()), nil
 	}
 }
 
 func (conv *Converter) convertStruct(structure interface{}) (string, error) {
-	structVal := reflect.ValueOf(structure)
 	structType := reflect.TypeOf(structure)
 	structKind := structType.Kind()
 
-	if structKind == reflect.Pointer {
-		structType = structType.Elem()
-		structVal = structVal.Elem()
-	}
-
-	name := structType.String()
-
-	if strings.Contains(name, "struct") {
-		id, ok := conv.inlineId[name]
-		if !ok {
-			id = conv.genName
-			conv.genName++
-			conv.inlineId[name] = id
-		}
-		name = fmt.Sprintf("generatedInlineStruct_%03d", id)
-	}
-
-	name = strings.ReplaceAll(name, ".", "_")
-
-	if strings.Contains(name, "/") {
-		return "", fmt.Errorf("name of the structure contains the '/' symbol")
-	}
-	if conv.used[name] {
-		return name, nil
-	}
-	conv.used[name] = true
-
-	filePath := filepath.Join(".", conv.DirPath, name+".kt")
-	file, err := os.Create(filePath)
-	if err != nil {
-		return "", err
-	}
-
-	structDef := constants.PackageLine + readerImports
-
-	if conv.isJacoSupported {
-		structDef = ssa_helpers.AddImportAndDefinition(structDef, name)
-	} else {
-		structDef += fmt.Sprintf(constants.StructDefinition, name)
-	}
-
-	deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
-
-	for i := 0; i < structType.NumField(); i++ {
-		field := structType.Field(i)
-		fieldType := field.Type
-		//println(field.Type.String())
-
-		if field.Name == "_" {
-			// This is a blank identifier, no need to send.
-			continue
-		}
-		if field.Name == "object" {
-			// Invalid kotlin name.
-			field.Name = "Object"
-		}
-		if field.Name == "val" {
-			// Invalid kotlin name.
-			field.Name = "Val"
-		}
-
-		fieldType = structVal.Field(i).Type()
-		kind := fieldType.Kind()
-
-		ktName := conv.getInnerStructs(fieldType, kind)
-
-		if ktName == "" {
-			// unsupported, ex functions
-			continue
-		}
-
-		structDef += fmt.Sprintf(structField,
-			field.Name, ktName)
-		deserializer += fmt.Sprintf(deserializeField, field.Name, ktName)
-	}
-
-	if conv.isJacoSupported {
-		structDef = ssa_helpers.AddInterfaceFunctions(structDef, name)
-	}
-
-	structDef += "}\n\n"
-	file.Write([]byte(structDef))
-
-	deserializer += deserializeEnd
-	file.Write([]byte(deserializer))
-
-	return name, nil
+	return conv.getInnerStructs(structType, structKind)
 }
 
 func getFieldString(conv *Converter, startString string) (string, bool) {
@@ -486,9 +485,11 @@ func (conv *Converter) FillStructures(fillerFile io.Writer, structure interface{
 		return err
 	}
 
-	err = conv.generateBaseDeserializers()
-	if err != nil {
-		return err
+	if conv.isJacoSupported {
+		err = ssa_helpers.AddStubs(conv.DirPath, conv.used)
+		if err != nil {
+			return err
+		}
 	}
 
 	err = conv.generateEntrypoint()
