@@ -76,7 +76,7 @@ var ifaceToStringMap = map[int]string{
 	instruction_:      "ssaToJacoInst",
 	expression_:       "ssaToJacoExpr",
 	value_:            "ssaToJacoValue",
-	type_:             "GoType",
+	type_:             "ssaToJacoType",
 	expressionValue_:  "ssaToJacoExpr, ssaToJacoValue",
 	instructionValue_: "ssaToJacoInst, ssaToJacoValue",
 	call_:             "ssaToJacoInst, ssaToJacoValue, ssaToJacoExpr",

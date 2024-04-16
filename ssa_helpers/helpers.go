@@ -55,6 +55,17 @@ func GenerateJacoStructs(dirPath string) error {
 		return err
 	}
 
+	filePath = filepath.Join(".", dirPath, "ssaToJacoType.kt")
+	file, err = os.Create(filePath)
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write([]byte(constants.PackageLine + ssaToJacoType))
+	if err != nil {
+		return err
+	}
+
 	filePath = filepath.Join(".", dirPath, "ssa_CallExpr.kt")
 	file, err = os.Create(filePath)
 	if err != nil {

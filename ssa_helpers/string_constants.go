@@ -37,6 +37,13 @@ interface ssaToJacoValue {
 }
 `
 
+const ssaToJacoType = `import jacodb.GoType
+
+interface ssaToJacoType {
+    fun createJacoDBType(): GoType
+}
+`
+
 const createValueFunc = `override fun createJacoDBValue(): GoValue {
 		if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
             return ptrToJacoMap[structToPtrMap[this]] as %s
@@ -58,7 +65,7 @@ const markUsed = `if (structToPtrMap.containsKey(this)) {
 var ssaCallExpr = fmt.Sprintf(`import jacodb.*
 
 class ssa_CallExpr(init: ssa_Call) : ssaToJacoExpr, ssaToJacoValue {
-    val type = init.register!!.typ!! as GoType
+    val type = (init.register!!.typ!! as ssaToJacoType).createJacoDBType()
     val value = (init.Call!!.Value!! as ssaToJacoValue).createJacoDBValue()
     val operands = init.Call!!.Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
 
@@ -83,13 +90,13 @@ var functionExtra = fmt.Sprintf(`
 
         if (Signature!!.results!!.vars != null) {
             for (ret in Signature!!.results!!.vars!!) {
-                returns.add(ret.Object!!.typ!! as GoType)
+                returns.add((ret.Object!!.typ!! as ssaToJacoType).createJacoDBType())
             }
         }
 
         val res =
             GoFunction(
-                Signature!!,
+                Signature!!.createJacoDBType(),
                 Params!!.map { it.createJacoDBExpr() }, //TODO
                 name!!,
                 listOf(),
@@ -201,14 +208,14 @@ var ifExtra = fmt.Sprintf(`
                 cond = GoEqlExpr(
                     lhv = trueConst.createJacoDBExpr(),
                     rhv = parsed as GoValue,
-                    type = type,
+                    type = (type as ssaToJacoType).createJacoDBType(),
                 )
             }
         } else {
             cond = GoEqlExpr(
                 lhv = trueConst.createJacoDBExpr(),
                 rhv = (Cond!! as ssaToJacoValue).createJacoDBValue(),
-                type = type,
+                type = (type as ssaToJacoType).createJacoDBType(),
             )
         }
 
@@ -395,7 +402,7 @@ var freeVarExtra = fmt.Sprintf(`
         return GoFreeVar(
             pos!!.toInt(),
             name!!,
-            typ!! as GoType
+            (typ!! as ssaToJacoType).createJacoDBType()
         )
     }
 	%s
@@ -406,7 +413,7 @@ var parameterExtra = fmt.Sprintf(`
         return GoParameter(
             Object!!.Object!!.pos!!.toInt(),
             name!!,
-            typ!! as GoType
+            (typ!! as ssaToJacoType).createJacoDBType()
         )
     }
 	%s
@@ -417,60 +424,61 @@ var constExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoConst {
         val innerVal = Value
         val name: String
+		val type = (typ!! as ssaToJacoType).createJacoDBType()
 
         when (innerVal) {
             is Long -> {
                 name = GoLong(
                     innerVal,
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is Boolean -> {
                 name = GoBool(
                     innerVal,
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is Double -> {
                 name = GoDouble(
                     innerVal,
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is String -> {
                 name = GoStringConstant(
                     innerVal,
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is constant_intVal -> {
                 name = GoStringConstant(
                     innerVal.toString(),
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is constant_stringVal -> {
                 name = GoStringConstant(
                     innerVal.toString(),
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             is constant_ratVal -> {
                 name = GoStringConstant(
                     innerVal.toString(),
-                    typ!! as GoType
+                    type
                 ).toString()
             }
 			is constant_floatVal -> {
                 name = GoStringConstant(
                     innerVal.toString(),
-                    typ!! as GoType
+                    type
                 ).toString()
             }
 			is constant_complexVal -> {
                 name = GoStringConstant(
                     innerVal.toString(),
-                    typ!! as GoType
+                    type
                 ).toString()
             }
             else -> {
@@ -481,7 +489,7 @@ var constExtra = fmt.Sprintf(`
         return GoConst(
             0,
             name,
-            typ!! as GoType
+            type
         )
     }
 	%s
@@ -568,7 +576,7 @@ var globalExtra = fmt.Sprintf(`
         return GoGlobal(
             pos!!.toInt(),
             name!!,
-            typ!! as GoType
+            (typ!! as ssaToJacoType).createJacoDBType()
         )
     }
 	%s
@@ -579,134 +587,151 @@ var builtinExtra = fmt.Sprintf(`
         return GoBuiltin(
             0,
             name!!,
-            sig!!
+            sig!!.createJacoDBType()
         )
     }
 	%s
 `, fmt.Sprintf(createValueFunc, "GoBuiltin"))
 
 const arrayExtra = `
-	override val typeName: String
-        get() = "[${len!!}]${(elem!! as GoType).typeName}"
+	override fun createJacoDBType(): GoType {
+        return ArrayType(
+            len!!,
+            (elem!! as ssaToJacoType).createJacoDBType()
+        )
+    }
 `
 
 const basicExtra = `
-	override val typeName: String
-        get() = name!!
+	override fun createJacoDBType(): GoType {
+        return BasicType(name!!)
+    }
 `
 
 const chanExtra = `
-	override val typeName: String
-        get(): String {
-            var res = (elem!! as GoType).typeName
-            if (dir!! == 0L) {
-                res = "chan $res"
-            }
-            else if (dir!! == 1L) {
-                res = "<-chan $res"
-            }
-            else if (dir!! == 2L) {
-                res = "chan <-$res"
-            }
-            return res
-        }
+	override fun createJacoDBType(): GoType {
+        return ChanType(
+            dir!!,
+            (elem!! as ssaToJacoType).createJacoDBType()
+        )
+    }
 `
 
 const interfaceExtra = `
-	override val typeName: String
-        get() = "Any"
+	override fun createJacoDBType(): GoType {
+        return InterfaceType()
+    }
 `
 
 const mapExtra = `
-	override val typeName: String
-        get() = "map[${(key!! as GoType).typeName}]${(elem!! as GoType).typeName}"
+	override fun createJacoDBType(): GoType {
+        return MapType(
+            (key!! as ssaToJacoType).createJacoDBType(),
+            (elem!! as ssaToJacoType).createJacoDBType()
+        )
+    }
 `
 
 const namedExtra = `
-	override val typeName: String
-        get() = (underlying!! as GoType).typeName
+	override fun createJacoDBType(): GoType {
+        if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
+            return ptrToJacoMap[structToPtrMap[this]] as GoType
+        }
+
+        val res = NamedType(
+            InterfaceType()
+        )
+
+        if (structToPtrMap.containsKey(this)) {
+            ptrToJacoMap[structToPtrMap[this]!!] = res
+        }
+        if (underlying != null) {
+            res.underlyingType = (underlying!! as ssaToJacoType).createJacoDBType()
+        } else {
+            res.underlyingType = NullType()
+        }
+
+        return res
+    }
 `
 
 const pointerExtra = `
-	override val typeName: String
-        get() = "*${(base!! as GoType).typeName}"
+	override fun createJacoDBType(): GoType {
+        if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
+            return ptrToJacoMap[structToPtrMap[this]] as GoType
+        }
+
+        val res = PointerType(
+            InterfaceType()
+        )
+
+        if (structToPtrMap.containsKey(this)) {
+            ptrToJacoMap[structToPtrMap[this]!!] = res
+        }
+        res.baseType = (base!! as ssaToJacoType).createJacoDBType()
+
+        return res
+    }
 `
 
 const signatureExtra = `
-	override val typeName: String
-        get(): String {
-            var res = "func ("
-            var paramsString = ""
-            for (p in params!!.vars!!) {
-                paramsString += p.Object!!.name + ", "
-            }
-            res += paramsString.removeSuffix(", ") + ") ("
-            var resultsString = ""
-            for (r in results!!.vars!!) {
-                resultsString += r.Object!!.name + ", "
-            }
-            res += resultsString.removeSuffix(", ") + ")"
-            return res
-        }
+	override fun createJacoDBType(): GoType {
+        return SignatureType(
+            params!!.createJacoDBType() as TupleType,
+            results!!.createJacoDBType() as TupleType
+        )
+    }
 `
 
 const sliceTypeExtra = `
-	override val typeName: String
-        get() = "[]${(elem!! as GoType).typeName}"
+	override fun createJacoDBType(): GoType {
+        return SliceType(
+            (elem!! as ssaToJacoType).createJacoDBType()
+        )
+    }
 `
 
 const structExtra = `
-	override val typeName: String
-        get(): String {
-            var res = "struct {\n"
-            fields!!.forEachIndexed { ind, elem ->
-                res += (elem.Object!!.typ!! as GoType).typeName
-                if (tags != null && tags!!.size > ind) {
-                    res += " " + tags!![ind]
-                }
-                res += "\n"
-            }
-            res += "}"
-            return res
-        }
+	override fun createJacoDBType(): GoType {
+        return StructType(
+            fields!!.map { (it.Object!!.typ!! as ssaToJacoType).createJacoDBType() },
+            tags
+        )
+    }
 `
 
 const tupleExtra = `
-	override val typeName: String
-        get(): String {
-            var res = "["
-            for (i in vars!!) {
-                res += i.Object!!.name + ", "
-            }
-            return res.removeSuffix(", ") + "]"
-        }
+	override fun createJacoDBType(): GoType {
+        return TupleType(
+            vars?.map { it.Object!!.name ?: "" } ?: listOf()
+        )
+    }
 `
 
 const typeParamExtra = `
-	override val typeName: String
-        get() = obj!!.Object!!.name!!
+	override fun createJacoDBType(): GoType {
+        return TypeParam(obj!!.Object!!.name!!)
+    }
 `
 
 const unionExtra = `
-	override val typeName: String
-        get(): String {
-            var res = "enum {\n"
-            for (t in terms!!) {
-                res += (t.typ!! as GoType).typeName + ",\n"
-            }
-            return "$res}"
-        }
+	override fun createJacoDBType(): GoType {
+        return UnionType(
+            terms!!.map { (it.typ!! as ssaToJacoType).createJacoDBType() }
+        )
+    }
 `
 
 const opaqueTypeExtra = `
-	override val typeName: String
-        get() = name!!
+	override fun createJacoDBType(): GoType {
+        return OpaqueType(name!!)
+    }
 `
 
 var allocExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoAllocExpr {
         return GoAllocExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
         )
     }
 	%s
@@ -717,7 +742,7 @@ var phiExtra = fmt.Sprintf(`
 		%s
 
         val res = GoPhiExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			listOf()
         )
         if (structToPtrMap.containsKey(this)) {
@@ -732,7 +757,7 @@ var phiExtra = fmt.Sprintf(`
 
 const binOpExtra = `
 	override fun createJacoDBExpr(): GoBinaryExpr {
-        val type = register!!.typ!! as GoType
+        val type = (register!!.typ!! as ssaToJacoType).createJacoDBType()
 
         when (Op!!) {
             12L -> return GoAddExpr(
@@ -835,7 +860,7 @@ const binOpExtra = `
 
 var unOpExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoUnaryExpr {
-        val type = register!!.typ!! as GoType
+        val type = (register!!.typ!! as ssaToJacoType).createJacoDBType()
 
         when (Op!!) {
             43L -> return GoUnNotExpr(
@@ -868,7 +893,7 @@ var unOpExtra = fmt.Sprintf(`
 var changeTypeExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoChangeTypeExpr {
         return GoChangeTypeExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -878,7 +903,7 @@ var changeTypeExtra = fmt.Sprintf(`
 var convertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoConvertExpr {
         return GoConvertExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -888,7 +913,7 @@ var convertExtra = fmt.Sprintf(`
 var multiConvertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMultiConvertExpr {
         return GoMultiConvertExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -898,7 +923,7 @@ var multiConvertExtra = fmt.Sprintf(`
 var changeInterfaceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoChangeInterfaceExpr {
         return GoChangeInterfaceExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -908,7 +933,7 @@ var changeInterfaceExtra = fmt.Sprintf(`
 var sliceToArrayPointerExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoSliceToArrayPointerExpr {
         return GoSliceToArrayPointerExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -918,7 +943,7 @@ var sliceToArrayPointerExtra = fmt.Sprintf(`
 var makeInterfaceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeInterfaceExpr {
         return GoMakeInterfaceExpr(
-            register!!.typ!! as GoType,
+            (register!!.typ!! as ssaToJacoType).createJacoDBType(),
 			(X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -928,7 +953,7 @@ var makeInterfaceExtra = fmt.Sprintf(`
 var makeClosureExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeClosureExpr {
         return GoMakeClosureExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Fn!! as ssa_Function).createJacoDBMethod(),
 			Bindings!!.map { (it as ssaToJacoValue).createJacoDBValue() },
         )
@@ -945,7 +970,7 @@ var makeMapExtra = fmt.Sprintf(`
         }
 
         return GoMakeMapExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             reserve,
         )
     }
@@ -955,7 +980,7 @@ var makeMapExtra = fmt.Sprintf(`
 var makeChanExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeChanExpr {
         return GoMakeChanExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Size!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -965,7 +990,7 @@ var makeChanExtra = fmt.Sprintf(`
 var makeSliceExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoMakeSliceExpr {
         return GoMakeSliceExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Len!! as ssaToJacoValue).createJacoDBValue(),
 			(Cap!! as ssaToJacoValue).createJacoDBValue(),
         )
@@ -994,7 +1019,7 @@ var sliceExtra = fmt.Sprintf(`
         }
 
 		val res = GoSliceExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			low,
 			high,
@@ -1008,7 +1033,7 @@ var sliceExtra = fmt.Sprintf(`
 var fieldAddrExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoFieldAddrExpr {
         return GoFieldAddrExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			Field!!.toInt(),
         )
@@ -1019,7 +1044,7 @@ var fieldAddrExtra = fmt.Sprintf(`
 var fieldExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoFieldExpr {
         return GoFieldExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			Field!!.toInt(),
         )
@@ -1030,7 +1055,7 @@ var fieldExtra = fmt.Sprintf(`
 var indexAddrExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoIndexAddrExpr {
         return GoIndexAddrExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
@@ -1041,7 +1066,7 @@ var indexAddrExtra = fmt.Sprintf(`
 var indexExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoIndexExpr {
         return GoIndexExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
@@ -1052,7 +1077,7 @@ var indexExtra = fmt.Sprintf(`
 var lookupExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoLookupExpr {
         return GoLookupExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
 			(Index!! as ssaToJacoValue).createJacoDBValue(),
         )
@@ -1078,7 +1103,7 @@ var selectExtra = fmt.Sprintf(`
         }
 
         return GoSelectExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             chan,
 			send,
 			Blocking!!,
@@ -1090,7 +1115,7 @@ var selectExtra = fmt.Sprintf(`
 var rangeExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoRangeExpr {
         return GoRangeExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -1100,7 +1125,7 @@ var rangeExtra = fmt.Sprintf(`
 var nextExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoNextExpr {
         return GoNextExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Iter!! as ssaToJacoValue).createJacoDBValue(),
         )
     }
@@ -1110,9 +1135,9 @@ var nextExtra = fmt.Sprintf(`
 var typeAssertExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoTypeAssertExpr {
         return GoTypeAssertExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (X!! as ssaToJacoValue).createJacoDBValue(),
-			AssertedType!! as GoType,
+			(AssertedType!! as ssaToJacoType).createJacoDBType(),
         )
     }
 	%s
@@ -1121,7 +1146,7 @@ var typeAssertExtra = fmt.Sprintf(`
 var extractExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoExtractExpr {
         return GoExtractExpr(
-			register!!.typ!! as GoType,
+			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Tuple!! as ssaToJacoValue).createJacoDBValue(),
 			Index!!.toInt(),
         )
@@ -1132,7 +1157,7 @@ var extractExtra = fmt.Sprintf(`
 /*var callCommonExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoCallExpr {
         return GoCallExpr(
-            Method!!.Object!!.typ!! as GoType,
+            (Method!!.Object!!.typ!! as ssaToJacoType).createJacoDBType(),
             (Value!! as ssaToJacoValue).createJacoDBValue(),
             Args!!.map { (it as ssaToJacoValue).createJacoDBValue() }
         )

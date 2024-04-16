@@ -92,7 +92,7 @@ func main() {
 		packages.NeedEmbedPatterns
 	cfg := &packages.Config{Mode: mode}
 
-	initialPackages, err := packages.Load(cfg, "k8s.io/client-go/kubernetes") //"k8s.io/client-go/kubernetes"
+	initialPackages, err := packages.Load(cfg, fileName) //"k8s.io/client-go/kubernetes"
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -125,7 +125,7 @@ func main() {
 	k.f24 = &k*/
 
 	os.Mkdir("ssaExample", os.ModePerm)
-	file, _ := os.Create("ssaExample/filled.gz")
+	file, _ := os.Create("ssaExample/filled.txt")
 	defer file.Close()
 
 	gzipWriter := gzip.NewWriter(file)
@@ -136,5 +136,5 @@ func main() {
 	if *needToGen {
 		fmt.Printf("%v", conv.GenerateStructures(program))
 	}
-	fmt.Printf("%v", conv.FillStructures(gzipWriter, program))
+	fmt.Printf("%v", conv.FillStructures(file, program))
 }
