@@ -1,6 +1,7 @@
 package GoToJava
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io"
 	"os"
@@ -25,7 +26,12 @@ type Converter struct {
 	inlineId map[string]int
 
 	isJacoSupported bool
+
+	writeChan   chan string
+	doneWriting chan struct{}
 }
+
+const WRITESIZE = 1310720
 
 func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 	return Converter{
@@ -35,6 +41,8 @@ func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 		usedPtr:         map[uintptr]map[string]int{},
 		inlineId:        map[string]int{},
 		isJacoSupported: isJacoSupported,
+		writeChan:       make(chan string, WRITESIZE),
+		doneWriting:     make(chan struct{}, 1),
 	}
 }
 
@@ -44,8 +52,10 @@ func convertBaseType(goName string) string {
 		return "Long"
 	case "int16", "uint8", "byte":
 		return "Long"
-	case "int64", "uint32", "uint":
+	case "int64", "uint32":
 		return "Long"
+	case "uint64", "uint":
+		return "ULong"
 	case "float32":
 		return "Float"
 	case "float64":
@@ -259,7 +269,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			conv.fillInnerStructs(fieldType, fieldVal, kind, fillerFile)
 		} else {
 			conv.ptrNow = false
-			fillerFile.Write([]byte("nil\n"))
+			binary.Write(fillerFile, binary.LittleEndian, 4)
+			binary.Write(fillerFile, binary.LittleEndian, []byte("nil\n"))
 		}
 		return
 
@@ -276,7 +287,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 	case reflect.Slice, reflect.Array:
 		arrayString, skip := getFieldString(conv, "array")
 
-		fillerFile.Write([]byte(arrayString))
+		binary.Write(fillerFile, binary.LittleEndian, len(arrayString))
+		binary.Write(fillerFile, binary.LittleEndian, []byte(arrayString))
 
 		if skip {
 			return
@@ -291,12 +303,14 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			}
 		}
 
-		fillerFile.Write([]byte("end\n"))
+		binary.Write(fillerFile, binary.LittleEndian, 4)
+		binary.Write(fillerFile, binary.LittleEndian, []byte("end\n"))
 
 	case reflect.Map:
 		mapString, skip := getFieldString(conv, "map")
 
-		fillerFile.Write([]byte(mapString))
+		binary.Write(fillerFile, binary.LittleEndian, len(mapString))
+		binary.Write(fillerFile, binary.LittleEndian, []byte(mapString))
 
 		if skip {
 			return
@@ -315,7 +329,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			}
 		}
 
-		fillerFile.Write([]byte("end\n"))
+		binary.Write(fillerFile, binary.LittleEndian, 4)
+		binary.Write(fillerFile, binary.LittleEndian, []byte("end\n"))
 	case reflect.Struct:
 		name := fieldType.String()
 
@@ -337,7 +352,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 
 		structString, skip := getFieldString(conv, name)
 
-		fillerFile.Write([]byte(structString))
+		binary.Write(fillerFile, binary.LittleEndian, len(structString))
+		binary.Write(fillerFile, binary.LittleEndian, []byte(structString))
 
 		if skip {
 			return
@@ -373,13 +389,15 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 					continue
 				}
 
-				fillerFile.Write([]byte(field.Name + " "))
+				binary.Write(fillerFile, binary.LittleEndian, len(field.Name)+1)
+				binary.Write(fillerFile, binary.LittleEndian, []byte(field.Name+" "))
 
 				conv.fillInnerStructs(innerFieldType, innerFieldVal, innerKind, fillerFile)
 			}
 		}
 
-		fillerFile.Write([]byte("end\n"))
+		binary.Write(fillerFile, binary.LittleEndian, 4)
+		binary.Write(fillerFile, binary.LittleEndian, []byte("end\n"))
 	default:
 		conv.ptrNow = false
 
@@ -389,30 +407,25 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 			defaultVal = "nil"
 		}
 
+		filled := ""
 		if fieldVal.IsValid() {
 			switch kind {
 			case reflect.String:
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal.String())))
+				filled = fmt.Sprintf("%s\n%q\n", ktType, fieldVal.String())
 			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-				kek := fieldVal.Int()
-				if kek > 1000000000000 {
-					kek = 1000000000000
-				}
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(kek, 10))))
+				filled = fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatInt(fieldVal.Int(), 10))
 			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-				kek := fieldVal.Uint()
-				if kek > 1000000000000 {
-					kek = 1000000000000
-				}
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(kek, 10))))
+				filled = fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatUint(fieldVal.Uint(), 10))
 			case reflect.Bool:
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatBool(fieldVal.Bool()))))
+				filled = fmt.Sprintf("%s\n%v\n", ktType, strconv.FormatBool(fieldVal.Bool()))
 			default:
-				fillerFile.Write([]byte(fmt.Sprintf("%s\n%q\n", ktType, fieldVal)))
+				filled = fmt.Sprintf("%s\n%q\n", ktType, fieldVal)
 			}
 		} else {
-			fillerFile.Write([]byte(fmt.Sprintf("%s\n%s\n", ktType, defaultVal)))
+			filled = fmt.Sprintf("%s\n%s\n", ktType, defaultVal)
 		}
+		binary.Write(fillerFile, binary.LittleEndian, len(filled))
+		binary.Write(fillerFile, binary.LittleEndian, []byte(filled))
 	}
 }
 
@@ -421,7 +434,11 @@ func (conv *Converter) fillValues(structure interface{}, fillerFile io.Writer) e
 	structType := reflect.TypeOf(structure)
 	structKind := structType.Kind()
 
-	conv.fillInnerStructs(structType, structVal, structKind, fillerFile)
+	acc := NewAccumulator(fillerFile)
+
+	conv.fillInnerStructs(structType, structVal, structKind, acc)
+
+	acc.WriteRest()
 
 	return nil
 }
@@ -490,6 +507,15 @@ func (conv *Converter) FillStructures(fillerFile io.Writer, structure interface{
 		if err != nil {
 			return err
 		}
+		err := ssa_helpers.GenerateJacoStructs(conv.DirPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = conv.generateBaseDeserializers()
+	if err != nil {
+		return err
 	}
 
 	err = conv.generateEntrypoint()

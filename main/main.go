@@ -1,6 +1,7 @@
 package main
 
 import (
+	"compress/gzip"
 	"flag"
 	"fmt"
 	"os"
@@ -64,7 +65,7 @@ var needToGen = flag.Bool("gen", true, "Is initial generation needed")
 
 func main() {
 	flag.Parse()
-	fileName := "./ssa_prompt/g306/main.go" //"./ssa_prompt/tarantool/main.go"
+	fileName := "./ssa_prompt/934E2/main.go" //"./ssa_prompt/tarantool/main.go"
 
 	// Replace interface{} with any for this test.
 	// Parse the source files.
@@ -91,7 +92,7 @@ func main() {
 		packages.NeedEmbedPatterns
 	cfg := &packages.Config{Mode: mode}
 
-	initialPackages, err := packages.Load(cfg, fileName) //"k8s.io/client-go/kubernetes"
+	initialPackages, err := packages.Load(cfg, "k8s.io/client-go/kubernetes") //"k8s.io/client-go/kubernetes"
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -124,12 +125,16 @@ func main() {
 	k.f24 = &k*/
 
 	os.Mkdir("ssaExample", os.ModePerm)
-	file, _ := os.Create("ssaExample/filled.txt")
+	file, _ := os.Create("ssaExample/filled.gz")
+	defer file.Close()
+
+	gzipWriter := gzip.NewWriter(file)
+	defer gzipWriter.Close()
 
 	conv := GoToJava.CreateConverter("ssaExample", true)
 
 	if *needToGen {
 		fmt.Printf("%v", conv.GenerateStructures(program))
 	}
-	fmt.Printf("%v", conv.FillStructures(file, program))
+	fmt.Printf("%v", conv.FillStructures(gzipWriter, program))
 }

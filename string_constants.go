@@ -43,6 +43,10 @@ fun readInteger(buffReader: BufferedReader, id: Int): Any {
     return buffReader.readLine().toLong()
 }
 
+fun readULong(buffReader: BufferedReader, id: Int): Any {
+    return buffReader.readLine().toULong()
+}
+
 fun readString(buffReader: BufferedReader, id: Int): Any {
     return buffReader.readLine().drop(1).dropLast(1)
 }
@@ -138,6 +142,7 @@ val mapDec: Map<String, (BufferedReader, Int)->Any?> = mapOf(
     "Int" to ::readInteger,
     "Short" to ::readInteger,
     "Long" to ::readInteger,
+	"ULong" to ::readULong,
     "Float" to ::readReal,
     "Double" to ::readReal,
     "String" to ::readString,
