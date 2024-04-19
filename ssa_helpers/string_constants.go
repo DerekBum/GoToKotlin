@@ -410,8 +410,15 @@ var freeVarExtra = fmt.Sprintf(`
 
 var parameterExtra = fmt.Sprintf(`
 	override fun createJacoDBExpr(): GoParameter {
+        var index = -1
+        for ((i, par) in parent!!.Params!!.withIndex()) {
+            if (par.name!! == name!!) {
+                index = i
+                break
+            }
+        }
         return GoParameter(
-            Object!!.Object!!.pos!!.toInt(),
+            index,
             name!!,
             (typ!! as ssaToJacoType).createJacoDBType()
         )

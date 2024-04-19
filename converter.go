@@ -132,7 +132,7 @@ func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 		}
 		conv.used[name] = true
 
-		filePath := filepath.Join(".", conv.DirPath, name+".kt")
+		filePath := filepath.Join(".", conv.DirPath, strconv.Itoa(len(conv.used))+"_"+name+".kt")
 		file, err := os.Create(filePath)
 		if err != nil {
 			return "", err
