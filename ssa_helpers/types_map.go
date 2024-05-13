@@ -80,6 +80,8 @@ var ifaceToStringMap = map[int]string{
 	expressionValue_:  "ssaToJacoExpr, ssaToJacoValue",
 	instructionValue_: "ssaToJacoInst, ssaToJacoValue",
 	call_:             "ssaToJacoInst, ssaToJacoValue, ssaToJacoExpr",
+	project_:          "ssaToJacoProject",
+	method_:           "ssaToJacoExpr, ssaToJacoValue, ssaToJacoMethod",
 }
 
 var nameToExtra = map[string]string{

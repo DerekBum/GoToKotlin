@@ -1,6 +1,6 @@
 package constants
 
-const PackageLine = `package GoToJava
+const PackageLine = `package org.usvm.jacodb.gen
 
 `
 

@@ -17,6 +17,8 @@ const (
 	type_
 	instructionValue_
 	call_
+	project_
+	method_
 
 	none_ = -1
 )
@@ -66,6 +68,28 @@ func GenerateJacoStructs(dirPath string) error {
 		return err
 	}
 
+	filePath = filepath.Join(".", dirPath, "ssaToJacoProject.kt")
+	file, err = os.Create(filePath)
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write([]byte(constants.PackageLine + ssaToJacoProject))
+	if err != nil {
+		return err
+	}
+
+	filePath = filepath.Join(".", dirPath, "ssaToJacoMethod.kt")
+	file, err = os.Create(filePath)
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write([]byte(constants.PackageLine + ssaToJacoMethod))
+	if err != nil {
+		return err
+	}
+
 	filePath = filepath.Join(".", dirPath, "ssa_CallExpr.kt")
 	file, err = os.Create(filePath)
 	if err != nil {
@@ -79,6 +103,12 @@ func GenerateJacoStructs(dirPath string) error {
 func getJacoInterface(name string) int {
 	if name == "ssa_Call" {
 		return call_
+	}
+	if name == "ssa_Program" {
+		return project_
+	}
+	if name == "ssa_Function" {
+		return method_
 	}
 	if slices.Contains(instructions, name) {
 		if slices.Contains(values, name) {
@@ -107,13 +137,6 @@ func AddImportAndDefinition(structDef, name string) string {
 	structDef += jacoImport
 
 	iface := getJacoInterface(name)
-
-	if iface == instruction_ || iface == instructionValue_ || iface == call_ {
-		structDef += jacoInstImport
-	}
-	if iface == type_ {
-		structDef += jacoTypeImport
-	}
 
 	if iface == none_ {
 		structDef += fmt.Sprintf(constants.StructDefinition, name)
