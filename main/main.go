@@ -125,7 +125,7 @@ func main() {
 	k.f24 = &k*/
 
 	os.Mkdir("ssaExample", os.ModePerm)
-	file, _ := os.Create("ssaExample/filled.txt")
+	file, _ := os.Create("ssaExample/filled.gzip")
 	defer file.Close()
 
 	gzipWriter := gzip.NewWriter(file)
@@ -136,5 +136,5 @@ func main() {
 	if *needToGen {
 		fmt.Printf("%v", conv.GenerateStructures(program))
 	}
-	fmt.Printf("%v", conv.FillStructures(file, program))
+	fmt.Printf("%v", conv.FillStructures(gzipWriter, program))
 }
