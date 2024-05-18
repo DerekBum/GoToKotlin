@@ -220,7 +220,7 @@ var jumpExtra = fmt.Sprintf(`
                 parent,
             ),
             GoInstRef(
-                anInstruction!!.block!!.Index!!.toInt()
+                anInstruction!!.block!!.Succs!![0].Index!!.toInt()
             )
         )
 		%s

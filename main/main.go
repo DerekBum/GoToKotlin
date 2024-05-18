@@ -65,7 +65,7 @@ var needToGen = flag.Bool("gen", true, "Is initial generation needed")
 
 func main() {
 	flag.Parse()
-	fileName := "./ssa_prompt/sql/1/main.go" //"./ssa_prompt/tarantool/main.go"
+	fileName := "./ssa_prompt/g501/main.go" //"./ssa_prompt/tarantool/main.go"
 
 	// Replace interface{} with any for this test.
 	// Parse the source files.
