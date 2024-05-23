@@ -53,7 +53,7 @@ interface ssaToJacoProject {
 const ssaToJacoMethod = `import org.jacodb.go.api.*
 
 interface ssaToJacoMethod {
-    fun createJacoDBMethod(): GoMethod
+    fun createJacoDBMethod(fileSet: FileSet): GoMethod
 }
 `
 
@@ -115,7 +115,7 @@ class ssa_CallExpr(init: ssa_Call, val callee: GoMethod? = null) : ssaToJacoExpr
 `, fmt.Sprintf(checkUsed, "GoCallExpr"), markUsed, fmt.Sprintf(createValueFunc, "GoCallExpr"))
 
 var functionExtra = fmt.Sprintf(`
-	override fun createJacoDBMethod(): GoFunction {
+	override fun createJacoDBMethod(fileSet: FileSet): GoFunction {
 		%s
 
         val returns = mutableListOf<GoType>()
@@ -133,7 +133,8 @@ var functionExtra = fmt.Sprintf(`
                 name!!,
                 listOf(),
                 returns, //TODO
-                Pkg?.Pkg?.name ?: "null"
+                Pkg?.Pkg?.name ?: "null",
+				fileSet,
             )
 
 		if (structToPtrMap.containsKey(this)) {
@@ -159,7 +160,7 @@ var functionExtra = fmt.Sprintf(`
 		if (structToPtrMap.containsKey(this) && ptrToJacoMap.containsKey(structToPtrMap[this])) {
             return ptrToJacoMap[structToPtrMap[this]] as GoFunction
         }
-        return createJacoDBMethod()
+        return createJacoDBMethod(parent.fileSet)
     }
 
 	override fun createJacoDBExpr(parent: GoMethod): GoExpr {
@@ -171,17 +172,29 @@ var programExtra = fmt.Sprintf(`
 	override fun createJacoDBProject(): GoProject {
 		%s
 
+		val fSet = mutableListOf<File>()
+        for (tokenFile in Fset!!.files!!) {
+            fSet.add(File(
+                tokenFile.name!!,
+                tokenFile.base!!.toInt(),
+                tokenFile.size!!.toInt(),
+                tokenFile.lines!!.map { it.toInt() },
+            ))
+        }
+        val fileSet = FileSet(fSet)
+
         val methods = mutableListOf<GoMethod>()
         for (pkg in packages!!) {
             for (member in pkg.value.Members!!) {
                 if (member.value is ssa_Function) {
-                    methods.add((member.value as ssa_Function).createJacoDBMethod())
+                    methods.add((member.value as ssa_Function).createJacoDBMethod(fileSet))
                 }
             }
         }
 
         val res = GoProject(
-            methods.toList()
+            methods.toList(),
+			fileSet,
         )
 		%s
     }
@@ -412,7 +425,7 @@ var callExtra = fmt.Sprintf(`
 	override fun createJacoDBInst(parent: GoMethod): GoCallInst {
         if (CallExpr == null) {
             val callee: GoMethod = if (Call!!.Value!! is ssaToJacoMethod) {
-                (Call!!.Value!! as ssaToJacoMethod).createJacoDBMethod()
+                (Call!!.Value!! as ssaToJacoMethod).createJacoDBMethod(parent.fileSet)
             } else if (Call!!.Value!! is ssaToJacoExpr) {
                 val value = (Call!!.Value!! as ssaToJacoExpr).createJacoDBExpr(parent)
                 if (value is GoMakeClosureExpr) {
@@ -1109,7 +1122,7 @@ var makeClosureExtra = fmt.Sprintf(`
                 parent
             ),
 			(register!!.typ!! as ssaToJacoType).createJacoDBType(),
-            (Fn!! as ssa_Function).createJacoDBMethod(),
+            (Fn!! as ssa_Function).createJacoDBMethod(parent.fileSet),
 			Bindings!!.map { (it as ssaToJacoValue).createJacoDBValue(parent) },
 			"t${register!!.num!!.toInt()}",
         )
