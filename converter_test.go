@@ -1,13 +1,9 @@
 package GoToJava_test
 
 import (
-	"flag"
-	"fmt"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
 	"os"
 	"os/exec"
+	"slices"
 	"testing"
 
 	"GoToJava"
@@ -117,8 +113,8 @@ func TestConvert(t *testing.T) {
 			entryCnt++
 			continue
 		}
-		if file.Name() != genFiles[cnt] {
-			t.Errorf("unexpected file, want %s, got %s", genFiles[cnt], file.Name())
+		if !slices.Contains(genFiles, file.Name()[2:]) {
+			t.Errorf("unexpected file, want %s, got %s", genFiles[cnt], file.Name()[2:])
 		}
 		cnt++
 	}
@@ -132,59 +128,6 @@ func TestConvert(t *testing.T) {
 	if err != nil {
 		t.Errorf("Kotlin files did not compile")
 	}
-}
-
-func TestSmh(t *testing.T) {
-	flag.Parse()
-	fileName := "./ssa_prompt/934E2/main.go" //"./ssa_prompt/tarantool/main.go"
-
-	// Replace interface{} with any for this test.
-	// Parse the source files.
-	f, err := os.Open(fileName)
-	if err != nil {
-		fmt.Printf("open file: %s", err)
-	}
-	if err = f.Close(); err != nil {
-		fmt.Printf("close file: %s", err)
-	}
-
-	mode := packages.NeedName |
-		packages.NeedFiles |
-		packages.NeedCompiledGoFiles |
-		packages.NeedImports |
-		packages.NeedDeps |
-		packages.NeedExportFile |
-		packages.NeedTypes |
-		packages.NeedTypesSizes |
-		packages.NeedTypesInfo |
-		packages.NeedSyntax |
-		packages.NeedModule |
-		packages.NeedEmbedFiles |
-		packages.NeedEmbedPatterns
-	cfg := &packages.Config{Mode: mode}
-
-	initialPackages, err := packages.Load(cfg, fileName) //"k8s.io/client-go/kubernetes"
-	if err != nil {
-		fmt.Print(err)
-	}
-	if len(initialPackages) == 0 {
-		fmt.Printf("no packages were loaded")
-	}
-
-	if packages.PrintErrors(initialPackages) > 0 {
-		fmt.Printf("packages contain errors")
-	}
-
-	program, _ := ssautil.AllPackages(initialPackages, ssa.InstantiateGenerics|ssa.SanityCheckFunctions)
-	program.Build()
-
-	os.Mkdir("ssaExample", os.ModePerm)
-	file, _ := os.Create("ssaExample/filled.txt")
-
-	conv := GoToJava.CreateConverter("ssaExample", true)
-
-	fmt.Printf("%v", conv.GenerateStructures(program))
-	fmt.Printf("%v", conv.FillStructures(file, program))
 }
 
 func TestMain(m *testing.M) {

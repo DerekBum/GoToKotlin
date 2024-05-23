@@ -1069,7 +1069,7 @@ var changeInterfaceExtra = fmt.Sprintf(`
 `, fmt.Sprintf(createValueFunc, "GoChangeInterfaceExpr"))
 
 var sliceToArrayPointerExtra = fmt.Sprintf(`
-	override fun createJacoDBExpr(parnemt: GoMethod): GoSliceToArrayPointerExpr {
+	override fun createJacoDBExpr(parent: GoMethod): GoSliceToArrayPointerExpr {
         return GoSliceToArrayPointerExpr(
 			GoInstLocationImpl(
                 register!!.anInstruction!!.block!!.Index!!.toInt(),

@@ -4,7 +4,7 @@ Field1 Long
 FieldString String
 ""
 field3 Boolean
-%!q(bool=false)
+false
 F4 Long
 0
 f5 Long
@@ -34,7 +34,7 @@ f11 map
 String
 "lolol"
 Boolean
-%!q(bool=false)
+false
 end
 f12 map
 end

@@ -27,11 +27,10 @@ type Converter struct {
 
 	isJacoSupported bool
 
-	writeChan   chan string
 	doneWriting chan struct{}
-}
 
-const WRITESIZE = 1310720
+	bufferSize int
+}
 
 func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 	return Converter{
@@ -41,9 +40,13 @@ func CreateConverter(dirPath string, isJacoSupported bool) Converter {
 		usedPtr:         map[uintptr]map[string]int{},
 		inlineId:        map[string]int{},
 		isJacoSupported: isJacoSupported,
-		writeChan:       make(chan string, WRITESIZE),
 		doneWriting:     make(chan struct{}, 1),
+		bufferSize:      MAXLEN,
 	}
+}
+
+func (conv *Converter) SetBufferSize(size int) {
+	conv.bufferSize = size
 }
 
 func convertBaseType(goName string) string {
@@ -112,7 +115,7 @@ func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 	case reflect.Struct:
 		name := fieldType.String()
 
-		if strings.Contains(name, "struct") {
+		if strings.Contains(name, "struct {") {
 			id, ok := conv.inlineId[name]
 			if !ok {
 				id = conv.genName
@@ -150,10 +153,8 @@ func (conv *Converter) getInnerStructs(fieldType reflect.Type, kind reflect.Kind
 		deserializer := fmt.Sprintf(deserializeFunStart, name, name, name, name)
 
 		for i := 0; i < fieldType.NumField(); i++ {
-			//fmt.Printf("%+v\n", fieldType.Field(i))
 			field := fieldType.Field(i)
 			innerFieldType := field.Type
-			//println(field.Type.String())
 
 			if field.Name == "_" {
 				// This is a blank identifier, no need to send.
@@ -334,7 +335,7 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 	case reflect.Struct:
 		name := fieldType.String()
 
-		if strings.Contains(name, "struct") {
+		if strings.Contains(name, "struct {") {
 			id, ok := conv.inlineId[name]
 			if !ok {
 				id = conv.genName
@@ -361,10 +362,8 @@ func (conv *Converter) fillInnerStructs(fieldType reflect.Type, fieldVal reflect
 
 		if fieldVal.Kind() != 0 {
 			for i := 0; i < fieldType.NumField(); i++ {
-				//fmt.Printf("%+v\n", fieldType.Field(i))
 				field := fieldType.Field(i)
 				innerFieldType := field.Type
-				//println(field.Type.String())
 
 				if field.Name == "_" {
 					// This is a blank identifier, no need to send.
@@ -434,7 +433,7 @@ func (conv *Converter) fillValues(structure interface{}, fillerFile io.Writer) e
 	structType := reflect.TypeOf(structure)
 	structKind := structType.Kind()
 
-	acc := NewAccumulator(fillerFile)
+	acc := NewAccumulator(fillerFile, conv.bufferSize)
 
 	conv.fillInnerStructs(structType, structVal, structKind, acc)
 

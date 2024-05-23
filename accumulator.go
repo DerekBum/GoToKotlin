@@ -12,10 +12,17 @@ type Accumulator struct {
 	buf    *bytes.Buffer
 	writer io.Writer
 	waiter *sync.WaitGroup
+
+	bufferSize int
 }
 
-func NewAccumulator(writer io.Writer) *Accumulator {
-	return &Accumulator{buf: &bytes.Buffer{}, writer: writer, waiter: &sync.WaitGroup{}}
+func NewAccumulator(writer io.Writer, bufferSize int) *Accumulator {
+	return &Accumulator{
+		buf:        &bytes.Buffer{},
+		writer:     writer,
+		waiter:     &sync.WaitGroup{},
+		bufferSize: bufferSize,
+	}
 }
 
 func (a *Accumulator) Write(p []byte) (int, error) {
@@ -24,7 +31,7 @@ func (a *Accumulator) Write(p []byte) (int, error) {
 		return n, err
 	}
 
-	if a.buf.Len() >= MAXLEN {
+	if a.buf.Len() >= a.bufferSize {
 		var cpy = make([]byte, a.buf.Len())
 		copy(cpy, a.buf.Bytes())
 
