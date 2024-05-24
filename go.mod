@@ -1,4 +1,4 @@
-module GoToJava
+module GoToKotlin
 
 go 1.22.0
 

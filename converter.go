@@ -1,4 +1,4 @@
-package GoToJava
+package GoToKotlin
 
 import (
 	"encoding/binary"
@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	"GoToJava/constants"
-	"GoToJava/ssa_helpers"
+	"GoToKotlin/constants"
+	"GoToKotlin/ssa_helpers"
 )
 
 type Converter struct {

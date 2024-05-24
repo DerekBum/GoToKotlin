@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"GoToJava/constants"
+	"GoToKotlin/constants"
 )
 
 const (

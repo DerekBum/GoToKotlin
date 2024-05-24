@@ -1,4 +1,4 @@
-package GoToJava_test
+package GoToKotlin_test
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"GoToJava"
+	"GoToKotlin"
 )
 
 type nonEmptyInterface interface {
@@ -65,10 +65,10 @@ type BigStruct struct {
 
 var testDir = "./test_struct"
 var genFiles = []string{
-	"GoToJava_test_BigStruct.kt",
-	"GoToJava_test_innerStruct.kt",
-	"GoToJava_test_interfaceImpl.kt",
-	"GoToJava_test_someStruct.kt",
+	"GoToKotlin_test_BigStruct.kt",
+	"GoToKotlin_test_innerStruct.kt",
+	"GoToKotlin_test_interfaceImpl.kt",
+	"GoToKotlin_test_someStruct.kt",
 }
 
 func TestConvert(t *testing.T) {
@@ -77,7 +77,7 @@ func TestConvert(t *testing.T) {
 	os.MkdirAll(testDir, os.ModePerm)
 	file, _ := os.Create(testDir + "/filled.txt")
 
-	conv := GoToJava.CreateConverter(testDir, false)
+	conv := GoToKotlin.CreateConverter(testDir, false)
 
 	err := conv.GenerateStructures(st)
 	if err != nil {

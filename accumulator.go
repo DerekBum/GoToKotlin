@@ -1,4 +1,4 @@
-package GoToJava
+package GoToKotlin
 
 import (
 	"bytes"

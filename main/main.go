@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GoToKotlin"
 	"compress/gzip"
 	"flag"
 	"fmt"
@@ -9,8 +10,6 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
-
-	"GoToJava"
 )
 
 type nonEmptyInterface interface {
@@ -131,7 +130,7 @@ func main() {
 	gzipWriter := gzip.NewWriter(file)
 	defer gzipWriter.Close()
 
-	conv := GoToJava.CreateConverter("ssaExample", true)
+	conv := GoToKotlin.CreateConverter("ssaExample", true)
 
 	if *needToGen {
 		fmt.Printf("%v", conv.GenerateStructures(program))

@@ -1,7 +1,7 @@
 package ssa_helpers
 
 import (
-	"GoToJava/constants"
+	"GoToKotlin/constants"
 	"fmt"
 )
 

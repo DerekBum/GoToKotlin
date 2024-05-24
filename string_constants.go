@@ -1,4 +1,4 @@
-package GoToJava
+package GoToKotlin
 
 const structField = `	var %s: %s? = null
 `
