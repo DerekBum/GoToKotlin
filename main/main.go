@@ -1,13 +1,13 @@
 package main
 
 import (
-	"GoToJava"
+	"GoToKotlin"
+	"compress/gzip"
+	"flag"
 	"fmt"
-	"go/ast"
-	"go/importer"
-	"go/parser"
-	"go/token"
-	"go/types"
+	"os"
+
+	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
 )
@@ -31,6 +31,8 @@ func (l interfaceImpl) SomeFunc() bool {
 type customType int16
 
 type BigStruct struct {
+	_ interfaceImpl
+
 	Field1      int
 	FieldString string
 	field3      bool
@@ -54,28 +56,84 @@ type BigStruct struct {
 	f20         *customType
 	f21         []*customType
 	f22         map[customType]*customType
+	f23         *BigStruct
+	f24         interface{}
 }
 
+var needToGen = flag.Bool("gen", true, "Is initial generation needed")
+
 func main() {
+	flag.Parse()
+	fileName := "./ssa_prompt/g501/main.go" //"./ssa_prompt/tarantool/main.go"
+
 	// Replace interface{} with any for this test.
 	// Parse the source files.
-	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "./ssa_prompt/main.go", nil, parser.ParseComments)
+	f, err := os.Open(fileName)
 	if err != nil {
-		fmt.Print(err) // parse error
+		fmt.Printf("open file: %s", err)
 	}
-	files := []*ast.File{f}
-	// Create the type-checker's package.
-	pkg := types.NewPackage("main", "")
-	// Type-check the package, load dependencies.
-	// Create and build the SSA program.
-	pkgBuild, _, err := ssautil.BuildPackage(
-		&types.Config{Importer: importer.Default()}, fset, pkg, files, ssa.PrintFunctions)
-	if err != nil {
-		fmt.Print(err) // type error in some package
+	if err = f.Close(); err != nil {
+		fmt.Printf("close file: %s", err)
 	}
 
-	//impl := interfaceImpl{}
-	//k := BigStruct{f85: 123, f10: impl}
-	fmt.Printf("%v", GoToJava.RunConverter("ssaExample", pkgBuild))
+	mode := packages.NeedName |
+		packages.NeedFiles |
+		packages.NeedCompiledGoFiles |
+		packages.NeedImports |
+		packages.NeedDeps |
+		packages.NeedExportFile |
+		packages.NeedTypes |
+		packages.NeedTypesSizes |
+		packages.NeedTypesInfo |
+		packages.NeedSyntax |
+		packages.NeedModule |
+		packages.NeedEmbedFiles |
+		packages.NeedEmbedPatterns
+	cfg := &packages.Config{Mode: mode}
+
+	initialPackages, err := packages.Load(cfg, fileName) //"k8s.io/client-go/kubernetes"
+	if err != nil {
+		fmt.Print(err)
+	}
+	if len(initialPackages) == 0 {
+		fmt.Printf("no packages were loaded")
+	}
+
+	if packages.PrintErrors(initialPackages) > 0 {
+		fmt.Printf("packages contain errors")
+	}
+
+	program, _ := ssautil.AllPackages(initialPackages, ssa.InstantiateGenerics|ssa.SanityCheckFunctions)
+	program.Build()
+
+	//mainPackage := ssautil.MainPackages(program.AllPackages())[0]
+
+	/*impl := interfaceImpl{}
+	k := BigStruct{f85: 123, f10: impl}
+	k.f9.fl1 = "123"
+	k.f11 = make(map[string]bool)
+	k.f11["lolol"] = false
+
+	mp := make(map[someStruct]interfaceImpl)
+	mp[someStruct{fl1: "key"}] = interfaceImpl{fl21: []string{"some", "value"}}
+	k.f13 = &mp
+
+	f10 := interfaceImpl{fl21: []string{"hello\nworld!", "hola", "привет"}}
+	k.f10 = f10
+	k.f23 = &k
+	k.f24 = &k*/
+
+	os.Mkdir("ssaExample", os.ModePerm)
+	file, _ := os.Create("ssaExample/filled.gzip")
+	defer file.Close()
+
+	gzipWriter := gzip.NewWriter(file)
+	defer gzipWriter.Close()
+
+	conv := GoToKotlin.CreateConverter("ssaExample", true)
+
+	if *needToGen {
+		fmt.Printf("%v", conv.GenerateStructures(program))
+	}
+	fmt.Printf("%v", conv.FillStructures(gzipWriter, program))
 }

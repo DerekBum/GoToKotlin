@@ -1,17 +1,14 @@
 package main
 
-func GetSign(x int) (res int) {
-	res = 123
-	if x > 0 {
-		return 1
-	} else if x == 0 {
-		return 0
-	}
-	res = -1
-	return
+func log(a int) {
+	a++
+}
+
+func add(a, b int) int {
+	return a + b
 }
 
 func main() {
-	var x int
-	println(GetSign(x))
+	a := add(2, 3)
+	log(a)
 }

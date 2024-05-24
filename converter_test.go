@@ -1,11 +1,12 @@
-package GoToJava_test
+package GoToKotlin_test
 
 import (
 	"os"
 	"os/exec"
+	"slices"
 	"testing"
 
-	"GoToJava"
+	"GoToKotlin"
 )
 
 type nonEmptyInterface interface {
@@ -58,20 +59,31 @@ type BigStruct struct {
 	f20         *customType
 	f21         []*customType
 	f22         map[customType]*customType
+	f23         *BigStruct
+	f24         interface{}
 }
 
 var testDir = "./test_struct"
 var genFiles = []string{
-	"GoToJava_test_BigStruct.kt",
-	"GoToJava_test_innerStruct.kt",
-	"GoToJava_test_interfaceImpl.kt",
-	"GoToJava_test_someStruct.kt",
+	"GoToKotlin_test_BigStruct.kt",
+	"GoToKotlin_test_innerStruct.kt",
+	"GoToKotlin_test_interfaceImpl.kt",
+	"GoToKotlin_test_someStruct.kt",
 }
 
 func TestConvert(t *testing.T) {
 	st := BigStruct{}
 
-	err := GoToJava.RunConverter(testDir, st)
+	os.MkdirAll(testDir, os.ModePerm)
+	file, _ := os.Create(testDir + "/filled.txt")
+
+	conv := GoToKotlin.CreateConverter(testDir, false)
+
+	err := conv.GenerateStructures(st)
+	if err != nil {
+		t.Errorf("unexpected error: %s", err.Error())
+	}
+	err = conv.FillStructures(file, st)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
@@ -81,13 +93,33 @@ func TestConvert(t *testing.T) {
 		t.Errorf("unexpected error: %s", err.Error())
 	}
 
-	if len(dir) != len(genFiles) {
+	if len(dir) != len(genFiles)+3 {
 		t.Errorf("wrong number of files, want %d, got %d", len(genFiles), len(dir))
 	}
-	for i, file := range dir {
-		if file.Name() != genFiles[i] {
-			t.Errorf("unexpected file, want %s, got %s", genFiles[i], file.Name())
+	cnt := 0
+	fillerCnt := 0
+	baseCnt := 0
+	entryCnt := 0
+	for _, file := range dir {
+		if file.Name() == "filled.txt" {
+			fillerCnt++
+			continue
 		}
+		if file.Name() == "baseDeserializers.kt" {
+			baseCnt++
+			continue
+		}
+		if file.Name() == "Entrypoint.kt" {
+			entryCnt++
+			continue
+		}
+		if !slices.Contains(genFiles, file.Name()[2:]) {
+			t.Errorf("unexpected file, want %s, got %s", genFiles[cnt], file.Name()[2:])
+		}
+		cnt++
+	}
+	if fillerCnt != 1 || baseCnt != 1 || entryCnt != 1 {
+		t.Errorf("Wrong number of files")
 	}
 
 	cmd := exec.Command("kotlinc", testDir, "-d", testDir)
